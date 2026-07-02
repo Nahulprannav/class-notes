@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Python Selenium Automation — 10-Day Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080C14;
+  --surface:#0F1520;
+  --card:#141C2B;
+  --border:#1E2D45;
+  --primary:#7C3AED;
+  --primary-glow:rgba(124,58,237,0.25);
+  --accent:#10D985;
+  --accent-glow:rgba(16,217,133,0.2);
+  --orange:#F97316;
+  --blue:#38BDF8;
+  --red:#EF4444;
+  --text:#E2E8F0;
+  --muted:#64748B;
+  --code-bg:#060A10;
+  --radius:10px;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--primary)}
+
+/* ═══ HEADER ═══ */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(8,12,20,0.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:700;font-size:15px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--primary),#A855F7);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-text{color:var(--text)}
+.logo-text span{color:var(--accent)}
+.progress-bar-wrap{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.progress-track{width:160px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width .4s}
+.day-counter{color:var(--accent);font-weight:600}
+
+/* ═══ LAYOUT ═══ */
+.layout{display:flex;padding-top:60px;min-height:100vh}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{
+  width:230px;min-width:230px;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  position:fixed;top:60px;left:0;bottom:0;
+  overflow-y:auto;padding:16px 0;
+  z-index:90;
+}
+.sidebar-section{padding:0 16px 8px;font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:8px}
+.day-btn{
+  width:100%;background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;color:var(--muted);font-family:var(--sans);font-size:13px;
+  text-align:left;transition:all .2s;border-left:3px solid transparent;
+}
+.day-btn:hover{background:rgba(124,58,237,.08);color:var(--text);border-left-color:var(--primary)}
+.day-btn.active{background:rgba(124,58,237,.15);color:var(--text);border-left-color:var(--primary)}
+.day-btn.completed{color:var(--accent)}
+.day-btn.completed .day-num{background:var(--accent);color:#000}
+.day-num{
+  min-width:26px;height:26px;
+  background:var(--border);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  transition:all .2s;
+}
+.day-btn.active .day-num{background:var(--primary);color:#fff}
+.day-label{font-size:12px;line-height:1.3}
+
+/* ═══ MAIN CONTENT ═══ */
+.main{margin-left:230px;flex:1;padding:32px;max-width:calc(100vw - 230px)}
+
+/* ═══ DAY PANEL ═══ */
+.day-panel{display:none;animation:fadeIn .3s ease}
+.day-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ DAY HEADER ═══ */
+.day-hero{
+  background:linear-gradient(135deg,rgba(124,58,237,.15) 0%,rgba(16,217,133,.08) 100%);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 32px;margin-bottom:28px;
+  position:relative;overflow:hidden;
+}
+.day-hero::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:180px;height:180px;
+  background:radial-gradient(circle,var(--primary-glow),transparent 70%);
+  pointer-events:none;
+}
+.day-tag{font-family:var(--mono);font-size:11px;color:var(--accent);background:rgba(16,217,133,.1);padding:4px 10px;border-radius:4px;border:1px solid rgba(16,217,133,.2);display:inline-block;margin-bottom:10px}
+.day-hero h1{font-size:26px;font-weight:700;line-height:1.3;margin-bottom:8px}
+.day-hero h1 span{color:var(--primary)}
+.day-hero p{color:var(--muted);font-size:14px;max-width:600px;line-height:1.6}
+.day-meta{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);background:rgba(255,255,255,.04);padding:5px 10px;border-radius:5px;border:1px solid var(--border)}
+.meta-item .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--accent)}
+.dot-purple{background:var(--primary)}
+.dot-orange{background:var(--orange)}
+
+/* ═══ TABS ═══ */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.tab-btn{
+  background:none;border:none;cursor:pointer;
+  padding:10px 18px;font-family:var(--sans);font-size:13px;font-weight:500;
+  color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .2s;
+}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab-pane{display:none}
+.tab-pane.active{display:block;animation:fadeIn .25s ease}
+
+/* ═══ SECTION BLOCKS ═══ */
+.section{margin-bottom:28px}
+.section-title{
+  font-family:var(--mono);font-size:13px;font-weight:700;
+  color:var(--accent);text-transform:uppercase;letter-spacing:.08em;
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ═══ CONCEPT CARDS ═══ */
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:20px}
+.concept-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;transition:all .2s;
+}
+.concept-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 6px 20px rgba(124,58,237,.15)}
+.cc-icon{font-size:22px;margin-bottom:8px}
+.cc-title{font-weight:600;font-size:14px;margin-bottom:6px;color:var(--text)}
+.cc-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ═══ NOTE / INFO BOXES ═══ */
+.box{border-radius:var(--radius);padding:16px 18px;margin:16px 0;border-left:4px solid;font-size:13px;line-height:1.7}
+.box-info{background:rgba(56,189,248,.08);border-color:var(--blue);color:#BAE6FD}
+.box-tip{background:rgba(16,217,133,.08);border-color:var(--accent);color:#6EE7B7}
+.box-warn{background:rgba(249,115,22,.08);border-color:var(--orange);color:#FED7AA}
+.box-title{font-weight:700;font-family:var(--mono);margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+
+/* ═══ CODE BLOCKS ═══ */
+.code-wrap{position:relative;margin:16px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.code-header{
+  background:#0D1525;padding:8px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.code-lang{font-family:var(--mono);font-size:11px;color:var(--primary);font-weight:700;text-transform:uppercase}
+.copy-btn{
+  background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);
+  color:var(--primary);font-family:var(--mono);font-size:11px;
+  padding:4px 10px;border-radius:5px;cursor:pointer;transition:all .2s;
+}
+.copy-btn:hover{background:rgba(124,58,237,.4)}
+.copy-btn.copied{background:rgba(16,217,133,.2);border-color:rgba(16,217,133,.3);color:var(--accent)}
+pre{background:var(--code-bg);padding:18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.75;margin:0}
+code{font-family:var(--mono);font-size:13px}
+
+/* syntax colours */
+.kw{color:#C792EA}
+.fn{color:#82AAFF}
+.st{color:#C3E88D}
+.cm{color:#546E7A;font-style:italic}
+.nb{color:#F78C6C}
+.op{color:#89DDFF}
+.cl{color:#FFCB6B}
+
+/* ═══ TABLE ═══ */
+.tbl-wrap{overflow-x:auto;margin:14px 0;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#0D1525;padding:10px 14px;text-align:left;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid rgba(30,45,69,.6);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(124,58,237,.05)}
+.tag-td{font-family:var(--mono);font-size:12px;color:var(--accent)}
+
+/* ═══ LIST ═══ */
+.content-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.content-list li{display:flex;gap:10px;font-size:13px;line-height:1.6;color:var(--text)}
+.content-list li::before{content:'▸';color:var(--primary);font-size:11px;margin-top:3px;flex-shrink:0}
+
+/* ═══ QUIZ ═══ */
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.quiz-q{font-weight:600;font-size:14px;margin-bottom:14px;line-height:1.5}
+.quiz-q span{font-family:var(--mono);color:var(--accent);margin-right:8px}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt-btn{
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:7px;padding:10px 14px;
+  font-size:13px;font-family:var(--sans);color:var(--text);
+  cursor:pointer;text-align:left;transition:all .2s;
+}
+.opt-btn:hover:not([disabled]){background:rgba(124,58,237,.1);border-color:var(--primary);color:var(--primary)}
+.opt-btn.correct{background:rgba(16,217,133,.1);border-color:var(--accent);color:var(--accent)}
+.opt-btn.wrong{background:rgba(239,68,68,.1);border-color:var(--red);color:var(--red)}
+.quiz-result{font-family:var(--mono);font-size:12px;margin-top:10px;padding:8px 12px;border-radius:6px;display:none}
+.result-correct{background:rgba(16,217,133,.1);color:var(--accent)}
+.result-wrong{background:rgba(239,68,68,.1);color:var(--red)}
+
+/* ═══ PRACTICE TASK ═══ */
+.practice-box{background:var(--card);border:1px solid rgba(124,58,237,.3);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.task-num{font-family:var(--mono);font-size:11px;color:var(--primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.task-title{font-weight:600;font-size:14px;margin-bottom:8px}
+.task-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:12px}
+.difficulty{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-family:var(--mono);padding:3px 9px;border-radius:4px}
+.diff-easy{background:rgba(16,217,133,.1);color:var(--accent);border:1px solid rgba(16,217,133,.2)}
+.diff-med{background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.2)}
+.diff-hard{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+
+/* ═══ MARK-COMPLETE ═══ */
+.complete-btn{
+  display:inline-flex;align-items:center;gap:8px;margin-top:24px;
+  background:linear-gradient(135deg,var(--primary),#A855F7);
+  border:none;border-radius:8px;padding:11px 22px;
+  color:#fff;font-family:var(--sans);font-weight:600;font-size:14px;
+  cursor:pointer;transition:all .25s;
+}
+.complete-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px var(--primary-glow)}
+.complete-btn.done{background:linear-gradient(135deg,#065F46,#10B981);box-shadow:0 0 20px rgba(16,185,129,.2)}
+
+/* ═══ NAV ARROWS ═══ */
+.nav-row{display:flex;gap:12px;margin-top:32px;justify-content:space-between}
+.nav-arrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:10px 18px;
+  color:var(--muted);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .2s;
+}
+.nav-arrow:hover{border-color:var(--primary);color:var(--primary);background:rgba(124,58,237,.08)}
+.nav-arrow:disabled{opacity:.3;cursor:not-allowed}
+
+/* inline code */
+.ic{background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.2);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:12px;color:#C4B5FD}
+
+/* ═══ OVERVIEW CARD ═══ */
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:24px}
+.ov-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;cursor:pointer;
+  transition:all .2s;
+}
+.ov-card:hover{border-color:var(--primary);transform:translateY(-2px)}
+.ov-card.active{border-color:var(--primary);background:rgba(124,58,237,.1)}
+.ov-day{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:6px}
+.ov-title{font-weight:600;font-size:13px}
+.ov-dots{display:flex;gap:4px;margin-top:8px}
+.ov-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}
+.ov-dot.filled{background:var(--accent)}
+
+/* ═══ STEP LIST ═══ */
+.step-list{list-style:none;counter-reset:steps;display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.step-list li{counter-increment:steps;display:flex;gap:12px;font-size:13px;line-height:1.65;color:var(--text);align-items:flex-start}
+.step-list li::before{content:counter(steps);min-width:24px;height:24px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px}
+
+/* responsive */
+@media(max-width:768px){
+  .sidebar{width:200px;min-width:200px}
+  .main{margin-left:200px;padding:20px}
+  .day-hero h1{font-size:20px}
+  .concept-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">🐍</div>
+    <div class="logo-text">Selenium<span>.py</span></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <span>Progress</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="day-counter" id="progressText">0 / 10</span>
+  </div>
+</header>
+
+<!-- ═══════════════ LAYOUT ═══════════════ -->
+<div class="layout">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section">10-Day Course</div>
+    <button class="day-btn active" onclick="showDay(1)" id="nav1">
+      <div class="day-num">01</div>
+      <div class="day-label">Intro & Setup</div>
+    </button>
+    <button class="day-btn" onclick="showDay(2)" id="nav2">
+      <div class="day-num">02</div>
+      <div class="day-label">Locating Elements</div>
+    </button>
+    <button class="day-btn" onclick="showDay(3)" id="nav3">
+      <div class="day-num">03</div>
+      <div class="day-label">Browser Interactions</div>
+    </button>
+    <button class="day-btn" onclick="showDay(4)" id="nav4">
+      <div class="day-num">04</div>
+      <div class="day-label">Waits in Selenium</div>
+    </button>
+    <button class="day-btn" onclick="showDay(5)" id="nav5">
+      <div class="day-num">05</div>
+      <div class="day-label">Forms & Controls</div>
+    </button>
+    <button class="day-btn" onclick="showDay(6)" id="nav6">
+      <div class="day-num">06</div>
+      <div class="day-label">Frames & Windows</div>
+    </button>
+    <button class="day-btn" onclick="showDay(7)" id="nav7">
+      <div class="day-num">07</div>
+      <div class="day-label">Actions Class</div>
+    </button>
+    <button class="day-btn" onclick="showDay(8)" id="nav8">
+      <div class="day-num">08</div>
+      <div class="day-label">Screenshots & Files</div>
+    </button>
+    <button class="day-btn" onclick="showDay(9)" id="nav9">
+      <div class="day-num">09</div>
+      <div class="day-label">pytest Framework</div>
+    </button>
+    <button class="day-btn" onclick="showDay(10)" id="nav10">
+      <div class="day-num">10</div>
+      <div class="day-label">Page Object Model</div>
+    </button>
+  </nav>
+
+  <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+  <main class="main">
+
+  <!-- ╔══════════════════ DAY 1 ══════════════════╗ -->
+  <div class="day-panel active" id="day1">
+    <div class="day-hero">
+      <div class="day-tag">DAY 01 / 10</div>
+      <h1>Introduction to <span>Selenium</span> & Environment Setup</h1>
+      <p>Understand what Selenium is, its architecture, and get your Python + WebDriver environment ready to write your very first automated test.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-green"></span>Beginner</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Theory + Setup</span>
+        <span class="meta-item"><span class="dot dot-orange"></span>~2 Hours</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d1-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d1-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d1-quiz')">🧠 Quiz</button>
+    </div>
+
+    <!-- THEORY -->
+    <div class="tab-pane active" id="d1-theory">
+      <div class="section">
+        <div class="section-title">What is Selenium?</div>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="cc-icon">🌐</div>
+            <div class="cc-title">Web Automation Tool</div>
+            <div class="cc-desc">Selenium automates browsers just like a real human user — clicking, typing, navigating pages, and verifying results.</div>
+          </div>
+          <div class="concept-card">
+            <div class="cc-icon">🆓</div>
+            <div class="cc-title">Open Source</div>
+            <div class="cc-desc">Free to use, maintained by the Selenium community. Supports Python, Java, C#, JavaScript, Ruby, and more.</div>
+          </div>
+          <div class="concept-card">
+            <div class="cc-icon">🔁</div>
+            <div class="cc-title">Cross-Browser</div>
+            <div class="cc-desc">Run the same test on Chrome, Firefox, Edge, Safari without rewriting code. One API, all browsers.</div>
+          </div>
+          <div class="concept-card">
+            <div class="cc-icon">🧪</div>
+            <div class="cc-title">Testing Powerhouse</div>
+            <div class="cc-desc">Used for functional testing, regression testing, and end-to-end testing of web applications.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Selenium Architecture</div>
+        <div class="box box-info">
+          <div class="box-title">🔧 How Selenium Works</div>
+          Your Python Test Script → Selenium WebDriver API → Browser Driver (ChromeDriver) → Actual Browser (Chrome/Firefox/Edge)
+        </div>
+        <ul class="content-list">
+          <li><strong>Selenium WebDriver</strong> — The core component. It directly communicates with the browser via native browser-specific drivers.</li>
+          <li><strong>Browser Drivers</strong> — ChromeDriver (Chrome), GeckoDriver (Firefox), EdgeDriver (Edge). Translate Selenium commands to browser actions.</li>
+          <li><strong>WebDriver Protocol</strong> — Uses W3C WebDriver standard — a RESTful HTTP API between Selenium and the browser driver.</li>
+          <li><strong>Selenium Grid</strong> — Run tests in parallel across multiple machines and browsers simultaneously.</li>
+          <li><strong>Selenium IDE</strong> — A browser extension that records and replays test steps (no coding needed).</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Installation Steps</div>
+        <ol class="step-list">
+          <li>Install Python 3.x from <strong>python.org</strong> — make sure to check "Add to PATH" during installation.</li>
+          <li>Install Selenium library using pip: <span class="ic">pip install selenium</span></li>
+          <li>Install WebDriver Manager (auto-manages browser driver versions): <span class="ic">pip install webdriver-manager</span></li>
+          <li>Install pytest for running tests: <span class="ic">pip install pytest</span></li>
+          <li>Verify installation by running: <span class="ic">python -c "import selenium; print(selenium.__version__)"</span></li>
+        </ol>
+        <div class="box box-tip">
+          <div class="box-title">💡 Pro Tip</div>
+          Using <strong>webdriver-manager</strong> automatically downloads the correct driver for your installed browser version. No manual driver setup needed!
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Selenium vs Other Tools</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Feature</th><th>Selenium</th><th>Playwright</th><th>Cypress</th></tr>
+            <tr><td>Language</td><td>Python, Java, JS, etc.</td><td>Python, JS, Java</td><td>JavaScript only</td></tr>
+            <tr><td>Browser Support</td><td>All major browsers</td><td>Chrome, Firefox, Safari</td><td>Chrome, Firefox, Edge</td></tr>
+            <tr><td>Speed</td><td>Moderate</td><td>Fast</td><td>Fast</td></tr>
+            <tr><td>Mobile Testing</td><td>✅ With Appium</td><td>✅ Emulation</td><td>Limited</td></tr>
+            <tr><td>Industry Use</td><td>Very High</td><td>Growing</td><td>Moderate</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE -->
+    <div class="tab-pane" id="d1-code">
+      <div class="section">
+        <div class="section-title">Installation Commands</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">TERMINAL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># Install all required packages</span>
+pip install selenium
+pip install webdriver-manager
+pip install pytest
+pip install pytest-html
+
+<span class="cm"># Verify installation</span>
+python -c <span class="st">"import selenium; print('Selenium:', selenium.__version__)"</span>
+python -c <span class="st">"import webdriver_manager; print('WDM installed')"</span></code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">First Selenium Script — Open a Browser</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># first_script.py</span>
+<span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+<span class="cm"># 1. Setup: Auto-download and configure ChromeDriver</span>
+service = <span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install())
+
+<span class="cm"># 2. Create WebDriver instance</span>
+driver = webdriver.<span class="fn">Chrome</span>(service=service)
+
+<span class="cm"># 3. Open a website</span>
+driver.<span class="fn">get</span>(<span class="st">"https://www.google.com"</span>)
+
+<span class="cm"># 4. Print page title</span>
+<span class="fn">print</span>(<span class="st">"Page Title:"</span>, driver.title)
+
+<span class="cm"># 5. Maximize window</span>
+driver.maximize_window()
+
+<span class="cm"># 6. Close the browser</span>
+driver.<span class="fn">quit</span>()
+
+<span class="fn">print</span>(<span class="st">"Test Completed Successfully!"</span>)</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Launching Different Browsers</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service <span class="kw">as</span> ChromeService
+<span class="kw">from</span> selenium.webdriver.firefox.service <span class="kw">import</span> Service <span class="kw">as</span> FirefoxService
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+<span class="kw">from</span> webdriver_manager.firefox <span class="kw">import</span> GeckoDriverManager
+
+<span class="cm"># Chrome</span>
+driver_chrome = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">ChromeService</span>(<span class="cl">ChromeDriverManager</span>().install()))
+
+<span class="cm"># Firefox</span>
+driver_firefox = webdriver.<span class="fn">Firefox</span>(service=<span class="cl">FirefoxService</span>(<span class="cl">GeckoDriverManager</span>().install()))
+
+<span class="cm"># Edge</span>
+<span class="kw">from</span> selenium.webdriver.edge.service <span class="kw">import</span> Service <span class="kw">as</span> EdgeService
+<span class="kw">from</span> webdriver_manager.microsoft <span class="kw">import</span> EdgeChromiumDriverManager
+driver_edge = webdriver.<span class="fn">Edge</span>(service=<span class="cl">EdgeService</span>(<span class="cl">EdgeChromiumDriverManager</span>().install()))
+
+<span class="cm"># Headless Chrome (no GUI)</span>
+options = webdriver.<span class="cl">ChromeOptions</span>()
+options.add_argument(<span class="st">"--headless"</span>)
+options.add_argument(<span class="st">"--no-sandbox"</span>)
+driver_headless = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">ChromeService</span>(<span class="cl">ChromeDriverManager</span>().install()), options=options)</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Browser Driver Methods</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># Common WebDriver Properties</span>
+driver.title               <span class="cm"># Get page title</span>
+driver.current_url         <span class="cm"># Get current URL</span>
+driver.page_source         <span class="cm"># Get full HTML source</span>
+driver.window_handles      <span class="cm"># List of open window handles</span>
+driver.current_window_handle <span class="cm"># Current window handle</span>
+
+<span class="cm"># Window Control</span>
+driver.maximize_window()
+driver.minimize_window()
+driver.set_window_size(<span class="nb">1280</span>, <span class="nb">720</span>)
+
+<span class="cm"># Navigation</span>
+driver.<span class="fn">get</span>(<span class="st">"https://example.com"</span>)
+driver.back()
+driver.forward()
+driver.refresh()
+
+<span class="cm"># Closing</span>
+driver.close()   <span class="cm"># Close current tab only</span>
+driver.quit()    <span class="cm"># Close ALL windows and quit driver</span></code></pre>
+        </div>
+        <div class="box box-warn">
+          <div class="box-title">⚠️ Important</div>
+          Always use <span class="ic">driver.quit()</span> at the end of tests, not just <span class="ic">driver.close()</span>. <strong>quit()</strong> terminates the entire WebDriver session and frees system resources. <strong>close()</strong> only closes the current tab.
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="tab-pane" id="d1-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>What protocol does Selenium WebDriver use to communicate with browser drivers?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','W3C WebDriver is the standard. HTTP is the transport.')">FTP Protocol</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! Selenium uses the W3C WebDriver standard — a RESTful HTTP API.')">W3C WebDriver (RESTful HTTP API)</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','WebSocket is used in some newer tools but not core Selenium.')">WebSocket API</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','GraphQL is a query language, unrelated to WebDriver communication.')">GraphQL</button>
+        </div>
+        <div class="quiz-result" id="qr1"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>Which command properly terminates the entire WebDriver session?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','driver.close() only closes the current tab.')">driver.close()</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! driver.quit() ends the entire WebDriver session and frees all resources.')">driver.quit()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','driver.stop() is not a valid Selenium method.')">driver.stop()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','driver.exit() is not a valid Selenium method.')">driver.exit()</button>
+        </div>
+        <div class="quiz-result" id="qr2"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q3.</span>What does <code>webdriver-manager</code> library do in Selenium?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','It is not a performance enhancer.')">Speeds up test execution</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Selenium already has its own core components.')">Replaces the Selenium core library</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! webdriver-manager auto-downloads and manages the correct browser driver version.')">Automatically downloads the correct browser driver</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','It does not generate test reports by itself.')">Generates HTML test reports</button>
+        </div>
+        <div class="quiz-result" id="qr3"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete1" onclick="markComplete(1)">✓ Mark Day 1 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" disabled>← Previous</button>
+      <button class="nav-arrow" onclick="showDay(2)">Day 2 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 2 ══════════════════╗ -->
+  <div class="day-panel" id="day2">
+    <div class="day-hero">
+      <div class="day-tag">DAY 02 / 10</div>
+      <h1>Locating Web <span>Elements</span></h1>
+      <p>Master all 8 element locator strategies in Selenium — from simple IDs to powerful XPath and CSS Selectors.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-green"></span>Beginner</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Locators</span>
+        <span class="meta-item"><span class="dot dot-orange"></span>~3 Hours</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d2-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d2-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d2-quiz')">🧠 Quiz</button>
+    </div>
+
+    <div class="tab-pane active" id="d2-theory">
+      <div class="section">
+        <div class="section-title">Locator Strategies Overview</div>
+        <div class="box box-info">
+          <div class="box-title">🎯 What is a Locator?</div>
+          A locator tells Selenium <strong>which HTML element</strong> to interact with. Choosing the right locator makes tests reliable and maintainable.
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Locator</th><th>Based On</th><th>Reliability</th><th>Use When</th></tr>
+            <tr><td class="tag-td">By.ID</td><td>id attribute</td><td>⭐⭐⭐⭐⭐</td><td>Always preferred if ID exists</td></tr>
+            <tr><td class="tag-td">By.NAME</td><td>name attribute</td><td>⭐⭐⭐⭐</td><td>Form inputs with name attr</td></tr>
+            <tr><td class="tag-td">By.CLASS_NAME</td><td>class attribute</td><td>⭐⭐⭐</td><td>Single-class elements</td></tr>
+            <tr><td class="tag-td">By.TAG_NAME</td><td>HTML tag</td><td>⭐⭐</td><td>Getting all elements of a type</td></tr>
+            <tr><td class="tag-td">By.LINK_TEXT</td><td>Exact anchor text</td><td>⭐⭐⭐⭐</td><td>Exact hyperlink text</td></tr>
+            <tr><td class="tag-td">By.PARTIAL_LINK_TEXT</td><td>Partial anchor text</td><td>⭐⭐⭐</td><td>Partial hyperlink text</td></tr>
+            <tr><td class="tag-td">By.CSS_SELECTOR</td><td>CSS rules</td><td>⭐⭐⭐⭐⭐</td><td>Complex UI, no ID/Name</td></tr>
+            <tr><td class="tag-td">By.XPATH</td><td>XML path expression</td><td>⭐⭐⭐⭐⭐</td><td>Dynamic elements, complex DOM</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">XPath — Deep Dive</div>
+        <ul class="content-list">
+          <li><strong>Absolute XPath:</strong> Starts from the root <span class="ic">/html/body/div/form/input</span> — fragile, breaks if structure changes.</li>
+          <li><strong>Relative XPath:</strong> Starts with <span class="ic">//</span> — searches entire DOM: <span class="ic">//input[@id='email']</span></li>
+          <li><strong>contains():</strong> Partial match: <span class="ic">//button[contains(text(),'Login')]</span></li>
+          <li><strong>starts-with():</strong> Prefix match: <span class="ic">//input[starts-with(@name,'user')]</span></li>
+          <li><strong>text():</strong> Match by visible text: <span class="ic">//h1[text()='Welcome']</span></li>
+          <li><strong>Axes:</strong> Navigate DOM relationships — parent, child, following-sibling, preceding-sibling.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">CSS Selector — Deep Dive</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Pattern</th><th>Example</th><th>Description</th></tr>
+            <tr><td class="tag-td">#id</td><td>#loginBtn</td><td>Select by ID</td></tr>
+            <tr><td class="tag-td">.class</td><td>.btn-primary</td><td>Select by class</td></tr>
+            <tr><td class="tag-td">tag</td><td>input</td><td>Select by tag</td></tr>
+            <tr><td class="tag-td">[attr=val]</td><td>input[type='email']</td><td>Attribute equals value</td></tr>
+            <tr><td class="tag-td">[attr*=val]</td><td>div[class*='nav']</td><td>Attribute contains value</td></tr>
+            <tr><td class="tag-td">parent > child</td><td>form > input</td><td>Direct child</td></tr>
+            <tr><td class="tag-td">parent child</td><td>form input</td><td>Any descendant</td></tr>
+            <tr><td class="tag-td">:nth-child(n)</td><td>li:nth-child(2)</td><td>Nth child element</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Best Practices for Locators</div>
+        <ul class="content-list">
+          <li><strong>Priority Order:</strong> ID → Name → CSS Selector → XPath. Avoid Tag Name for unique selection.</li>
+          <li><strong>Never use absolute XPath</strong> in production tests — one DOM change breaks everything.</li>
+          <li><strong>Use data-testid attributes</strong> — Ask developers to add custom attributes like <span class="ic">data-testid="login-btn"</span> for test stability.</li>
+          <li><strong>Inspect in Browser:</strong> Right-click → Inspect → Use browser DevTools to build and verify locators before adding to code.</li>
+          <li><strong>Keep locators DRY:</strong> Store locators in Page Object classes, not hardcoded in every test.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d2-code">
+      <div class="section">
+        <div class="section-title">All 8 Locators — Syntax</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://www.example.com"</span>)
+
+<span class="cm"># 1. By ID</span>
+elem = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"username"</span>)
+
+<span class="cm"># 2. By Name</span>
+elem = driver.find_element(<span class="cl">By</span>.NAME, <span class="st">"email"</span>)
+
+<span class="cm"># 3. By Class Name</span>
+elem = driver.find_element(<span class="cl">By</span>.CLASS_NAME, <span class="st">"btn-login"</span>)
+
+<span class="cm"># 4. By Tag Name</span>
+all_inputs = driver.find_elements(<span class="cl">By</span>.TAG_NAME, <span class="st">"input"</span>)  <span class="cm"># returns list</span>
+
+<span class="cm"># 5. By Link Text (exact)</span>
+link = driver.find_element(<span class="cl">By</span>.LINK_TEXT, <span class="st">"Forgot Password?"</span>)
+
+<span class="cm"># 6. By Partial Link Text</span>
+link = driver.find_element(<span class="cl">By</span>.PARTIAL_LINK_TEXT, <span class="st">"Forgot"</span>)
+
+<span class="cm"># 7. By CSS Selector</span>
+elem = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"input#email"</span>)
+elem = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".form-group input[type='email']"</span>)
+
+<span class="cm"># 8. By XPath</span>
+elem = driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//input[@id='email']"</span>)
+elem = driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//button[contains(text(),'Sign In')]"</span>)
+
+<span class="cm"># find_elements returns a LIST (empty if none found)</span>
+all_links = driver.find_elements(<span class="cl">By</span>.TAG_NAME, <span class="st">"a"</span>)
+<span class="fn">print</span>(<span class="st">f"Found <span class="nb">{len(all_links)}</span> links"</span>)</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">XPath Examples — Practical</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># ─── XPath Patterns ───────────────────────────</span>
+
+<span class="cm"># Exact attribute match</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//input[@type='submit']"</span>)
+
+<span class="cm"># contains() - partial attribute value</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//div[contains(@class,'error-msg')]"</span>)
+
+<span class="cm"># starts-with()</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//input[starts-with(@id,'user_')]"</span>)
+
+<span class="cm"># text() match</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//h2[text()='Login to Your Account']"</span>)
+
+<span class="cm"># AND condition</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//input[@type='text' and @name='email']"</span>)
+
+<span class="cm"># Parent axis — find parent of an element</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//input[@id='pwd']/.."</span>)
+
+<span class="cm"># Following sibling</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//label[text()='Email']/following-sibling::input"</span>)
+
+<span class="cm"># Nth child</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//ul[@class='menu']/li[3]"</span>)  <span class="cm"># 3rd li</span></code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Practical Login Test</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># login_test.py — Using locators to automate login</span>
+<span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+<span class="kw">import</span> time
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/login"</span>)
+driver.maximize_window()
+
+<span class="cm"># Locate username field by ID and enter value</span>
+username_field = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"username"</span>)
+username_field.<span class="fn">clear</span>()
+username_field.<span class="fn">send_keys</span>(<span class="st">"tomsmith"</span>)
+
+<span class="cm"># Locate password field by name</span>
+password_field = driver.find_element(<span class="cl">By</span>.NAME, <span class="st">"password"</span>)
+password_field.<span class="fn">send_keys</span>(<span class="st">"SuperSecretPassword!"</span>)
+
+<span class="cm"># Locate and click submit button by CSS Selector</span>
+login_btn = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"button[type='submit']"</span>)
+login_btn.<span class="fn">click</span>()
+
+time.sleep(<span class="nb">2</span>)
+
+<span class="cm"># Verify login — check for success message</span>
+msg = driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//div[contains(@class,'flash success')]"</span>)
+<span class="fn">print</span>(<span class="st">"Login Result:"</span>, msg.text)
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d2-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>Which locator is considered the most reliable and should be used first?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Tag name is the least specific locator.')">By.TAG_NAME</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! By.ID is the most specific, fastest, and most reliable locator when available.')">By.ID</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','XPath is powerful but slower than ID.')">By.XPATH</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Class name can match multiple elements.')">By.CLASS_NAME</button>
+        </div>
+        <div class="quiz-result" id="qr4"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>What does <code>driver.find_elements()</code> return when no matching element exists?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','It does not raise an exception — that is find_element().')">Raises NoSuchElementException</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','It does not return None.')">Returns None</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! find_elements() returns an empty list [], never raises an exception.')">Returns an empty list []</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','It does not return False.')">Returns False</button>
+        </div>
+        <div class="quiz-result" id="qr5"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q3.</span>Which XPath finds a button that contains the word "Login" in its text?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','text()=Login would require an exact match with no extra words.')">button[text()='Login']</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! contains(text(), Login) matches any button with Login anywhere in its text.'))">//button[contains(text(),'Login')]</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','This CSS selector cannot match text content.')">button.Login</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','starts-with checks if text starts with Login, not contains it.'))">//button[starts-with(@id,'Login')]</button>
+        </div>
+        <div class="quiz-result" id="qr6"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete2" onclick="markComplete(2)">✓ Mark Day 2 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(1)">← Day 1</button>
+      <button class="nav-arrow" onclick="showDay(3)">Day 3 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 3 ══════════════════╗ -->
+  <div class="day-panel" id="day3">
+    <div class="day-hero">
+      <div class="day-tag">DAY 03 / 10</div>
+      <h1>Browser <span>Interactions</span> & Element Actions</h1>
+      <p>Learn how to interact with web elements — clicking, typing, keyboard shortcuts, navigation, alerts, and JavaScript execution.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-green"></span>Beginner–Intermediate</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>WebElement Methods</span>
+        <span class="meta-item"><span class="dot dot-orange"></span>~3 Hours</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d3-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d3-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d3-quiz')">🧠 Quiz</button>
+    </div>
+    <div class="tab-pane active" id="d3-theory">
+      <div class="section">
+        <div class="section-title">WebElement Methods</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Method</th><th>Description</th><th>Example</th></tr>
+            <tr><td class="tag-td">.click()</td><td>Clicks the element</td><td>btn.click()</td></tr>
+            <tr><td class="tag-td">.send_keys()</td><td>Types text / key combos</td><td>field.send_keys("hello")</td></tr>
+            <tr><td class="tag-td">.clear()</td><td>Clears text field content</td><td>field.clear()</td></tr>
+            <tr><td class="tag-td">.text</td><td>Gets visible text of element</td><td>elem.text</td></tr>
+            <tr><td class="tag-td">.get_attribute()</td><td>Gets an HTML attribute value</td><td>elem.get_attribute("href")</td></tr>
+            <tr><td class="tag-td">.is_displayed()</td><td>True if element is visible</td><td>elem.is_displayed()</td></tr>
+            <tr><td class="tag-td">.is_enabled()</td><td>True if element is enabled</td><td>btn.is_enabled()</td></tr>
+            <tr><td class="tag-td">.is_selected()</td><td>True if checkbox/radio is selected</td><td>chk.is_selected()</td></tr>
+            <tr><td class="tag-td">.submit()</td><td>Submits a form</td><td>form.submit()</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Handling Browser Alerts</div>
+        <ul class="content-list">
+          <li><strong>Simple Alert:</strong> Shows a message with OK button only. Use <span class="ic">driver.switch_to.alert.accept()</span></li>
+          <li><strong>Confirmation Alert:</strong> Has OK and Cancel. Accept = OK, Dismiss = Cancel.</li>
+          <li><strong>Prompt Alert:</strong> Has a text input field. Use <span class="ic">alert.send_keys()</span> before accept.</li>
+          <li><strong>WebDriverWait for alerts:</strong> Wait until alert is present before switching using <span class="ic">EC.alert_is_present()</span></li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">JavaScript Executor</div>
+        <ul class="content-list">
+          <li>Use <span class="ic">driver.execute_script()</span> to run JavaScript directly in the browser page.</li>
+          <li>Useful for: scrolling to elements, clicking hidden elements, changing values not reachable via Selenium.</li>
+          <li>Example: <span class="ic">driver.execute_script("arguments[0].click();", element)</span> — JS click bypasses visibility checks.</li>
+          <li>Scroll down: <span class="ic">driver.execute_script("window.scrollBy(0, 500);")</span></li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Keyboard Keys (Keys Class)</div>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="cc-title">Common Keys</div>
+            <div class="cc-desc">ENTER, TAB, ESCAPE, BACKSPACE, DELETE, SPACE, ARROW_UP, ARROW_DOWN, F5, HOME, END</div>
+          </div>
+          <div class="concept-card">
+            <div class="cc-title">Modifier Keys</div>
+            <div class="cc-desc">CONTROL, SHIFT, ALT — used in combination: Keys.CONTROL + 'a' for Select All</div>
+          </div>
+          <div class="concept-card">
+            <div class="cc-title">Function Keys</div>
+            <div class="cc-desc">F1 through F12 are all supported via Keys.F1 to Keys.F12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d3-code">
+      <div class="section">
+        <div class="section-title">Element Interaction Methods</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.common.keys <span class="kw">import</span> Keys
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/login"</span>)
+
+<span class="cm"># Type text</span>
+username = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"username"</span>)
+username.<span class="fn">clear</span>()
+username.<span class="fn">send_keys</span>(<span class="st">"tomsmith"</span>)
+
+<span class="cm"># Press TAB key to move to next field</span>
+username.<span class="fn">send_keys</span>(<span class="cl">Keys</span>.TAB)
+
+<span class="cm"># Get element attribute</span>
+<span class="fn">print</span>(username.<span class="fn">get_attribute</span>(<span class="st">"type"</span>))     <span class="cm"># "text"</span>
+<span class="fn">print</span>(username.<span class="fn">get_attribute</span>(<span class="st">"value"</span>))    <span class="cm"># current value</span>
+<span class="fn">print</span>(username.<span class="fn">get_attribute</span>(<span class="st">"placeholder"</span>)) <span class="cm"># placeholder text</span>
+
+<span class="cm"># Check element state</span>
+<span class="fn">print</span>(<span class="st">"Visible:"</span>, username.is_displayed())
+<span class="fn">print</span>(<span class="st">"Enabled:"</span>, username.is_enabled())
+
+<span class="cm"># CTRL + A to select all, then BACKSPACE to delete</span>
+username.<span class="fn">send_keys</span>(<span class="cl">Keys</span>.CONTROL + <span class="st">'a'</span>)
+username.<span class="fn">send_keys</span>(<span class="cl">Keys</span>.BACKSPACE)
+
+<span class="cm"># Press ENTER key (instead of clicking submit)</span>
+pwd = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"password"</span>)
+pwd.<span class="fn">send_keys</span>(<span class="st">"SuperSecretPassword!"</span> + <span class="cl">Keys</span>.RETURN)
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Handling Alerts</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait
+<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/javascript_alerts"</span>)
+
+<span class="cm"># ─── Simple Alert ────────────────────────────</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//button[text()='Click for JS Alert']"</span>).<span class="fn">click</span>()
+<span class="cl">WebDriverWait</span>(driver, <span class="nb">5</span>).until(<span class="cl">EC</span>.alert_is_present())
+alert = driver.switch_to.alert
+<span class="fn">print</span>(<span class="st">"Alert text:"</span>, alert.text)
+alert.<span class="fn">accept</span>()     <span class="cm"># Click OK</span>
+
+<span class="cm"># ─── Confirmation Alert ──────────────────────</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//button[text()='Click for JS Confirm']"</span>).<span class="fn">click</span>()
+<span class="cl">WebDriverWait</span>(driver, <span class="nb">5</span>).until(<span class="cl">EC</span>.alert_is_present())
+alert = driver.switch_to.alert
+alert.<span class="fn">dismiss</span>()    <span class="cm"># Click Cancel</span>
+
+<span class="cm"># ─── Prompt Alert (with text input) ──────────</span>
+driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//button[text()='Click for JS Prompt']"</span>).<span class="fn">click</span>()
+<span class="cl">WebDriverWait</span>(driver, <span class="nb">5</span>).until(<span class="cl">EC</span>.alert_is_present())
+alert = driver.switch_to.alert
+alert.<span class="fn">send_keys</span>(<span class="st">"Selenium Testing"</span>)
+alert.<span class="fn">accept</span>()
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">JavaScript Executor</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># JavaScript Execution with Selenium</span>
+
+<span class="cm"># Scroll to element</span>
+element = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"footer"</span>)
+driver.<span class="fn">execute_script</span>(<span class="st">"arguments[0].scrollIntoView(true);"</span>, element)
+
+<span class="cm"># Scroll page by pixels</span>
+driver.<span class="fn">execute_script</span>(<span class="st">"window.scrollBy(0, 500);"</span>)
+
+<span class="cm"># Scroll to bottom of page</span>
+driver.<span class="fn">execute_script</span>(<span class="st">"window.scrollTo(0, document.body.scrollHeight);"</span>)
+
+<span class="cm"># JS Click (bypass visibility check)</span>
+btn = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"hiddenBtn"</span>)
+driver.<span class="fn">execute_script</span>(<span class="st">"arguments[0].click();"</span>, btn)
+
+<span class="cm"># Set input value via JS (bypass restrictions)</span>
+driver.<span class="fn">execute_script</span>(<span class="st">"arguments[0].value='new_value';"</span>, element)
+
+<span class="cm"># Get text via JS</span>
+text = driver.<span class="fn">execute_script</span>(<span class="st">"return document.title;"</span>)
+<span class="fn">print</span>(<span class="st">"Title via JS:"</span>, text)
+
+<span class="cm"># Highlight element (for debugging)</span>
+driver.<span class="fn">execute_script</span>(<span class="st">"arguments[0].style.border='3px solid red';"</span>, element)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d3-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>How do you get the current value typed in an input field?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','element.text gives the visible label text, not the input value.')">element.text</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! get_attribute("value") retrieves the current value of an input field.')">element.get_attribute("value")</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','element.value is not a valid Selenium Python attribute.')">element.value</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','get_text() is not a Selenium method.')">element.get_text()</button>
+        </div>
+        <div class="quiz-result" id="qr7"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>Which method is used to DISMISS (cancel) a confirmation alert?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','accept() clicks the OK button, not Cancel.')">alert.accept()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','close() is not valid for alerts.')">alert.close()</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! alert.dismiss() clicks the Cancel button on confirmation/prompt alerts.')">alert.dismiss()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','cancel() is not a valid alert method.')">alert.cancel()</button>
+        </div>
+        <div class="quiz-result" id="qr8"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete3" onclick="markComplete(3)">✓ Mark Day 3 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(2)">← Day 2</button>
+      <button class="nav-arrow" onclick="showDay(4)">Day 4 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 4 ══════════════════╗ -->
+  <div class="day-panel" id="day4">
+    <div class="day-hero">
+      <div class="day-tag">DAY 04 / 10</div>
+      <h1>Waits in <span>Selenium</span></h1>
+      <p>Eliminate flaky tests by mastering Implicit Waits, Explicit Waits, and Fluent Waits — the most critical concept for stable automation.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-orange"></span>Intermediate</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Synchronization</span>
+        <span class="meta-item"><span class="dot dot-green"></span>~3 Hours</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d4-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d4-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d4-quiz')">🧠 Quiz</button>
+    </div>
+    <div class="tab-pane active" id="d4-theory">
+      <div class="section">
+        <div class="section-title">Why Waits are Essential</div>
+        <div class="box box-warn">
+          <div class="box-title">⚠️ The Flaky Test Problem</div>
+          Modern web apps use JavaScript to dynamically load content. Without waits, Selenium tries to find elements before they appear — causing <strong>NoSuchElementException</strong> and intermittent failures called "flaky tests."
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="cc-icon">⏰</div>
+            <div class="cc-title">Implicit Wait</div>
+            <div class="cc-desc">Sets a global timeout. Selenium will poll the DOM for up to N seconds for any element before throwing an exception.</div>
+          </div>
+          <div class="concept-card">
+            <div class="cc-icon">🎯</div>
+            <div class="cc-title">Explicit Wait</div>
+            <div class="cc-desc">Waits for a specific condition on a specific element. Most powerful and recommended approach.</div>
+          </div>
+          <div class="concept-card">
+            <div class="cc-icon">🔄</div>
+            <div class="cc-title">Fluent Wait</div>
+            <div class="cc-desc">Advanced version of Explicit Wait. Customize polling interval and ignore specific exceptions during polling.</div>
+          </div>
+          <div class="concept-card">
+            <div class="cc-icon">😴</div>
+            <div class="cc-title">time.sleep() ❌</div>
+            <div class="cc-desc">Hard-coded sleep. Always waits the full duration even if element loads faster. Slows tests and is unreliable.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Expected Conditions (EC)</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Expected Condition</th><th>Description</th></tr>
+            <tr><td class="tag-td">presence_of_element_located</td><td>Element is in DOM (may be hidden)</td></tr>
+            <tr><td class="tag-td">visibility_of_element_located</td><td>Element is visible on page</td></tr>
+            <tr><td class="tag-td">element_to_be_clickable</td><td>Element is visible AND enabled</td></tr>
+            <tr><td class="tag-td">text_to_be_present_in_element</td><td>Element contains specific text</td></tr>
+            <tr><td class="tag-td">title_contains</td><td>Page title contains text</td></tr>
+            <tr><td class="tag-td">title_is</td><td>Page title equals exact string</td></tr>
+            <tr><td class="tag-td">url_contains</td><td>URL contains specific text</td></tr>
+            <tr><td class="tag-td">alert_is_present</td><td>An alert dialog is open</td></tr>
+            <tr><td class="tag-td">frame_to_be_available_and_switch_to_it</td><td>Frame available and switched</td></tr>
+            <tr><td class="tag-td">staleness_of</td><td>Element no longer in DOM</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Implicit vs Explicit vs Fluent</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Feature</th><th>Implicit</th><th>Explicit</th><th>Fluent</th></tr>
+            <tr><td>Scope</td><td>Global (all elements)</td><td>Specific element</td><td>Specific element</td></tr>
+            <tr><td>Condition</td><td>Element present in DOM</td><td>Any EC condition</td><td>Any EC + custom ignore</td></tr>
+            <tr><td>Poll Interval</td><td>Fixed (500ms)</td><td>Fixed (500ms)</td><td>Configurable</td></tr>
+            <tr><td>Ignore Exceptions</td><td>No</td><td>No</td><td>Yes (configurable)</td></tr>
+            <tr><td>Recommended</td><td>Avoid mixing with Explicit</td><td>✅ Yes</td><td>Advanced scenarios</td></tr>
+          </table>
+        </div>
+        <div class="box box-warn">
+          <div class="box-title">⚠️ Never Mix Implicit + Explicit Waits</div>
+          Mixing them causes unpredictable behavior. The waits can compound and create unexpected timeouts. Use one type consistently per test — prefer Explicit Waits.
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d4-code">
+      <div class="section">
+        <div class="section-title">Implicit Wait</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+
+<span class="cm"># Set implicit wait — applies to ALL find_element calls</span>
+driver.implicitly_wait(<span class="nb">10</span>)  <span class="cm"># Wait up to 10 seconds</span>
+
+driver.<span class="fn">get</span>(<span class="st">"https://example.com"</span>)
+
+<span class="cm"># Selenium will automatically wait up to 10s for any element</span>
+element = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"dynamic-element"</span>)
+element.<span class="fn">click</span>()
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Explicit Wait with Expected Conditions</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait
+<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/dynamic_loading/1"</span>)
+
+<span class="cm"># Create WebDriverWait object — 15s max timeout</span>
+wait = <span class="cl">WebDriverWait</span>(driver, <span class="nb">15</span>)
+
+<span class="cm"># Click the Start button</span>
+start_btn = wait.until(<span class="cl">EC</span>.element_to_be_clickable((<span class="cl">By</span>.XPATH, <span class="st">"//button[text()='Start']"</span>)))
+start_btn.<span class="fn">click</span>()
+
+<span class="cm"># Wait for the loading to finish (element becomes visible)</span>
+hello_msg = wait.until(<span class="cl">EC</span>.visibility_of_element_located((<span class="cl">By</span>.ID, <span class="st">"finish"</span>)))
+<span class="fn">print</span>(<span class="st">"Loaded:"</span>, hello_msg.text)
+
+<span class="cm"># Wait for URL to change</span>
+wait.until(<span class="cl">EC</span>.url_contains(<span class="st">"success"</span>))
+
+<span class="cm"># Wait for page title</span>
+wait.until(<span class="cl">EC</span>.title_contains(<span class="st">"Dynamic"</span>))
+
+<span class="cm"># Wait for text in element</span>
+wait.until(<span class="cl">EC</span>.text_to_be_present_in_element((<span class="cl">By</span>.ID, <span class="st">"status"</span>), <span class="st">"Complete"</span>))
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Fluent Wait</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait
+<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC
+<span class="kw">from</span> selenium.common.exceptions <span class="kw">import</span> NoSuchElementException, StaleElementReferenceException
+<span class="kw">from</span> datetime <span class="kw">import</span> timedelta
+
+<span class="cm"># Fluent Wait: max 30 seconds, poll every 2 seconds,</span>
+<span class="cm"># ignore NoSuchElementException and StaleElementReferenceException</span>
+fluent_wait = <span class="cl">WebDriverWait</span>(
+    driver,
+    timeout=<span class="nb">30</span>,
+    poll_frequency=<span class="nb">2</span>,   <span class="cm"># check every 2 seconds</span>
+    ignored_exceptions=[<span class="cl">NoSuchElementException</span>, <span class="cl">StaleElementReferenceException</span>]
+)
+
+<span class="cm"># Use it just like explicit wait</span>
+element = fluent_wait.until(
+    <span class="cl">EC</span>.visibility_of_element_located((<span class="cl">By</span>.ID, <span class="st">"ajax-result"</span>))
+)
+<span class="fn">print</span>(element.text)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d4-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>Which Expected Condition should you use to ensure an element is both VISIBLE and CLICKABLE?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','presence_of_element_located only checks if element is in DOM, not visible.')">EC.presence_of_element_located</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','visibility_of_element_located checks visibility but not clickability.')">EC.visibility_of_element_located</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! element_to_be_clickable ensures element is both visible AND enabled.')">EC.element_to_be_clickable</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','element_to_be_selected is for checkboxes/radio buttons.')">EC.element_to_be_selected</button>
+        </div>
+        <div class="quiz-result" id="qr9"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>What is the main advantage of Fluent Wait over Explicit Wait?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Both can handle dynamic elements.')">It works with dynamic elements</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! Fluent Wait lets you configure the polling frequency and ignore specific exceptions during polling.')">Custom polling interval and exception ignoring</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Fluent Wait is not necessarily faster.')">It is faster than Explicit Wait</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Implicit Wait has a global scope, not Fluent Wait.')">It applies globally to all elements</button>
+        </div>
+        <div class="quiz-result" id="qr10"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete4" onclick="markComplete(4)">✓ Mark Day 4 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(3)">← Day 3</button>
+      <button class="nav-arrow" onclick="showDay(5)">Day 5 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 5 ══════════════════╗ -->
+  <div class="day-panel" id="day5">
+    <div class="day-hero">
+      <div class="day-tag">DAY 05 / 10</div>
+      <h1>Forms, <span>Dropdowns</span> & Controls</h1>
+      <p>Automate complex form elements — Select dropdowns, checkboxes, radio buttons, date pickers, and multi-select lists.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-orange"></span>Intermediate</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Form Automation</span>
+        <span class="meta-item"><span class="dot dot-green"></span>~3 Hours</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d5-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d5-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d5-quiz')">🧠 Quiz</button>
+    </div>
+    <div class="tab-pane active" id="d5-theory">
+      <div class="section">
+        <div class="section-title">Select Class for Dropdowns</div>
+        <div class="box box-info">
+          <div class="box-title">📋 What is the Select Class?</div>
+          The <strong>Select</strong> class in Selenium provides dedicated methods for interacting with HTML <code>&lt;select&gt;</code> elements. Import it from <span class="ic">selenium.webdriver.support.ui</span>.
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Method</th><th>Description</th></tr>
+            <tr><td class="tag-td">select_by_visible_text(text)</td><td>Select by visible label text</td></tr>
+            <tr><td class="tag-td">select_by_value(value)</td><td>Select by HTML value attribute</td></tr>
+            <tr><td class="tag-td">select_by_index(index)</td><td>Select by position (0-based)</td></tr>
+            <tr><td class="tag-td">deselect_by_visible_text(text)</td><td>Deselect in multi-select</td></tr>
+            <tr><td class="tag-td">deselect_all()</td><td>Deselect all in multi-select</td></tr>
+            <tr><td class="tag-td">.options</td><td>List of all option WebElements</td></tr>
+            <tr><td class="tag-td">.all_selected_options</td><td>List of all selected options</td></tr>
+            <tr><td class="tag-td">.first_selected_option</td><td>The first selected option</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Checkboxes & Radio Buttons</div>
+        <ul class="content-list">
+          <li><strong>Click to toggle</strong> — Use <span class="ic">.click()</span> to check/uncheck checkboxes.</li>
+          <li><strong>Verify state</strong> — Use <span class="ic">.is_selected()</span> to check if a checkbox or radio is currently selected.</li>
+          <li><strong>Conditional click</strong> — Check only if not already selected: <span class="ic">if not checkbox.is_selected(): checkbox.click()</span></li>
+          <li><strong>Radio buttons</strong> — Only one can be selected at a time. Just <span class="ic">.click()</span> the desired radio button.</li>
+          <li><strong>Grouped checkboxes</strong> — Use <span class="ic">find_elements()</span> to get all checkboxes in a group, then iterate.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Custom Dropdowns (Non-Select)</div>
+        <div class="box box-warn">
+          <div class="box-title">⚠️ Not All Dropdowns are &lt;select&gt;</div>
+          Modern frameworks (React, Angular, Vue) often use custom divs/uls for dropdowns. These do NOT use the Select class. Instead: click the dropdown trigger → wait for options to appear → find and click the option.
+        </div>
+        <ul class="content-list">
+          <li>Click the dropdown trigger element (the visible button/div).</li>
+          <li>Wait for the dropdown menu to appear using explicit wait.</li>
+          <li>Find the desired option using XPath with text() or contains().</li>
+          <li>Click the option.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d5-code">
+      <div class="section">
+        <div class="section-title">Select Dropdown — All Methods</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> Select
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/dropdown"</span>)
+
+<span class="cm"># Locate the dropdown element and wrap with Select class</span>
+dropdown_elem = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"dropdown"</span>)
+dropdown = <span class="cl">Select</span>(dropdown_elem)
+
+<span class="cm"># Method 1: Select by visible text</span>
+dropdown.<span class="fn">select_by_visible_text</span>(<span class="st">"Option 1"</span>)
+
+<span class="cm"># Method 2: Select by value attribute</span>
+dropdown.<span class="fn">select_by_value</span>(<span class="st">"2"</span>)
+
+<span class="cm"># Method 3: Select by index (0-based)</span>
+dropdown.<span class="fn">select_by_index</span>(<span class="nb">1</span>)
+
+<span class="cm"># Get all options</span>
+all_options = dropdown.options
+<span class="fn">print</span>(<span class="st">f"Total options: <span class="nb">{len(all_options)}</span>"</span>)
+<span class="kw">for</span> option <span class="kw">in</span> all_options:
+    <span class="fn">print</span>(<span class="st">f"  - <span class="nb">{option.text}</span> [value=<span class="nb">{option.get_attribute('value')}</span>]"</span>)
+
+<span class="cm"># Get currently selected option</span>
+selected = dropdown.first_selected_option
+<span class="fn">print</span>(<span class="st">"Selected:"</span>, selected.text)
+
+<span class="cm"># Multi-select dropdown</span>
+multi_dropdown = <span class="cl">Select</span>(driver.find_element(<span class="cl">By</span>.ID, <span class="st">"multi"</span>))
+multi_dropdown.<span class="fn">select_by_visible_text</span>(<span class="st">"Python"</span>)
+multi_dropdown.<span class="fn">select_by_visible_text</span>(<span class="st">"Java"</span>)
+all_selected = multi_dropdown.all_selected_options
+<span class="fn">print</span>(<span class="st">"Selected:"</span>, [opt.text <span class="kw">for</span> opt <span class="kw">in</span> all_selected])
+multi_dropdown.<span class="fn">deselect_all</span>()
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Checkboxes & Radio Buttons</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># ─── Checkbox Automation ──────────────────────</span>
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/checkboxes"</span>)
+
+checkboxes = driver.find_elements(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"input[type='checkbox']"</span>)
+
+<span class="kw">for</span> i, cb <span class="kw">in</span> <span class="fn">enumerate</span>(checkboxes):
+    <span class="fn">print</span>(<span class="st">f"Checkbox <span class="nb">{i+1}</span> selected: <span class="nb">{cb.is_selected()}</span>"</span>)
+
+<span class="cm"># Check only if NOT already checked</span>
+<span class="kw">if</span> <span class="kw">not</span> checkboxes[<span class="nb">0</span>].is_selected():
+    checkboxes[<span class="nb">0</span>].<span class="fn">click</span>()
+
+<span class="cm"># Uncheck only if currently checked</span>
+<span class="kw">if</span> checkboxes[<span class="nb">1</span>].is_selected():
+    checkboxes[<span class="nb">1</span>].<span class="fn">click</span>()
+
+<span class="cm"># ─── Radio Button Automation ──────────────────</span>
+radio_buttons = driver.find_elements(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"input[type='radio']"</span>)
+
+<span class="cm"># Click the second radio option</span>
+radio_buttons[<span class="nb">1</span>].<span class="fn">click</span>()
+<span class="fn">print</span>(<span class="st">"Second radio selected:"</span>, radio_buttons[<span class="nb">1</span>].is_selected())
+
+<span class="cm"># Select radio by value</span>
+desired_radio = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"input[type='radio'][value='female']"</span>)
+<span class="kw">if</span> <span class="kw">not</span> desired_radio.is_selected():
+    desired_radio.<span class="fn">click</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Custom Dropdown (Non-select)</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait
+<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC
+
+<span class="cm"># Custom dropdown using divs (common in React/Angular apps)</span>
+wait = <span class="cl">WebDriverWait</span>(driver, <span class="nb">10</span>)
+
+<span class="cm"># Step 1: Click the dropdown trigger</span>
+dropdown_trigger = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".custom-dropdown"</span>)
+dropdown_trigger.<span class="fn">click</span>()
+
+<span class="cm"># Step 2: Wait for options to appear</span>
+wait.until(<span class="cl">EC</span>.visibility_of_element_located((<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".dropdown-menu"</span>)))
+
+<span class="cm"># Step 3: Find and click the desired option</span>
+option = driver.find_element(<span class="cl">By</span>.XPATH, <span class="st">"//ul[@class='dropdown-menu']//li[text()='Python']"</span>)
+option.<span class="fn">click</span>()
+
+<span class="cm"># Verify selection</span>
+selected_value = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".dropdown-selected"</span>).text
+<span class="fn">print</span>(<span class="st">"Selected:"</span>, selected_value)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d5-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>Which Select class method selects an option using the HTML <code>value</code> attribute?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','select_by_visible_text uses the displayed label text, not the value attribute.')">select_by_visible_text()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','select_by_index uses position number, not value attribute.')">select_by_index()</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! select_by_value() selects the option whose value HTML attribute matches the given string.')">select_by_value()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','select_by_attribute is not a valid Select method.')">select_by_attribute()</button>
+        </div>
+        <div class="quiz-result" id="qr11"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>How do you safely check a checkbox only if it is NOT already checked?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Calling click() always toggles, which could uncheck an already-checked box.')">checkbox.click()</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! Check is_selected() first, then click only if it returns False.')">if not checkbox.is_selected(): checkbox.click()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','checkbox.check() is not a valid Selenium method.')">checkbox.check()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','is_enabled() tells if element is enabled, not if it is checked.')">if not checkbox.is_enabled(): checkbox.click()</button>
+        </div>
+        <div class="quiz-result" id="qr12"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete5" onclick="markComplete(5)">✓ Mark Day 5 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(4)">← Day 4</button>
+      <button class="nav-arrow" onclick="showDay(6)">Day 6 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 6 ══════════════════╗ -->
+  <div class="day-panel" id="day6">
+    <div class="day-hero">
+      <div class="day-tag">DAY 06 / 10</div>
+      <h1>Frames, <span>Windows</span> & Tabs</h1>
+      <p>Switch between iFrames, multiple browser windows, and tabs — essential for testing portals, payment gateways, and OAuth flows.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-orange"></span>Intermediate</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Window Management</span>
+        <span class="meta-item"><span class="dot dot-green"></span>~2.5 Hours</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d6-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d6-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d6-quiz')">🧠 Quiz</button>
+    </div>
+    <div class="tab-pane active" id="d6-theory">
+      <div class="section">
+        <div class="section-title">Understanding iFrames</div>
+        <div class="box box-info">
+          <div class="box-title">🖼️ What is an iFrame?</div>
+          An <strong>iFrame (inline frame)</strong> is an HTML element that embeds another document within the current page. Examples: embedded videos, payment forms, Google Maps, reCAPTCHA, social media widgets.
+        </div>
+        <ul class="content-list">
+          <li>Selenium operates within a context. By default, it's the main document context.</li>
+          <li>To interact with elements inside an iFrame, you must <strong>switch to that frame</strong> first.</li>
+          <li>After working inside a frame, switch back to the main document with <span class="ic">driver.switch_to.default_content()</span></li>
+          <li>Nested frames require switching step by step — frame within a frame.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Window / Tab Management</div>
+        <ul class="content-list">
+          <li><strong>window_handles</strong> — A list of all open window/tab handle IDs. The first handle is the original window.</li>
+          <li><strong>current_window_handle</strong> — Returns the handle of the currently focused window.</li>
+          <li><strong>switch_to.window(handle)</strong> — Switch focus to a specific window by handle.</li>
+          <li><strong>New tab via JS</strong> — Use <span class="ic">driver.execute_script("window.open()")</span> to open a new blank tab.</li>
+          <li><strong>Always store the parent handle</strong> — Before clicking a link that opens a new window, save the parent handle to return later.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Frame Switching Methods</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Method</th><th>Description</th></tr>
+            <tr><td class="tag-td">switch_to.frame(0)</td><td>Switch by index (0, 1, 2...)</td></tr>
+            <tr><td class="tag-td">switch_to.frame("name")</td><td>Switch by name attribute</td></tr>
+            <tr><td class="tag-td">switch_to.frame("id")</td><td>Switch by id attribute</td></tr>
+            <tr><td class="tag-td">switch_to.frame(webelement)</td><td>Switch using a WebElement</td></tr>
+            <tr><td class="tag-td">switch_to.default_content()</td><td>Return to main document</td></tr>
+            <tr><td class="tag-td">switch_to.parent_frame()</td><td>Go up one frame level (nested)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d6-code">
+      <div class="section">
+        <div class="section-title">iFrame Handling</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait
+<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/iframe"</span>)
+wait = <span class="cl">WebDriverWait</span>(driver, <span class="nb">10</span>)
+
+<span class="cm"># ─── Method 1: Switch by Index ────────────────</span>
+driver.switch_to.frame(<span class="nb">0</span>)
+editor = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"tinymce"</span>)
+editor.<span class="fn">clear</span>()
+editor.<span class="fn">send_keys</span>(<span class="st">"Hello from inside iFrame!"</span>)
+
+<span class="cm"># Return to main document</span>
+driver.switch_to.default_content()
+<span class="fn">print</span>(<span class="st">"Back in main document"</span>)
+
+<span class="cm"># ─── Method 2: Switch by Name/ID ─────────────</span>
+driver.switch_to.frame(<span class="st">"mce_0_ifr"</span>)  <span class="cm"># by name or id</span>
+driver.switch_to.default_content()
+
+<span class="cm"># ─── Method 3: Switch by WebElement ──────────</span>
+iframe_elem = driver.find_element(<span class="cl">By</span>.TAG_NAME, <span class="st">"iframe"</span>)
+driver.switch_to.frame(iframe_elem)
+driver.switch_to.default_content()
+
+<span class="cm"># ─── Nested Frames ────────────────────────────</span>
+driver.switch_to.frame(<span class="st">"outer"</span>)    <span class="cm"># Enter outer frame</span>
+driver.switch_to.frame(<span class="st">"inner"</span>)    <span class="cm"># Enter inner frame</span>
+<span class="cm"># do stuff in inner frame</span>
+driver.switch_to.parent_frame()     <span class="cm"># Back to outer frame</span>
+driver.switch_to.default_content()  <span class="cm"># Back to main page</span>
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Multiple Windows & Tabs</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/windows"</span>)
+
+<span class="cm"># Save the parent window handle</span>
+parent_handle = driver.current_window_handle
+<span class="fn">print</span>(<span class="st">"Parent handle:"</span>, parent_handle)
+
+<span class="cm"># Click a link that opens a new window</span>
+driver.find_element(<span class="cl">By</span>.LINK_TEXT, <span class="st">"Click Here"</span>).<span class="fn">click</span>()
+
+<span class="cm"># Get all window handles</span>
+all_handles = driver.window_handles
+<span class="fn">print</span>(<span class="st">f"Total windows open: <span class="nb">{len(all_handles)}</span>"</span>)
+
+<span class="cm"># Switch to the new window</span>
+<span class="kw">for</span> handle <span class="kw">in</span> all_handles:
+    <span class="kw">if</span> handle != parent_handle:
+        driver.switch_to.window(handle)
+        <span class="kw">break</span>
+
+<span class="fn">print</span>(<span class="st">"New window title:"</span>, driver.title)
+<span class="cm"># Do work in new window...</span>
+driver.<span class="fn">close</span>()  <span class="cm"># Close the new window</span>
+
+<span class="cm"># Switch back to parent window</span>
+driver.switch_to.window(parent_handle)
+<span class="fn">print</span>(<span class="st">"Back to parent:"</span>, driver.title)
+
+<span class="cm"># Open new tab programmatically</span>
+driver.<span class="fn">execute_script</span>(<span class="st">"window.open('https://google.com', '_blank');"</span>)
+new_tab_handle = [h <span class="kw">for</span> h <span class="kw">in</span> driver.window_handles <span class="kw">if</span> h != parent_handle][<span class="nb">0</span>]
+driver.switch_to.window(new_tab_handle)
+<span class="fn">print</span>(<span class="st">"New tab:"</span>, driver.title)
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d6-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>After working inside an iFrame, which method returns control to the main document?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','switch_to.parent_frame() only goes up one level — to parent frame, not necessarily main document.')">driver.switch_to.parent_frame()</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! switch_to.default_content() always returns to the top-level main document regardless of nesting.')">driver.switch_to.default_content()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','switch_to.main_frame() is not a valid Selenium method.')">driver.switch_to.main_frame()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','switch_to.window() switches windows, not frames.')">driver.switch_to.window(handle)</button>
+        </div>
+        <div class="quiz-result" id="qr13"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>What does <code>driver.window_handles</code> return?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','It returns handles (IDs), not URLs.')">A list of URLs of all open windows</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','It returns a list, not just one value.')">The handle of the current window</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! window_handles returns a list of all open window/tab handle strings.')">A list of all open window/tab handle IDs</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','It does not return a count.')">The count of open windows</button>
+        </div>
+        <div class="quiz-result" id="qr14"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete6" onclick="markComplete(6)">✓ Mark Day 6 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(5)">← Day 5</button>
+      <button class="nav-arrow" onclick="showDay(7)">Day 7 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 7 ══════════════════╗ -->
+  <div class="day-panel" id="day7">
+    <div class="day-hero">
+      <div class="day-tag">DAY 07 / 10</div>
+      <h1>Actions Class — <span>Advanced</span> Interactions</h1>
+      <p>Simulate complex user gestures — mouse hover, drag & drop, right-click, double-click, and keyboard chaining with the ActionChains class.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-orange"></span>Intermediate–Advanced</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Mouse & Keyboard</span>
+        <span class="meta-item"><span class="dot dot-green"></span>~3 Hours</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d7-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d7-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d7-quiz')">🧠 Quiz</button>
+    </div>
+    <div class="tab-pane active" id="d7-theory">
+      <div class="section">
+        <div class="section-title">ActionChains Class</div>
+        <div class="box box-info">
+          <div class="box-title">⛓️ What are ActionChains?</div>
+          ActionChains is a Selenium class that allows chaining of multiple user actions. All actions are queued and executed together when <span class="ic">.perform()</span> is called.
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Method</th><th>Description</th></tr>
+            <tr><td class="tag-td">move_to_element(elem)</td><td>Hover over element (mouse over)</td></tr>
+            <tr><td class="tag-td">click(elem)</td><td>Single left click</td></tr>
+            <tr><td class="tag-td">double_click(elem)</td><td>Double-click element</td></tr>
+            <tr><td class="tag-td">context_click(elem)</td><td>Right-click (context menu)</td></tr>
+            <tr><td class="tag-td">click_and_hold(elem)</td><td>Press and hold left mouse button</td></tr>
+            <tr><td class="tag-td">release()</td><td>Release mouse button</td></tr>
+            <tr><td class="tag-td">drag_and_drop(src, target)</td><td>Drag element from source to target</td></tr>
+            <tr><td class="tag-td">drag_and_drop_by_offset(src, x, y)</td><td>Drag by pixel offset</td></tr>
+            <tr><td class="tag-td">send_keys(keys)</td><td>Type keys at current focus</td></tr>
+            <tr><td class="tag-td">key_down(key)</td><td>Hold down a key</td></tr>
+            <tr><td class="tag-td">key_up(key)</td><td>Release a held key</td></tr>
+            <tr><td class="tag-td">scroll_to_element(elem)</td><td>Scroll until element is in view</td></tr>
+            <tr><td class="tag-td">perform()</td><td>Execute all queued actions</td></tr>
+            <tr><td class="tag-td">reset_actions()</td><td>Clear queued actions</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">When to Use ActionChains</div>
+        <ul class="content-list">
+          <li><strong>Hover menus:</strong> Navigation menus that only appear on mouse hover cannot be clicked directly without hovering first.</li>
+          <li><strong>Drag and Drop:</strong> Sortable lists, kanban boards, slider controls.</li>
+          <li><strong>Tooltips:</strong> Verifying tooltips that appear on hover.</li>
+          <li><strong>Right-click menus:</strong> Testing custom context menus in web apps.</li>
+          <li><strong>Keyboard shortcuts:</strong> CTRL+C, CTRL+V, CTRL+Z — multi-key combinations.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d7-code">
+      <div class="section">
+        <div class="section-title">ActionChains — All Key Methods</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.common.action_chains <span class="kw">import</span> ActionChains
+<span class="kw">from</span> selenium.webdriver.common.keys <span class="kw">import</span> Keys
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+actions = <span class="cl">ActionChains</span>(driver)
+
+<span class="cm"># ─── 1. Hover (Mouse Over) ────────────────────</span>
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/hovers"</span>)
+avatars = driver.find_elements(<span class="cl">By</span>.CLASS_NAME, <span class="st">"figure"</span>)
+actions.move_to_element(avatars[<span class="nb">0</span>]).<span class="fn">perform</span>()
+
+<span class="cm"># ─── 2. Double Click ─────────────────────────</span>
+element = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"some-element"</span>)
+actions.double_click(element).<span class="fn">perform</span>()
+
+<span class="cm"># ─── 3. Right Click (Context Menu) ───────────</span>
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/context_menu"</span>)
+box = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"hot-spot"</span>)
+actions.context_click(box).<span class="fn">perform</span>()
+
+<span class="cm"># ─── 4. Drag and Drop ────────────────────────</span>
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/drag_and_drop"</span>)
+source = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"column-a"</span>)
+target = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"column-b"</span>)
+actions.drag_and_drop(source, target).<span class="fn">perform</span>()
+
+<span class="cm"># ─── 5. Drag by Offset (x, y pixels) ─────────</span>
+slider = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".slider input"</span>)
+actions.click_and_hold(slider).move_by_offset(<span class="nb">50</span>, <span class="nb">0</span>).release().<span class="fn">perform</span>()
+
+<span class="cm"># ─── 6. Key Down + Click (Multi-Select) ──────</span>
+items = driver.find_elements(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"li.item"</span>)
+actions.click(items[<span class="nb">0</span>])
+actions.key_down(<span class="cl">Keys</span>.CONTROL)
+actions.click(items[<span class="nb">2</span>])     <span class="cm"># CTRL+click 3rd item</span>
+actions.key_up(<span class="cl">Keys</span>.CONTROL)
+actions.<span class="fn">perform</span>()
+
+<span class="cm"># ─── 7. Chained Actions (Multiple in one) ────</span>
+actions.move_to_element(element)\
+       .click()\
+       .send_keys(<span class="st">"Test input"</span>)\
+       .key_down(<span class="cl">Keys</span>.SHIFT)\
+       .send_keys(<span class="cl">Keys</span>.HOME)\
+       .key_up(<span class="cl">Keys</span>.SHIFT)\
+       .<span class="fn">perform</span>()
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d7-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>What method executes all queued ActionChains actions?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','execute() is not a valid ActionChains method.')">actions.execute()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','run() is not a valid ActionChains method.')">actions.run()</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! perform() executes all the queued actions in sequence.')">actions.perform()</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','start() is not a valid ActionChains method.')">actions.start()</button>
+        </div>
+        <div class="quiz-result" id="qr15"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>Which method simulates a right-click (context menu) on an element?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','right_click() is not a valid ActionChains method.')">actions.right_click(element)</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! context_click() simulates a right mouse button click.')">actions.context_click(element)</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','alt_click() is not a valid ActionChains method.')">actions.alt_click(element)</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','secondary_click() is not a valid ActionChains method.')">actions.secondary_click(element)</button>
+        </div>
+        <div class="quiz-result" id="qr16"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete7" onclick="markComplete(7)">✓ Mark Day 7 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(6)">← Day 6</button>
+      <button class="nav-arrow" onclick="showDay(8)">Day 8 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 8 ══════════════════╗ -->
+  <div class="day-panel" id="day8">
+    <div class="day-hero">
+      <div class="day-tag">DAY 08 / 10</div>
+      <h1>Screenshots, <span>File Upload</span> & Browser Options</h1>
+      <p>Capture test evidence with screenshots, automate file uploads, configure browser with custom options and headless mode.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-orange"></span>Intermediate</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Files & Config</span>
+        <span class="meta-item"><span class="dot dot-green"></span>~2.5 Hours</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d8-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d8-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d8-quiz')">🧠 Quiz</button>
+    </div>
+    <div class="tab-pane active" id="d8-theory">
+      <div class="section">
+        <div class="section-title">Screenshots in Selenium</div>
+        <div class="concept-grid">
+          <div class="concept-card"><div class="cc-icon">📸</div><div class="cc-title">Full Page Screenshot</div><div class="cc-desc">Captures the entire visible browser viewport as a PNG file — saves as evidence of test pass/fail.</div></div>
+          <div class="concept-card"><div class="cc-icon">🔲</div><div class="cc-title">Element Screenshot</div><div class="cc-desc">Captures only a specific element's area. Selenium 4+ supports element.screenshot() directly.</div></div>
+          <div class="concept-card"><div class="cc-icon">🕐</div><div class="cc-title">Timestamp Naming</div><div class="cc-desc">Always use timestamps in screenshot filenames to avoid overwriting: screenshot_2024-01-15_10-30.png</div></div>
+          <div class="concept-card"><div class="cc-icon">🧪</div><div class="cc-title">On Failure</div><div class="cc-desc">Best practice: auto-capture screenshot in test teardown when test fails. Attach to test reports.</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">File Upload Approaches</div>
+        <ul class="content-list">
+          <li><strong>send_keys() method:</strong> For standard HTML file input (<span class="ic">&lt;input type="file"&gt;</span>), use <span class="ic">element.send_keys("/path/to/file")</span> — the most reliable approach.</li>
+          <li><strong>Absolute file path:</strong> Always use the full absolute path when calling send_keys for file upload.</li>
+          <li><strong>Custom upload dialogs:</strong> For non-standard dialogs (Windows OS file picker), use tools like AutoIt or pyautogui — Selenium cannot control OS-level dialogs.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">ChromeOptions — Key Arguments</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Option</th><th>Description</th></tr>
+            <tr><td class="tag-td">--headless</td><td>Run without browser GUI (server/CI environments)</td></tr>
+            <tr><td class="tag-td">--no-sandbox</td><td>Required for running Chrome in Docker/Linux</td></tr>
+            <tr><td class="tag-td">--disable-gpu</td><td>Disable GPU acceleration (headless mode)</td></tr>
+            <tr><td class="tag-td">--window-size=1920,1080</td><td>Set viewport size for headless mode</td></tr>
+            <tr><td class="tag-td">--incognito</td><td>Open browser in incognito/private mode</td></tr>
+            <tr><td class="tag-td">--disable-notifications</td><td>Block browser notification popups</td></tr>
+            <tr><td class="tag-td">--start-maximized</td><td>Start browser maximized</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d8-code">
+      <div class="section">
+        <div class="section-title">Screenshots — Page & Element</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime
+<span class="kw">import</span> os
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://google.com"</span>)
+driver.maximize_window()
+
+<span class="cm"># ─── Full Page Screenshot ─────────────────────</span>
+driver.<span class="fn">save_screenshot</span>(<span class="st">"screenshot.png"</span>)
+
+<span class="cm"># Screenshot with timestamp filename</span>
+timestamp = datetime.now().strftime(<span class="st">"%Y%m%d_%H%M%S"</span>)
+filename = <span class="st">f"screenshot_<span class="nb">{timestamp}</span>.png"</span>
+driver.<span class="fn">save_screenshot</span>(filename)
+<span class="fn">print</span>(<span class="st">f"Saved: <span class="nb">{filename}</span>"</span>)
+
+<span class="cm"># Screenshot to a specific folder</span>
+os.makedirs(<span class="st">"screenshots"</span>, exist_ok=<span class="kw">True</span>)
+driver.<span class="fn">save_screenshot</span>(<span class="st">f"screenshots/<span class="nb">{timestamp}</span>.png"</span>)
+
+<span class="cm"># Get screenshot as Base64 (useful for reports)</span>
+base64_img = driver.get_screenshot_as_base64()
+
+<span class="cm"># Get screenshot as bytes (in-memory)</span>
+img_bytes = driver.get_screenshot_as_png()
+
+<span class="cm"># ─── Element Screenshot (Selenium 4+) ────────</span>
+logo = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"#logo"</span>)
+logo.<span class="fn">screenshot</span>(<span class="st">"logo_element.png"</span>)
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">File Upload</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+<span class="kw">import</span> os
+
+driver = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+driver.<span class="fn">get</span>(<span class="st">"https://the-internet.herokuapp.com/upload"</span>)
+
+<span class="cm"># File upload using send_keys — provide ABSOLUTE path</span>
+file_path = os.path.abspath(<span class="st">"test_document.pdf"</span>)
+upload_input = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"file-upload"</span>)
+upload_input.<span class="fn">send_keys</span>(file_path)
+
+<span class="cm"># Click Upload button</span>
+driver.find_element(<span class="cl">By</span>.ID, <span class="st">"file-submit"</span>).<span class="fn">click</span>()
+
+<span class="cm"># Verify upload success</span>
+result = driver.find_element(<span class="cl">By</span>.ID, <span class="st">"uploaded-files"</span>)
+<span class="fn">print</span>(<span class="st">"Uploaded file:"</span>, result.text)
+
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Chrome Options & Headless Mode</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.chrome.options <span class="kw">import</span> Options
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+<span class="cm"># Configure Chrome Options</span>
+options = <span class="cl">Options</span>()
+
+<span class="cm"># Headless mode (no GUI — for CI/CD servers)</span>
+options.add_argument(<span class="st">"--headless=new"</span>)       <span class="cm"># New headless mode (Chrome 112+)</span>
+options.add_argument(<span class="st">"--no-sandbox"</span>)
+options.add_argument(<span class="st">"--disable-gpu"</span>)
+options.add_argument(<span class="st">"--window-size=1920,1080"</span>)
+
+<span class="cm"># Block popups and notifications</span>
+options.add_argument(<span class="st">"--disable-notifications"</span>)
+options.add_argument(<span class="st">"--disable-popup-blocking"</span>)
+
+<span class="cm"># Start maximized</span>
+options.add_argument(<span class="st">"--start-maximized"</span>)
+
+<span class="cm"># Incognito mode</span>
+options.add_argument(<span class="st">"--incognito"</span>)
+
+<span class="cm"># Set download directory</span>
+prefs = {<span class="st">"download.default_directory"</span>: <span class="st">"/path/to/downloads"</span>}
+options.add_experimental_option(<span class="st">"prefs"</span>, prefs)
+
+<span class="cm"># Ignore SSL errors</span>
+options.add_argument(<span class="st">"--ignore-certificate-errors"</span>)
+
+driver = webdriver.<span class="fn">Chrome</span>(
+    service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()),
+    options=options
+)
+
+driver.<span class="fn">get</span>(<span class="st">"https://example.com"</span>)
+<span class="fn">print</span>(driver.title)
+driver.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d8-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>Which method is used for standard HTML file upload in Selenium?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','upload_file() is not a valid Selenium method.')">driver.upload_file(path)</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! send_keys() with the file path sets the value of a file input element directly.')">input_element.send_keys("/absolute/path/to/file")</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','attach_file() is not a valid Selenium method.')">driver.attach_file(path)</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','ActionChains is not used for simple file upload.')">ActionChains.upload(path)</button>
+        </div>
+        <div class="quiz-result" id="qr17"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete8" onclick="markComplete(8)">✓ Mark Day 8 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(7)">← Day 7</button>
+      <button class="nav-arrow" onclick="showDay(9)">Day 9 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 9 ══════════════════╗ -->
+  <div class="day-panel" id="day9">
+    <div class="day-hero">
+      <div class="day-tag">DAY 09 / 10</div>
+      <h1>pytest <span>Framework</span> Integration</h1>
+      <p>Structure professional test suites with pytest — fixtures, setup/teardown, parameterization, assertions, and HTML reporting.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-orange"></span>Intermediate–Advanced</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Test Framework</span>
+        <span class="meta-item"><span class="dot dot-green"></span>~3.5 Hours</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d9-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d9-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d9-quiz')">🧠 Quiz</button>
+    </div>
+    <div class="tab-pane active" id="d9-theory">
+      <div class="section">
+        <div class="section-title">pytest Fundamentals</div>
+        <div class="concept-grid">
+          <div class="concept-card"><div class="cc-icon">📁</div><div class="cc-title">Test Discovery</div><div class="cc-desc">pytest auto-discovers test files starting with <strong>test_</strong> or ending with <strong>_test.py</strong>, and functions starting with <strong>test_</strong>.</div></div>
+          <div class="concept-card"><div class="cc-icon">⚙️</div><div class="cc-title">Fixtures</div><div class="cc-desc">Reusable setup/teardown functions. Decorated with <span style="color:var(--accent)">@pytest.fixture</span>. Injected by parameter name into test functions.</div></div>
+          <div class="concept-card"><div class="cc-icon">🔁</div><div class="cc-title">Parametrize</div><div class="cc-desc">Run the same test with multiple data sets using <span style="color:var(--accent)">@pytest.mark.parametrize</span>. Eliminates code duplication.</div></div>
+          <div class="concept-card"><div class="cc-icon">📊</div><div class="cc-title">HTML Reports</div><div class="cc-desc">Generate rich HTML test reports with pytest-html: <span style="color:var(--accent)">--html=report.html --self-contained-html</span></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Fixture Scopes</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Scope</th><th>Setup Runs</th><th>Use For</th></tr>
+            <tr><td class="tag-td">function</td><td>Before each test (default)</td><td>Fresh browser per test</td></tr>
+            <tr><td class="tag-td">class</td><td>Once per test class</td><td>Shared state within class</td></tr>
+            <tr><td class="tag-td">module</td><td>Once per test file</td><td>Shared browser per file</td></tr>
+            <tr><td class="tag-td">session</td><td>Once per test session</td><td>Very expensive setups</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">conftest.py</div>
+        <div class="box box-info">
+          <div class="box-title">📂 conftest.py — The Fixture Hub</div>
+          Place shared fixtures in a file named <strong>conftest.py</strong> in your project root. pytest automatically discovers and imports it — no manual import needed in test files. All test files in the directory share access to these fixtures.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Common pytest Commands</div>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Command</th><th>Description</th></tr>
+            <tr><td class="tag-td">pytest</td><td>Run all discovered tests</td></tr>
+            <tr><td class="tag-td">pytest -v</td><td>Verbose output</td></tr>
+            <tr><td class="tag-td">pytest test_login.py</td><td>Run specific file</td></tr>
+            <tr><td class="tag-td">pytest -k "login"</td><td>Run tests matching keyword</td></tr>
+            <tr><td class="tag-td">pytest -m "smoke"</td><td>Run tests with marker</td></tr>
+            <tr><td class="tag-td">pytest --html=report.html</td><td>Generate HTML report</td></tr>
+            <tr><td class="tag-td">pytest -x</td><td>Stop on first failure</td></tr>
+            <tr><td class="tag-td">pytest --tb=short</td><td>Short traceback format</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d9-code">
+      <div class="section">
+        <div class="section-title">conftest.py — Shared Fixtures</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON — conftest.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># conftest.py — Place in project root</span>
+<span class="kw">import</span> pytest
+<span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.chrome.service <span class="kw">import</span> Service
+<span class="kw">from</span> webdriver_manager.chrome <span class="kw">import</span> ChromeDriverManager
+
+<span class="kw">@pytest</span>.fixture(scope=<span class="st">"function"</span>)
+<span class="kw">def</span> <span class="fn">driver</span>():
+    <span class="st">"""Create a fresh Chrome WebDriver for each test"""</span>
+    options = webdriver.<span class="cl">ChromeOptions</span>()
+    options.add_argument(<span class="st">"--start-maximized"</span>)
+    options.add_argument(<span class="st">"--disable-notifications"</span>)
+
+    drv = webdriver.<span class="fn">Chrome</span>(
+        service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()),
+        options=options
+    )
+    drv.implicitly_wait(<span class="nb">5</span>)
+
+    <span class="kw">yield</span> drv         <span class="cm"># This is where the test runs</span>
+
+    drv.<span class="fn">quit</span>()         <span class="cm"># Teardown — runs after every test</span>
+
+<span class="kw">@pytest</span>.fixture(scope=<span class="st">"module"</span>)
+<span class="kw">def</span> <span class="fn">shared_driver</span>():
+    <span class="st">"""One browser shared across all tests in a module"""</span>
+    drv = webdriver.<span class="fn">Chrome</span>(service=<span class="cl">Service</span>(<span class="cl">ChromeDriverManager</span>().install()))
+    drv.maximize_window()
+    <span class="kw">yield</span> drv
+    drv.<span class="fn">quit</span>()</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Test File with pytest</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON — test_login.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># test_login.py</span>
+<span class="kw">import</span> pytest
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait
+<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC
+
+BASE_URL = <span class="st">"https://the-internet.herokuapp.com/login"</span>
+
+<span class="kw">class</span> <span class="cl">TestLogin</span>:
+
+    <span class="kw">def</span> <span class="fn">test_valid_login</span>(self, driver):
+        <span class="st">"""Test successful login with correct credentials"""</span>
+        driver.<span class="fn">get</span>(BASE_URL)
+        driver.find_element(<span class="cl">By</span>.ID, <span class="st">"username"</span>).<span class="fn">send_keys</span>(<span class="st">"tomsmith"</span>)
+        driver.find_element(<span class="cl">By</span>.ID, <span class="st">"password"</span>).<span class="fn">send_keys</span>(<span class="st">"SuperSecretPassword!"</span>)
+        driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"button[type='submit']"</span>).<span class="fn">click</span>()
+
+        wait = <span class="cl">WebDriverWait</span>(driver, <span class="nb">10</span>)
+        success = wait.until(<span class="cl">EC</span>.visibility_of_element_located((<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".flash.success"</span>)))
+
+        <span class="kw">assert</span> <span class="st">"You logged into a secure area!"</span> <span class="kw">in</span> success.text
+        <span class="kw">assert</span> <span class="st">"/secure"</span> <span class="kw">in</span> driver.current_url
+
+    <span class="kw">def</span> <span class="fn">test_invalid_login</span>(self, driver):
+        <span class="st">"""Test login failure with wrong password"""</span>
+        driver.<span class="fn">get</span>(BASE_URL)
+        driver.find_element(<span class="cl">By</span>.ID, <span class="st">"username"</span>).<span class="fn">send_keys</span>(<span class="st">"tomsmith"</span>)
+        driver.find_element(<span class="cl">By</span>.ID, <span class="st">"password"</span>).<span class="fn">send_keys</span>(<span class="st">"wrongpassword"</span>)
+        driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"button[type='submit']"</span>).<span class="fn">click</span>()
+
+        error_msg = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".flash.error"</span>)
+        <span class="kw">assert</span> <span class="st">"Your password is invalid!"</span> <span class="kw">in</span> error_msg.text
+
+    <span class="kw">def</span> <span class="fn">test_empty_credentials</span>(self, driver):
+        <span class="st">"""Test login with empty username and password"""</span>
+        driver.<span class="fn">get</span>(BASE_URL)
+        driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"button[type='submit']"</span>).<span class="fn">click</span>()
+        error = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".flash.error"</span>)
+        <span class="kw">assert</span> error.is_displayed()
+
+
+<span class="cm"># ─── Parametrize — Run with Multiple Data Sets ──────</span>
+<span class="kw">@pytest</span>.mark.parametrize(<span class="st">"username,password,expected"</span>, [
+    (<span class="st">"tomsmith"</span>,   <span class="st">"SuperSecretPassword!"</span>, <span class="st">"success"</span>),
+    (<span class="st">"wronguser"</span>,  <span class="st">"SuperSecretPassword!"</span>, <span class="st">"error"</span>),
+    (<span class="st">"tomsmith"</span>,   <span class="st">"wrongpass"</span>,            <span class="st">"error"</span>),
+])
+<span class="kw">def</span> <span class="fn">test_login_parametrized</span>(driver, username, password, expected):
+    driver.<span class="fn">get</span>(BASE_URL)
+    driver.find_element(<span class="cl">By</span>.ID, <span class="st">"username"</span>).<span class="fn">send_keys</span>(username)
+    driver.find_element(<span class="cl">By</span>.ID, <span class="st">"password"</span>).<span class="fn">send_keys</span>(password)
+    driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"button[type='submit']"</span>).<span class="fn">click</span>()
+
+    flash = driver.find_element(<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".flash"</span>)
+    <span class="kw">assert</span> expected <span class="kw">in</span> flash.<span class="fn">get_attribute</span>(<span class="st">"class"</span>)</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Running Tests & HTML Report</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">TERMINAL</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># Run all tests</span>
+pytest -v
+
+<span class="cm"># Run specific file</span>
+pytest test_login.py -v
+
+<span class="cm"># Run specific test function</span>
+pytest test_login.py::TestLogin::test_valid_login -v
+
+<span class="cm"># Run tests matching keyword</span>
+pytest -k "login" -v
+
+<span class="cm"># Generate HTML report</span>
+pytest --html=reports/test_report.html --self-contained-html -v
+
+<span class="cm"># Stop after first failure</span>
+pytest -x -v
+
+<span class="cm"># Show print output (stdout)</span>
+pytest -s -v
+
+<span class="cm"># Run with markers</span>
+pytest -m "smoke" -v</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d9-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>Where should shared pytest fixtures be placed so all test files can access them without explicit imports?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','fixtures.py must be manually imported, not auto-discovered.')">fixtures.py</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! conftest.py is auto-discovered by pytest and fixtures within it are available to all tests in the directory.')">conftest.py</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','base_test.py is not auto-discovered by pytest.')">base_test.py</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','setup.py is Python package config, not for test fixtures.')">setup.py</button>
+        </div>
+        <div class="quiz-result" id="qr18"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>Which decorator runs the same test function multiple times with different inputs?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','@pytest.mark.data is not a valid pytest decorator.')">@pytest.mark.data</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','@pytest.mark.repeat does not pass different parameter values.')">@pytest.mark.repeat</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! @pytest.mark.parametrize allows specifying multiple sets of arguments for a single test function.')">@pytest.mark.parametrize</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','@pytest.fixture is for setup/teardown, not multiple runs.')">@pytest.fixture</button>
+        </div>
+        <div class="quiz-result" id="qr19"></div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete9" onclick="markComplete(9)">✓ Mark Day 9 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(8)">← Day 8</button>
+      <button class="nav-arrow" onclick="showDay(10)">Day 10 →</button>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════ DAY 10 ══════════════════╗ -->
+  <div class="day-panel" id="day10">
+    <div class="day-hero">
+      <div class="day-tag">DAY 10 / 10</div>
+      <h1>Page Object <span>Model</span> (POM)</h1>
+      <p>Master the industry-standard POM design pattern — write maintainable, scalable, and reusable Selenium test architectures.</p>
+      <div class="day-meta">
+        <span class="meta-item"><span class="dot dot-red"></span>Advanced</span>
+        <span class="meta-item"><span class="dot dot-purple"></span>Design Patterns</span>
+        <span class="meta-item"><span class="dot dot-green"></span>~4 Hours</span>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'d10-theory')">📖 Theory</button>
+      <button class="tab-btn" onclick="switchTab(this,'d10-code')">💻 Code</button>
+      <button class="tab-btn" onclick="switchTab(this,'d10-quiz')">🧠 Quiz</button>
+    </div>
+    <div class="tab-pane active" id="d10-theory">
+      <div class="section">
+        <div class="section-title">What is Page Object Model?</div>
+        <div class="box box-info">
+          <div class="box-title">🏗️ POM Definition</div>
+          POM is a design pattern that creates a <strong>separate class for each web page</strong>. Each class contains all locators and methods for that page. Tests use these classes instead of directly interacting with browser elements. This separates <em>test logic</em> from <em>UI interaction logic</em>.
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card"><div class="cc-icon">🔧</div><div class="cc-title">Maintainability</div><div class="cc-desc">If a locator changes, update only one Page class — not every test that uses it.</div></div>
+          <div class="concept-card"><div class="cc-icon">♻️</div><div class="cc-title">Reusability</div><div class="cc-desc">Page classes are reused across multiple test files. Write once, use everywhere.</div></div>
+          <div class="concept-card"><div class="cc-icon">📖</div><div class="cc-title">Readability</div><div class="cc-desc">Tests read like plain English: login_page.enter_username("tom").click_login(). Clear and understandable.</div></div>
+          <div class="concept-card"><div class="cc-icon">🧩</div><div class="cc-title">Separation of Concerns</div><div class="cc-desc">Test logic (what to test) is separated from page logic (how to interact). Cleaner codebase.</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">POM Project Structure</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">FOLDER STRUCTURE</span></div>
+          <pre><code>selenium_project/
+│
+├── pages/                    <span class="cm"># Page Object Classes</span>
+│   ├── __init__.py
+│   ├── base_page.py          <span class="cm"># Base class with common methods</span>
+│   ├── login_page.py         <span class="cm"># Login Page Object</span>
+│   ├── dashboard_page.py     <span class="cm"># Dashboard Page Object</span>
+│   └── register_page.py      <span class="cm"># Registration Page Object</span>
+│
+├── tests/                    <span class="cm"># Test Files</span>
+│   ├── __init__.py
+│   ├── test_login.py
+│   └── test_register.py
+│
+├── utils/                    <span class="cm"># Utilities</span>
+│   ├── driver_factory.py     <span class="cm"># Driver setup utility</span>
+│   └── helpers.py
+│
+├── screenshots/              <span class="cm"># Auto-saved screenshots</span>
+├── reports/                  <span class="cm"># HTML test reports</span>
+├── conftest.py               <span class="cm"># pytest fixtures</span>
+└── pytest.ini                <span class="cm"># pytest configuration</span></code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">POM Rules</div>
+        <ul class="content-list">
+          <li><strong>One class per page</strong> — Each web page has its own Python class.</li>
+          <li><strong>Locators as class attributes</strong> — Define locators at the top of the class.</li>
+          <li><strong>No assertions in page classes</strong> — Assertions belong in test files only.</li>
+          <li><strong>Methods return page objects</strong> — Actions that navigate to new pages should return the new page's object (method chaining).</li>
+          <li><strong>Base Page class</strong> — Common methods (wait, click, type) go in a parent BasePage class.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d10-code">
+      <div class="section">
+        <div class="section-title">base_page.py — Common Methods</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON — pages/base_page.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># pages/base_page.py</span>
+<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait
+<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC
+<span class="kw">from</span> selenium.common.exceptions <span class="kw">import</span> TimeoutException
+
+<span class="kw">class</span> <span class="cl">BasePage</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, driver, timeout=<span class="nb">10</span>):
+        self.driver = driver
+        self.timeout = timeout
+        self.wait = <span class="cl">WebDriverWait</span>(driver, timeout)
+
+    <span class="kw">def</span> <span class="fn">open</span>(self, url):
+        self.driver.<span class="fn">get</span>(url)
+        <span class="kw">return</span> self
+
+    <span class="kw">def</span> <span class="fn">find</span>(self, locator):
+        <span class="kw">return</span> self.wait.until(<span class="cl">EC</span>.presence_of_element_located(locator))
+
+    <span class="kw">def</span> <span class="fn">click</span>(self, locator):
+        self.wait.until(<span class="cl">EC</span>.element_to_be_clickable(locator)).<span class="fn">click</span>()
+
+    <span class="kw">def</span> <span class="fn">type_text</span>(self, locator, text):
+        element = self.wait.until(<span class="cl">EC</span>.visibility_of_element_located(locator))
+        element.<span class="fn">clear</span>()
+        element.<span class="fn">send_keys</span>(text)
+
+    <span class="kw">def</span> <span class="fn">get_text</span>(self, locator):
+        <span class="kw">return</span> self.wait.until(<span class="cl">EC</span>.visibility_of_element_located(locator)).text
+
+    <span class="kw">def</span> <span class="fn">is_visible</span>(self, locator):
+        <span class="kw">try</span>:
+            self.wait.until(<span class="cl">EC</span>.visibility_of_element_located(locator))
+            <span class="kw">return</span> <span class="kw">True</span>
+        <span class="kw">except</span> <span class="cl">TimeoutException</span>:
+            <span class="kw">return</span> <span class="kw">False</span>
+
+    <span class="kw">def</span> <span class="fn">take_screenshot</span>(self, name):
+        self.driver.<span class="fn">save_screenshot</span>(<span class="st">f"screenshots/<span class="nb">{name}</span>.png"</span>)</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">login_page.py — Page Object</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON — pages/login_page.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># pages/login_page.py</span>
+<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By
+<span class="kw">from</span> pages.base_page <span class="kw">import</span> BasePage
+
+<span class="kw">class</span> <span class="cl">LoginPage</span>(<span class="cl">BasePage</span>):
+    <span class="cm"># ─── Locators ──────────────────────────────────</span>
+    URL            = <span class="st">"https://the-internet.herokuapp.com/login"</span>
+    USERNAME_INPUT = (<span class="cl">By</span>.ID, <span class="st">"username"</span>)
+    PASSWORD_INPUT = (<span class="cl">By</span>.ID, <span class="st">"password"</span>)
+    LOGIN_BTN      = (<span class="cl">By</span>.CSS_SELECTOR, <span class="st">"button[type='submit']"</span>)
+    FLASH_MSG      = (<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".flash"</span>)
+    SUCCESS_FLASH  = (<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".flash.success"</span>)
+    ERROR_FLASH    = (<span class="cl">By</span>.CSS_SELECTOR, <span class="st">".flash.error"</span>)
+
+    <span class="cm"># ─── Page Actions ──────────────────────────────</span>
+    <span class="kw">def</span> <span class="fn">open_login_page</span>(self):
+        <span class="kw">return</span> self.<span class="fn">open</span>(self.URL)
+
+    <span class="kw">def</span> <span class="fn">enter_username</span>(self, username):
+        self.<span class="fn">type_text</span>(self.USERNAME_INPUT, username)
+        <span class="kw">return</span> self   <span class="cm"># Return self for method chaining</span>
+
+    <span class="kw">def</span> <span class="fn">enter_password</span>(self, password):
+        self.<span class="fn">type_text</span>(self.PASSWORD_INPUT, password)
+        <span class="kw">return</span> self
+
+    <span class="kw">def</span> <span class="fn">click_login</span>(self):
+        self.<span class="fn">click</span>(self.LOGIN_BTN)
+        <span class="kw">return</span> self
+
+    <span class="kw">def</span> <span class="fn">login</span>(self, username, password):
+        <span class="st">"""Complete login action"""</span>
+        <span class="kw">return</span> self.<span class="fn">enter_username</span>(username)\
+                   .<span class="fn">enter_password</span>(password)\
+                   .<span class="fn">click_login</span>()
+
+    <span class="cm"># ─── Verification Methods ──────────────────────</span>
+    <span class="kw">def</span> <span class="fn">is_login_successful</span>(self):
+        <span class="kw">return</span> self.<span class="fn">is_visible</span>(self.SUCCESS_FLASH)
+
+    <span class="kw">def</span> <span class="fn">get_flash_message</span>(self):
+        <span class="kw">return</span> self.<span class="fn">get_text</span>(self.FLASH_MSG)</code></pre>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">test_login_pom.py — Clean Test File</div>
+        <div class="code-wrap">
+          <div class="code-header"><span class="code-lang">PYTHON — tests/test_login_pom.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code><span class="cm"># tests/test_login_pom.py</span>
+<span class="kw">import</span> pytest
+<span class="kw">from</span> pages.login_page <span class="kw">import</span> LoginPage
+
+<span class="kw">class</span> <span class="cl">TestLoginPOM</span>:
+
+    <span class="kw">def</span> <span class="fn">test_valid_login</span>(self, driver):
+        <span class="st">"""Clean, readable test using POM"""</span>
+        login = <span class="cl">LoginPage</span>(driver)
+        login.<span class="fn">open_login_page</span>()
+        login.<span class="fn">login</span>(<span class="st">"tomsmith"</span>, <span class="st">"SuperSecretPassword!"</span>)
+
+        <span class="kw">assert</span> login.<span class="fn">is_login_successful</span>(), <span class="st">"Login should succeed"</span>
+        <span class="kw">assert</span> <span class="st">"secure"</span> <span class="kw">in</span> driver.current_url
+
+    <span class="kw">def</span> <span class="fn">test_invalid_password</span>(self, driver):
+        login = <span class="cl">LoginPage</span>(driver)
+        login.<span class="fn">open_login_page</span>()
+        login.<span class="fn">login</span>(<span class="st">"tomsmith"</span>, <span class="st">"wrongpass"</span>)
+
+        msg = login.<span class="fn">get_flash_message</span>()
+        <span class="kw">assert</span> <span class="st">"invalid"</span> <span class="kw">in</span> msg.lower(), <span class="st">f"Expected error, got: {msg}"</span>
+
+    <span class="kw">@pytest</span>.mark.parametrize(<span class="st">"user,pwd,should_succeed"</span>, [
+        (<span class="st">"tomsmith"</span>,   <span class="st">"SuperSecretPassword!"</span>, <span class="kw">True</span>),
+        (<span class="st">"tomsmith"</span>,   <span class="st">"wrongpass"</span>,            <span class="kw">False</span>),
+        (<span class="st">"wronguser"</span>,  <span class="st">"SuperSecretPassword!"</span>, <span class="kw">False</span>),
+    ])
+    <span class="kw">def</span> <span class="fn">test_login_scenarios</span>(self, driver, user, pwd, should_succeed):
+        login = <span class="cl">LoginPage</span>(driver)
+        login.<span class="fn">open_login_page</span>()
+        login.<span class="fn">login</span>(user, pwd)
+
+        result = login.<span class="fn">is_login_successful</span>()
+        <span class="kw">assert</span> result == should_succeed</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="d10-quiz">
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q1.</span>In the Page Object Model, where should you place assertion statements?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Page classes should NOT contain assertions. They only handle UI interactions.')">Inside Page Object classes (LoginPage, DashboardPage)</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! Assertions belong only in test files. Page classes should only interact with the UI — never verify outcomes.')">In test files (test_login.py)</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','BasePage is for shared methods, not assertions.')">In the BasePage class</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','conftest.py is for fixtures, not assertions.')">In conftest.py</button>
+        </div>
+        <div class="quiz-result" id="qr20"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q2.</span>What is the main benefit of placing locators as class attributes in Page Object classes?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Test speed is not affected by locator placement.')">Makes tests run faster</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Python syntax is not affected by class attribute placement.')">Better Python syntax</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! Class-level locators mean you update the locator once in one place, and ALL methods using it automatically get the fix.')">When a locator changes, it only needs to be updated in ONE place</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Browser compatibility is unrelated to locator organization.')">Better browser compatibility</button>
+        </div>
+        <div class="quiz-result" id="qr21"></div>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-q"><span>Q3.</span>In POM, what should a page action method return when navigation stays on the same page?</div>
+        <div class="options">
+          <button class="opt-btn" onclick="checkAns(this,'wrong','Returning None would break method chaining.')">None</button>
+          <button class="opt-btn" onclick="checkAns(this,'correct','Correct! Returning self enables method chaining: login_page.enter_username("x").enter_password("y").click_login()')">self (the current page object)</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','The driver is not typically returned from page methods.')">The WebDriver instance</button>
+          <button class="opt-btn" onclick="checkAns(this,'wrong','True/False is reserved for boolean verification methods.')">True or False</button>
+        </div>
+        <div class="quiz-result" id="qr22"></div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(16,217,133,.1));border:1px solid rgba(124,58,237,.3);border-radius:var(--radius);padding:24px;margin-top:28px;text-align:center">
+      <div style="font-size:36px;margin-bottom:10px">🎉</div>
+      <div style="font-size:20px;font-weight:700;margin-bottom:8px">Congratulations! Course Complete!</div>
+      <div style="color:var(--muted);font-size:14px;max-width:500px;margin:0 auto">You've covered all 10 days of Python Selenium Automation Testing — from setup to professional POM architecture. Keep practicing on <strong style="color:var(--accent)">the-internet.herokuapp.com</strong> and <strong style="color:var(--primary)">automationpractice.com</strong></div>
+    </div>
+
+    <button class="complete-btn" id="complete10" onclick="markComplete(10)">✓ Mark Day 10 Complete</button>
+    <div class="nav-row">
+      <button class="nav-arrow" onclick="showDay(9)">← Day 9</button>
+      <button class="nav-arrow" disabled>Course Complete 🎓</button>
+    </div>
+  </div>
+
+  </main>
+</div>
+
+<script>
+const completed = new Set();
+let currentDay = 1;
+
+function showDay(n) {
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('day'+n).classList.add('active');
+  document.getElementById('nav'+n).classList.add('active');
+  currentDay = n;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function switchTab(btn, paneId) {
+  const panel = btn.closest('.day-panel');
+  panel.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  panel.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(paneId).classList.add('active');
+}
+
+function checkAns(btn, result, msg) {
+  const card = btn.closest('.quiz-card');
+  card.querySelectorAll('.opt-btn').forEach(b => {
+    b.disabled = true;
+    b.style.cursor = 'not-allowed';
+  });
+  btn.classList.add(result);
+  const rid = 'qr' + (Array.from(document.querySelectorAll('.quiz-result')).indexOf(card.querySelector('.quiz-result'))+1);
+  const resultEl = card.querySelector('.quiz-result');
+  resultEl.style.display = 'block';
+  resultEl.className = 'quiz-result ' + (result === 'correct' ? 'result-correct' : 'result-wrong');
+  resultEl.textContent = (result === 'correct' ? '✓ ' : '✗ ') + msg;
+}
+
+function markComplete(day) {
+  completed.add(day);
+  const btn = document.getElementById('complete'+day);
+  const navBtn = document.getElementById('nav'+day);
+  btn.textContent = '✓ Day '+day+' Completed!';
+  btn.classList.add('done');
+  navBtn.classList.add('completed');
+  navBtn.querySelector('.day-num').style.background = 'var(--accent)';
+  navBtn.querySelector('.day-num').style.color = '#000';
+  updateProgress();
+  if (day < 10) {
+    setTimeout(() => showDay(day + 1), 600);
+  }
+}
+
+function updateProgress() {
+  const pct = (completed.size / 10) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = completed.size + ' / 10';
+}
+
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+}
+</script>
+</body>
+</html>
