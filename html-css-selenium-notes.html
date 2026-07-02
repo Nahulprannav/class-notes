@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HTML & CSS for Selenium Python — Study Notes</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#16213a; --panel2:#1e293b; --accent:#38bdf8;
+    --accent2:#facc15; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3b55;
+    --code-bg:#0b1220; --green:#4ade80;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--text); display:flex;}
+
+  /* Sidebar */
+  #sidebar{
+    width:260px; flex-shrink:0; background:var(--panel); border-right:1px solid var(--border);
+    height:100vh; position:sticky; top:0; overflow-y:auto; padding:20px 0;
+  }
+  #sidebar h2{font-size:15px; color:var(--accent2); padding:0 20px; margin:18px 0 6px;}
+  #sidebar h2:first-child{margin-top:0;}
+  #sidebar a{display:block; padding:6px 20px; color:var(--muted); text-decoration:none; font-size:13.5px;}
+  #sidebar a:hover, #sidebar a.active{color:var(--accent); background:var(--panel2);}
+  #sidebar .top{padding:0 20px 15px; border-bottom:1px solid var(--border); margin-bottom:8px;}
+  #sidebar .top strong{color:var(--accent); font-size:16px;}
+
+  /* Main */
+  main{flex:1; padding:30px 50px 100px; max-width:980px;}
+  h1{color:var(--accent); font-size:28px; margin-bottom:4px;}
+  .subtitle{color:var(--muted); margin-bottom:35px;}
+  section{margin-bottom:50px; scroll-margin-top:20px;}
+  h2.section-title{
+    font-size:21px; color:var(--accent2); border-bottom:2px solid var(--border);
+    padding-bottom:8px; margin-bottom:18px; margin-top:0;
+  }
+  h3{color:var(--accent); font-size:16.5px; margin:24px 0 8px;}
+  p{line-height:1.65; color:var(--text);}
+  .muted{color:var(--muted);}
+  ul, ol{line-height:1.7; padding-left:22px;}
+  li{margin-bottom:4px;}
+
+  code.inline{background:var(--code-bg); color:var(--accent2); padding:2px 6px; border-radius:4px; font-size:13px; font-family:'Consolas',monospace;}
+  pre{
+    background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
+    padding:14px 16px; overflow-x:auto; font-size:13.2px; line-height:1.55; font-family:'Consolas',monospace;
+  }
+  pre .tag{color:#f472b6;} pre .attr{color:var(--accent2);} pre .str{color:var(--green);} pre .com{color:var(--muted);}
+
+  table.ref{width:100%; border-collapse:collapse; margin:14px 0; font-size:13.8px;}
+  table.ref th, table.ref td{border:1px solid var(--border); padding:9px 12px; text-align:left; vertical-align:top;}
+  table.ref th{background:var(--panel2); color:var(--accent2);}
+  table.ref tr:nth-child(even){background:#141f38;}
+
+  .note-box{
+    background:#13243f; border-left:4px solid var(--accent); border-radius:0 6px 6px 0;
+    padding:12px 16px; margin:16px 0; font-size:14px;
+  }
+  .warn-box{
+    background:#3a1f1f; border-left:4px solid #f87171; border-radius:0 6px 6px 0;
+    padding:12px 16px; margin:16px 0; font-size:14px;
+  }
+  .practice-link{
+    display:inline-block; margin-top:6px; font-size:13px; color:var(--accent); border:1px solid var(--accent);
+    padding:4px 10px; border-radius:5px; text-decoration:none;
+  }
+  .practice-link:hover{background:var(--accent); color:#0b1220;}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  @media(max-width:900px){
+    #sidebar{display:none;}
+    main{padding:20px;}
+    .grid2{grid-template-columns:1fr;}
+  }
+
+  footer{color:var(--muted); font-size:13px; text-align:center; padding:30px; border-top:1px solid var(--border); margin-top:60px;}
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="top"><strong>📘 SeleniumDocs</strong><br><span class="muted" style="font-size:12.5px;">HTML & CSS for Testers</span></div>
+
+  <h2>HTML Basics</h2>
+  <a href="#html-structure">Document Structure</a>
+  <a href="#html-attributes">Attributes</a>
+  <a href="#html-forms">Form Elements</a>
+  <a href="#html-tables">Tables</a>
+  <a href="#html-links">Links & Navigation</a>
+  <a href="#html-semantic">Semantic Tags</a>
+  <a href="#html-iframe">iFrames & Windows</a>
+  <a href="#html-dynamic">Dynamic / Hidden Elements</a>
+
+  <h2>CSS Basics</h2>
+  <a href="#css-syntax">CSS Syntax</a>
+  <a href="#css-selectors">Selector Types</a>
+  <a href="#css-combinators">Combinators</a>
+  <a href="#css-pseudo">Pseudo-classes</a>
+  <a href="#css-attribute">Attribute Selectors</a>
+
+  <h2>Selenium Mapping</h2>
+  <a href="#locator-strategy">Locator Strategy Guide</a>
+  <a href="#xpath-vs-css">XPath vs CSS</a>
+  <a href="#xpath-cheatsheet">XPath Cheat Sheet</a>
+  <a href="#css-cheatsheet">CSS Selector Cheat Sheet</a>
+
+  <h2>Practice</h2>
+  <a href="#cheat-summary">Quick Summary Table</a>
+</nav>
+
+<main>
+  <h1>HTML & CSS for Software Testing in Selenium (Python)</h1>
+  <p class="subtitle">Everything a tester needs to know about HTML structure and CSS to confidently locate, interact with, and validate web elements using Selenium WebDriver.</p>
+
+  <!-- ============ HTML STRUCTURE ============ -->
+  <section id="html-structure">
+    <h2 class="section-title">1. HTML Document Structure</h2>
+    <p>Every HTML page is a tree of nested <strong>elements</strong> (tags). Selenium locates elements by walking this tree — understanding the structure is the foundation of every locator strategy.</p>
+    <pre><span class="tag">&lt;html&gt;</span>
+  <span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Page Title<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+  <span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="str">"app"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h1&gt;</span>Welcome<span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></pre>
+    <p>Key terms a tester must know:</p>
+    <table class="ref">
+      <tr><th>Term</th><th>Meaning</th></tr>
+      <tr><td><code class="inline">Element / Tag</code></td><td>A building block like <code class="inline">&lt;div&gt;</code>, <code class="inline">&lt;button&gt;</code>, <code class="inline">&lt;input&gt;</code></td></tr>
+      <tr><td><code class="inline">Attribute</code></td><td>Extra info on a tag: <code class="inline">id</code>, <code class="inline">class</code>, <code class="inline">name</code>, <code class="inline">type</code>, <code class="inline">href</code></td></tr>
+      <tr><td><code class="inline">Parent / Child</code></td><td>Nesting relationship — used heavily in XPath (<code class="inline">parent::</code>, <code class="inline">child::</code>)</td></tr>
+      <tr><td><code class="inline">Sibling</code></td><td>Elements at the same level under the same parent</td></tr>
+      <tr><td><code class="inline">DOM</code></td><td>Document Object Model — the in-memory tree Selenium actually queries</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ ATTRIBUTES ============ -->
+  <section id="html-attributes">
+    <h2 class="section-title">2. Attributes Selenium Cares About</h2>
+    <table class="ref">
+      <tr><th>Attribute</th><th>Used For</th><th>Selenium Example</th></tr>
+      <tr><td><code class="inline">id</code></td><td>Unique identifier (best locator when stable)</td><td><code class="inline">driver.find_element(By.ID, "username")</code></td></tr>
+      <tr><td><code class="inline">name</code></td><td>Common on form fields, used in form submission</td><td><code class="inline">driver.find_element(By.NAME, "email")</code></td></tr>
+      <tr><td><code class="inline">class</code></td><td>Styling hook, can repeat on multiple elements</td><td><code class="inline">driver.find_elements(By.CLASS_NAME, "card")</code></td></tr>
+      <tr><td><code class="inline">type</code></td><td>Distinguishes input variants (text, checkbox, submit...)</td><td><code class="inline">driver.find_element(By.CSS_SELECTOR, "input[type='email']")</code></td></tr>
+      <tr><td><code class="inline">href</code></td><td>Link destination on anchor tags</td><td><code class="inline">driver.find_element(By.PARTIAL_LINK_TEXT, "Download")</code></td></tr>
+      <tr><td><code class="inline">placeholder</code></td><td>Hint text inside inputs, useful as a fallback locator</td><td><code class="inline">input[placeholder='Search']</code></td></tr>
+      <tr><td><code class="inline">data-*</code></td><td>Custom attributes, increasingly the most stable test hooks</td><td><code class="inline">[data-testid='submit-btn']</code></td></tr>
+      <tr><td><code class="inline">disabled / readonly / checked / selected</code></td><td>Boolean state attributes, used to assert element state</td><td><code class="inline">element.get_attribute("disabled")</code></td></tr>
+    </table>
+    <div class="note-box">💡 <strong>Tip:</strong> If a site has <code class="inline">data-testid</code> attributes, always prefer them — they're added specifically for automation and rarely change, unlike CSS classes used for styling.</div>
+  </section>
+
+  <!-- ============ FORM ELEMENTS ============ -->
+  <section id="html-forms">
+    <h2 class="section-title">3. Form Elements</h2>
+    <p>Forms are the most-tested part of any application: login, registration, search, checkout. Know each input type and the Selenium action it expects.</p>
+    <table class="ref">
+      <tr><th>HTML</th><th>Purpose</th><th>Selenium Action</th></tr>
+      <tr><td><code class="inline">&lt;input type="text"&gt;</code></td><td>Free text entry</td><td><code class="inline">.send_keys("value")</code></td></tr>
+      <tr><td><code class="inline">&lt;input type="password"&gt;</code></td><td>Masked text entry</td><td><code class="inline">.send_keys("secret")</code></td></tr>
+      <tr><td><code class="inline">&lt;input type="checkbox"&gt;</code></td><td>Boolean toggle</td><td><code class="inline">.click()</code>, check with <code class="inline">.is_selected()</code></td></tr>
+      <tr><td><code class="inline">&lt;input type="radio"&gt;</code></td><td>Single choice from a group</td><td><code class="inline">.click()</code></td></tr>
+      <tr><td><code class="inline">&lt;select&gt;&lt;option&gt;</code></td><td>Dropdown</td><td><code class="inline">Select(element).select_by_visible_text("Python")</code></td></tr>
+      <tr><td><code class="inline">&lt;select multiple&gt;</code></td><td>Multi-select dropdown</td><td><code class="inline">Select(element).select_by_index(n)</code> repeated</td></tr>
+      <tr><td><code class="inline">&lt;textarea&gt;</code></td><td>Multi-line text</td><td><code class="inline">.send_keys("text")</code></td></tr>
+      <tr><td><code class="inline">&lt;input type="file"&gt;</code></td><td>File upload</td><td><code class="inline">.send_keys("/path/to/file")</code> (no click needed)</td></tr>
+      <tr><td><code class="inline">&lt;input type="date"&gt;</code></td><td>Date picker</td><td><code class="inline">.send_keys("06/30/2026")</code> (format varies by browser)</td></tr>
+      <tr><td><code class="inline">&lt;button&gt;</code> / <code class="inline">&lt;input type="submit"&gt;</code></td><td>Form submission / actions</td><td><code class="inline">.click()</code></td></tr>
+      <tr><td><code class="inline">&lt;label for="id"&gt;</code></td><td>Links text to a field via the <code class="inline">for</code>/<code class="inline">id</code> match</td><td>Useful for XPath: <code class="inline">//label[text()='Email']/following-sibling::input</code></td></tr>
+    </table>
+    <a class="practice-link" href="selenium-practice.html#login-section">→ Practice these on the playground page</a>
+  </section>
+
+  <!-- ============ TABLES ============ -->
+  <section id="html-tables">
+    <h2 class="section-title">4. Tables</h2>
+    <p>Tables (<code class="inline">&lt;table&gt;</code>, <code class="inline">&lt;tr&gt;</code>, <code class="inline">&lt;td&gt;</code>, <code class="inline">&lt;th&gt;</code>) appear constantly in dashboards, reports, and search results. Testers frequently need to read rows/columns, search for a value, or validate cell content.</p>
+    <pre><span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;th&gt;</span>Name<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;th&gt;</span>Role<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td&gt;</span>John<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>QA<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span>
+<span class="tag">&lt;/table&gt;</span></pre>
+    <h3>Common Python/Selenium pattern</h3>
+    <pre><span class="com"># loop all rows, then all cells in each row</span>
+rows = driver.find_elements(By.CSS_SELECTOR, "table tr")
+for row in rows:
+    cells = row.find_elements(By.TAG_NAME, "td")
+    values = [c.text for c in cells]
+    print(values)</pre>
+    <h3>XPath patterns for tables</h3>
+    <pre><span class="com">// find a cell by its row's text (find "John"'s row, then get the Role cell)</span>
+//td[text()='John']/following-sibling::td[1]
+
+<span class="com">// get the 2nd row's 3rd cell</span>
+//table/tr[2]/td[3]</pre>
+  </section>
+
+  <!-- ============ LINKS & NAV ============ -->
+  <section id="html-links">
+    <h2 class="section-title">5. Links & Navigation</h2>
+    <table class="ref">
+      <tr><th>HTML</th><th>Selenium Locator</th></tr>
+      <tr><td><code class="inline">&lt;a href="#"&gt;Click Here&lt;/a&gt;</code></td><td><code class="inline">By.LINK_TEXT, "Click Here"</code> (exact match)</td></tr>
+      <tr><td><code class="inline">&lt;a href="#"&gt;Download Selenium Guide&lt;/a&gt;</code></td><td><code class="inline">By.PARTIAL_LINK_TEXT, "Download"</code></td></tr>
+      <tr><td><code class="inline">&lt;nav&gt;&lt;ul&gt;&lt;li&gt;</code> menus</td><td><code class="inline">By.CSS_SELECTOR, "nav ul li"</code></td></tr>
+      <tr><td>Breadcrumb trail</td><td>Usually plain text/links separated by <code class="inline">&gt;</code> — locate via partial link text or position</td></tr>
+    </table>
+    <div class="note-box">💡 Link text locators only work on <code class="inline">&lt;a&gt;</code> tags, not buttons or divs styled to look like links.</div>
+  </section>
+
+  <!-- ============ SEMANTIC TAGS ============ -->
+  <section id="html-semantic">
+    <h2 class="section-title">6. Semantic / Layout Tags</h2>
+    <p>Modern apps use meaningful tags instead of generic <code class="inline">&lt;div&gt;</code> soup. Knowing these helps you read a page's structure quickly when designing locators.</p>
+    <table class="ref">
+      <tr><th>Tag</th><th>Meaning</th></tr>
+      <tr><td><code class="inline">&lt;header&gt;</code></td><td>Top banner / page title area</td></tr>
+      <tr><td><code class="inline">&lt;nav&gt;</code></td><td>Navigation menu links</td></tr>
+      <tr><td><code class="inline">&lt;main&gt;</code></td><td>Primary page content (one per page)</td></tr>
+      <tr><td><code class="inline">&lt;section&gt;</code></td><td>A thematic grouping of content</td></tr>
+      <tr><td><code class="inline">&lt;article&gt;</code></td><td>Self-contained content block (a card, a post)</td></tr>
+      <tr><td><code class="inline">&lt;aside&gt;</code></td><td>Sidebar or tangential content</td></tr>
+      <tr><td><code class="inline">&lt;footer&gt;</code></td><td>Bottom of page / section</td></tr>
+      <tr><td><code class="inline">&lt;div&gt; / &lt;span&gt;</code></td><td>Generic containers with no semantic meaning — rely entirely on <code class="inline">id</code>/<code class="inline">class</code></td></tr>
+    </table>
+  </section>
+
+  <!-- ============ IFRAMES & WINDOWS ============ -->
+  <section id="html-iframe">
+    <h2 class="section-title">7. iFrames, Windows & Alerts</h2>
+    <p>These don't have unique HTML tags you "style," but they change how Selenium must reach an element.</p>
+    <table class="ref">
+      <tr><th>Concept</th><th>HTML Cause</th><th>Selenium Handling</th></tr>
+      <tr><td>iFrame</td><td><code class="inline">&lt;iframe id="frame1"&gt;</code></td><td><code class="inline">driver.switch_to.frame("frame1")</code> ... <code class="inline">driver.switch_to.default_content()</code></td></tr>
+      <tr><td>New Tab/Window</td><td><code class="inline">&lt;a target="_blank"&gt;</code></td><td><code class="inline">driver.switch_to.window(driver.window_handles[-1])</code></td></tr>
+      <tr><td>JS Alert/Confirm/Prompt</td><td><code class="inline">onclick="alert(...)"</code></td><td><code class="inline">driver.switch_to.alert.accept()</code> / <code class="inline">.dismiss()</code> / <code class="inline">.send_keys()</code></td></tr>
+    </table>
+    <div class="warn-box">⚠️ JS alerts are <strong>not part of the DOM</strong> — you cannot use <code class="inline">find_element</code> on them. Always switch to <code class="inline">driver.switch_to.alert</code> first.</div>
+  </section>
+
+  <!-- ============ DYNAMIC ELEMENTS ============ -->
+  <section id="html-dynamic">
+    <h2 class="section-title">8. Dynamic / Hidden Elements</h2>
+    <p>Real apps load content asynchronously or hide it conditionally. This is where most flaky tests come from.</p>
+    <pre><span class="tag">&lt;div</span> <span class="attr">style</span>=<span class="str">"display:none"</span><span class="tag">&gt;</span>Hidden Content<span class="tag">&lt;/div&gt;</span></pre>
+    <table class="ref">
+      <tr><th>State</th><th>What it means</th><th>Selenium check</th></tr>
+      <tr><td><code class="inline">display:none</code></td><td>Removed from layout, not clickable</td><td><code class="inline">element.is_displayed()</code> → False</td></tr>
+      <tr><td><code class="inline">visibility:hidden</code></td><td>Invisible but still takes up space</td><td><code class="inline">element.is_displayed()</code> → False</td></tr>
+      <tr><td>Not yet rendered</td><td>Element doesn't exist in DOM yet (AJAX-loaded)</td><td>Use <code class="inline">WebDriverWait</code> + <code class="inline">expected_conditions</code></td></tr>
+      <tr><td>Disabled</td><td><code class="inline">&lt;button disabled&gt;</code></td><td><code class="inline">element.is_enabled()</code> → False</td></tr>
+    </table>
+    <h3>Standard explicit wait pattern</h3>
+    <pre>from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
+el = WebDriverWait(driver, 10).until(
+    EC.visibility_of_element_located((By.ID, "hidden-content"))
+)</pre>
+  </section>
+
+  <!-- ============ CSS SYNTAX ============ -->
+  <section id="css-syntax">
+    <h2 class="section-title">9. CSS Syntax Basics</h2>
+    <pre><span class="attr">selector</span> {
+  <span class="attr">property</span>: <span class="str">value</span>;
+}
+
+<span class="com">/* example */</span>
+.login-btn {
+  background-color: blue;
+  color: white;
+}</pre>
+    <p>You don't need to write CSS as a tester — but you must read CSS <strong>selectors</strong> fluently, because <code class="inline">By.CSS_SELECTOR</code> uses the exact same syntax as a stylesheet.</p>
+  </section>
+
+  <!-- ============ CSS SELECTORS ============ -->
+  <section id="css-selectors">
+    <h2 class="section-title">10. CSS Selector Types</h2>
+    <table class="ref">
+      <tr><th>Selector</th><th>Syntax</th><th>Selenium Example</th></tr>
+      <tr><td>ID</td><td><code class="inline">#id</code></td><td><code class="inline">"#username"</code></td></tr>
+      <tr><td>Class</td><td><code class="inline">.class</code></td><td><code class="inline">".login-btn"</code></td></tr>
+      <tr><td>Tag</td><td><code class="inline">tagname</code></td><td><code class="inline">"button"</code></td></tr>
+      <tr><td>Tag + Class</td><td><code class="inline">tag.class</code></td><td><code class="inline">"button.primary"</code></td></tr>
+      <tr><td>Attribute</td><td><code class="inline">[attr='value']</code></td><td><code class="inline">"input[type='email']"</code></td></tr>
+      <tr><td>Multiple classes</td><td><code class="inline">.class1.class2</code></td><td><code class="inline">".card.active"</code></td></tr>
+      <tr><td>Universal</td><td><code class="inline">*</code></td><td>matches everything (rarely used alone)</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ COMBINATORS ============ -->
+  <section id="css-combinators">
+    <h2 class="section-title">11. CSS Combinators</h2>
+    <table class="ref">
+      <tr><th>Combinator</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td><code class="inline">A B</code> (space)</td><td>B anywhere inside A (descendant)</td><td><code class="inline">.card h3</code></td></tr>
+      <tr><td><code class="inline">A &gt; B</code></td><td>B is a <strong>direct</strong> child of A</td><td><code class="inline">.form-group &gt; input</code></td></tr>
+      <tr><td><code class="inline">A + B</code></td><td>B immediately follows A (adjacent sibling)</td><td><code class="inline">label + input</code></td></tr>
+      <tr><td><code class="inline">A ~ B</code></td><td>B is any later sibling of A</td><td><code class="inline">h2 ~ p</code></td></tr>
+      <tr><td><code class="inline">A, B</code></td><td>Matches A OR B (multiple selectors)</td><td><code class="inline">.error, .warning</code></td></tr>
+    </table>
+  </section>
+
+  <!-- ============ PSEUDO ============ -->
+  <section id="css-pseudo">
+    <h2 class="section-title">12. Pseudo-classes (Selenium-relevant ones)</h2>
+    <table class="ref">
+      <tr><th>Pseudo-class</th><th>Use</th></tr>
+      <tr><td><code class="inline">:first-child</code></td><td>First element among its siblings</td></tr>
+      <tr><td><code class="inline">:last-child</code></td><td>Last element among its siblings</td></tr>
+      <tr><td><code class="inline">:nth-child(n)</code></td><td>The n-th child — useful for row/column targeting in tables</td></tr>
+      <tr><td><code class="inline">:not(selector)</code></td><td>Excludes elements matching the inner selector</td></tr>
+      <tr><td><code class="inline">:checked</code></td><td>Matches a checked checkbox/radio</td></tr>
+      <tr><td><code class="inline">:disabled</code></td><td>Matches disabled form fields</td></tr>
+    </table>
+    <pre><span class="com"># Example: select the 3rd row of a table</span>
+driver.find_element(By.CSS_SELECTOR, "table tr:nth-child(3)")</pre>
+  </section>
+
+  <!-- ============ ATTRIBUTE SELECTORS ============ -->
+  <section id="css-attribute">
+    <h2 class="section-title">13. Attribute Selectors (Deep Dive)</h2>
+    <table class="ref">
+      <tr><th>Pattern</th><th>Matches</th></tr>
+      <tr><td><code class="inline">[type]</code></td><td>Any element that has a <code class="inline">type</code> attribute (any value)</td></tr>
+      <tr><td><code class="inline">[type='text']</code></td><td>Exact match</td></tr>
+      <tr><td><code class="inline">[class^='btn']</code></td><td>Class <strong>starts with</strong> "btn"</td></tr>
+      <tr><td><code class="inline">[class$='active']</code></td><td>Class <strong>ends with</strong> "active"</td></tr>
+      <tr><td><code class="inline">[class*='card']</code></td><td>Class <strong>contains</strong> "card" anywhere</td></tr>
+      <tr><td><code class="inline">[data-testid='submit']</code></td><td>Custom data attribute exact match (best practice locator)</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ LOCATOR STRATEGY ============ -->
+  <section id="locator-strategy">
+    <h2 class="section-title">14. Locator Strategy: Order of Preference</h2>
+    <ol>
+      <li><strong>id</strong> — fastest, most reliable, use first if present and stable</li>
+      <li><strong>data-testid / data-* attributes</strong> — built for testing, very stable</li>
+      <li><strong>name</strong> — reliable on form fields</li>
+      <li><strong>CSS selector</strong> — fast, readable, supports almost everything except "text contains"</li>
+      <li><strong>link text / partial link text</strong> — only for anchor tags</li>
+      <li><strong>XPath</strong> — most powerful (can match by text, traverse up/down the tree) but slowest and most brittle to layout changes</li>
+      <li><strong>class name</strong> — risky alone, since classes are often shared by many elements and reused for styling</li>
+    </ol>
+    <div class="note-box">💡 Rule of thumb: reach for CSS selectors by default, and only drop to XPath when you need to match by visible text or traverse to a parent/ancestor — CSS cannot select a parent based on its child.</div>
+  </section>
+
+  <!-- ============ XPATH VS CSS ============ -->
+  <section id="xpath-vs-css">
+    <h2 class="section-title">15. XPath vs CSS Selector</h2>
+    <table class="ref">
+      <tr><th>Capability</th><th>CSS Selector</th><th>XPath</th></tr>
+      <tr><td>Select by attribute</td><td>✅</td><td>✅</td></tr>
+      <tr><td>Select by visible text</td><td>❌</td><td>✅ <code class="inline">//button[text()='Enroll']</code></td></tr>
+      <tr><td>Traverse to parent</td><td>❌</td><td>✅ <code class="inline">//input/parent::div</code></td></tr>
+      <tr><td>Traverse to sibling</td><td>Partial (<code class="inline">+</code> / <code class="inline">~</code>)</td><td>✅ <code class="inline">following-sibling::</code></td></tr>
+      <tr><td>Performance</td><td>Faster</td><td>Slower</td></tr>
+      <tr><td>Readability</td><td>Cleaner</td><td>Verbose</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ XPATH CHEAT SHEET ============ -->
+  <section id="xpath-cheatsheet">
+    <h2 class="section-title">16. XPath Cheat Sheet</h2>
+    <table class="ref">
+      <tr><th>XPath</th><th>Meaning</th></tr>
+      <tr><td><code class="inline">//tag[@attr='value']</code></td><td>Element with exact attribute match</td></tr>
+      <tr><td><code class="inline">//tag[contains(@attr,'val')]</code></td><td>Attribute contains a substring</td></tr>
+      <tr><td><code class="inline">//tag[text()='Login']</code></td><td>Exact visible text match</td></tr>
+      <tr><td><code class="inline">//tag[contains(text(),'Log')]</code></td><td>Partial visible text match</td></tr>
+      <tr><td><code class="inline">//div[@class='card']//button</code></td><td>Any-depth descendant button inside a card div</td></tr>
+      <tr><td><code class="inline">//input/following-sibling::span</code></td><td>The span right after an input</td></tr>
+      <tr><td><code class="inline">//label[text()='Email']/following::input[1]</code></td><td>First input appearing after a label (when no <code class="inline">for</code> attribute links them)</td></tr>
+      <tr><td><code class="inline">(//table//tr)[2]</code></td><td>2nd row in the (first) matched table</td></tr>
+      <tr><td><code class="inline">//*[@id='username']</code></td><td>Wildcard tag with a given id (rarely needed — prefer <code class="inline">By.ID</code> directly)</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ CSS CHEAT SHEET ============ -->
+  <section id="css-cheatsheet">
+    <h2 class="section-title">17. CSS Selector Cheat Sheet</h2>
+    <table class="ref">
+      <tr><th>CSS Selector</th><th>Meaning</th></tr>
+      <tr><td><code class="inline">#login-btn</code></td><td>Element with id="login-btn"</td></tr>
+      <tr><td><code class="inline">.card.active</code></td><td>Element with both "card" and "active" classes</td></tr>
+      <tr><td><code class="inline">input[type='checkbox']:checked</code></td><td>Checked checkboxes only</td></tr>
+      <tr><td><code class="inline">.form-group input</code></td><td>Any input nested inside a .form-group</td></tr>
+      <tr><td><code class="inline">nav ul li:nth-child(2)</code></td><td>Second menu item in the nav list</td></tr>
+      <tr><td><code class="inline">table tr:not(:first-child)</code></td><td>All table rows except the header row</td></tr>
+      <tr><td><code class="inline">[data-testid='submit-btn']</code></td><td>Custom test attribute exact match</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ SUMMARY ============ -->
+  <section id="cheat-summary">
+    <h2 class="section-title">18. Quick Summary — What to Actually Memorize</h2>
+    <div class="grid2">
+      <div class="card-block">
+        <h3>HTML Must-Knows</h3>
+        <ul>
+          <li>Reading nested tags (parent/child/sibling)</li>
+          <li>id, class, name, type, data-* attributes</li>
+          <li>All form input types and their Selenium actions</li>
+          <li>Table structure: tr / td / th</li>
+          <li>Hidden vs disabled vs not-yet-rendered states</li>
+          <li>iframe and target="_blank" implications</li>
+        </ul>
+      </div>
+      <div class="card-block">
+        <h3>CSS Must-Knows</h3>
+        <ul>
+          <li><code class="inline">#id</code>, <code class="inline">.class</code>, <code class="inline">tag</code> basics</li>
+          <li>Descendant ( ) vs direct child (&gt;)</li>
+          <li>Attribute selectors: <code class="inline">[attr='val']</code>, <code class="inline">^=</code>, <code class="inline">$=</code>, <code class="inline">*=</code></li>
+          <li><code class="inline">:nth-child()</code> for tables/lists</li>
+          <li>When CSS can't do it (text match, parent traversal) → switch to XPath</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:25px;">Once these are comfortable, the best next step is hands-on repetition: open the practice playground page and locate every element using at least two different strategies (e.g., ID and CSS, or CSS and XPath) until it feels automatic.</p>
+    <a class="practice-link" href="selenium-practice.html">→ Go to the Selenium Practice Playground</a>
+  </section>
+
+  <footer>Study notes for Selenium + Python testers — HTML & CSS fundamentals. Built for hands-on learning.</footer>
+</main>
+
+<script>
+  // highlight active sidebar link on scroll
+  const links = document.querySelectorAll('#sidebar a');
+  const sections = document.querySelectorAll('section');
+  window.addEventListener('scroll', ()=>{
+    let current = '';
+    sections.forEach(sec=>{
+      const top = sec.offsetTop - 80;
+      if(window.scrollY >= top) current = sec.id;
+    });
+    links.forEach(a=>{
+      a.classList.toggle('active', a.getAttribute('href') === '#'+current);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL & Databases 20-Day Course — Fironix Technology</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+<style>
+:root{
+  --bg:#0b0f14; --panel:#0f1620; --panel-2:#121a26; --line:#1e2a38;
+  --blue-sql:#1c548a; --blue-accent:#3ba3db; --yellow:#FFD43B;
+  --text:#c9d6e3; --text-dim:#7c8fa3; --white:#eef4fa;
+  --green:#5fd88f; --red:#ff6b6b; --orange:#f0a860;
+  --radius:10px; --mono:'JetBrains Mono','Fira Code',Consolas,monospace; --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
+body{display:flex;min-height:100vh;}
+#sidebar{width:280px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;}
+#sidebar::-webkit-scrollbar{width:6px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+.brand{padding:0 20px 18px;border-bottom:1px solid var(--line);margin-bottom:14px;}
+.brand .dj{color:var(--blue-accent);font-family:var(--mono);font-weight:700;font-size:21px;display:flex;align-items:center;gap:6px;}
+.brand small{display:block;color:var(--text-dim);margin-top:4px;font-size:12px;letter-spacing:.5px;}
+.progress-wrap{padding:0 20px 16px;}
+.progress-track{height:6px;background:var(--panel-2);border-radius:6px;overflow:hidden;border:1px solid var(--line);}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue-accent),var(--yellow));transition:width .4s ease;}
+.progress-label{font-size:11px;color:var(--text-dim);margin-top:6px;font-family:var(--mono);}
+nav.toc{padding:0 10px;}
+nav.toc a{display:flex;align-items:center;gap:10px;padding:9px 12px;margin:2px 0;border-radius:8px;color:var(--text-dim);text-decoration:none;font-size:13px;border-left:2px solid transparent;cursor:pointer;}
+nav.toc a:hover{background:var(--panel-2);color:var(--white);}
+nav.toc a.active{background:var(--panel-2);color:var(--yellow);border-left:2px solid var(--yellow);}
+nav.toc a .chk{width:20px;height:20px;border-radius:5px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-family:var(--mono);}
+nav.toc a.done .chk{background:var(--green);border-color:var(--green);color:#08130c;}
+nav.toc .grp-label{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);padding:14px 12px 6px;}
+
+#main{flex:1;padding:36px 48px;max-width:1000px;}
+header.page-head{margin-bottom:24px;}
+header.page-head .daytag{font-family:var(--mono);color:var(--blue-accent);font-size:12.5px;background:var(--panel);border:1px solid var(--line);padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:10px;}
+header.page-head h1{font-family:var(--mono);font-size:28px;margin:0 0 6px;color:var(--white);}
+header.page-head p{color:var(--text-dim);margin:0;font-size:14.5px;}
+
+section.day{display:none;animation:fade .3s ease;}
+section.day.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.day h2{font-family:var(--mono);color:var(--yellow);font-size:20px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.mark-btn{font-family:var(--sans);font-size:12px;background:var(--panel-2);color:var(--text-dim);border:1px solid var(--line);padding:6px 12px;border-radius:20px;cursor:pointer;flex-shrink:0;}
+.mark-btn.done{background:var(--green);color:#08130c;border-color:var(--green);}
+
+.objectives{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--blue-accent);border-radius:var(--radius);padding:14px 18px;margin:14px 0;font-size:13.5px;}
+.objectives h3{margin:0 0 8px;color:var(--blue-accent);font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;}
+.objectives ul{margin:0;padding-left:20px;}
+.objectives li{margin:4px 0;}
+
+.theory{background:var(--panel);border:1px solid var(--line);border-left:3px solid #336791;border-radius:var(--radius);padding:16px 18px;margin:16px 0;font-size:14.5px;line-height:1.68;}
+.theory h3{margin:0 0 8px;color:#6fb3e0;font-size:15px;font-family:var(--mono);}
+.theory h4{margin:14px 0 6px;color:var(--white);font-size:13.5px;}
+.theory ul{margin:8px 0 0;padding-left:20px;}
+.theory code{background:var(--panel-2);padding:1px 6px;border-radius:4px;color:var(--yellow);font-family:var(--mono);font-size:13px;}
+
+.subhead{color:var(--white);font-size:15px;margin:22px 0 8px;font-weight:600;}
+.subhead .tag{font-family:var(--mono);font-size:10.5px;background:var(--panel-2);color:var(--green);border:1px solid var(--line);padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+.subhead .filetag{font-family:var(--mono);font-size:11px;background:#1a2332;color:var(--blue-accent);border:1px solid var(--line);padding:2px 10px;border-radius:6px;margin-left:8px;vertical-align:middle;}
+
+pre{background:#0d1117 !important;border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;overflow-x:auto;margin:10px 0 18px;font-size:13px;}
+code.hljs{background:transparent !important;font-family:var(--mono);}
+
+.explain{font-size:13.5px;color:var(--text-dim);background:var(--panel-2);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:-10px 0 18px;line-height:1.6;}
+.explain b{color:var(--text);}
+.explain .out{color:var(--green);font-family:var(--mono);}
+
+.practice{background:linear-gradient(135deg,#0a1420,#0f1620);border:1px solid #1c3d5a;border-left:3px solid var(--orange);border-radius:var(--radius);padding:16px 18px;margin:22px 0 10px;}
+.practice h3{margin:0 0 8px;color:var(--orange);font-size:14px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;}
+.practice ol{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.7;}
+.practice li{margin:4px 0;}
+
+table.reftable{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:13.5px;}
+table.reftable th,table.reftable td{border:1px solid var(--line);padding:8px 12px;text-align:left;}
+table.reftable th{background:var(--panel-2);color:var(--yellow);font-family:var(--mono);font-size:12.5px;}
+table.reftable td code{font-family:var(--mono);color:#6fb3e0;}
+table.reftable tr:nth-child(even){background:var(--panel);}
+
+.nav-footer{display:flex;justify-content:space-between;margin-top:34px;padding-top:16px;border-top:1px solid var(--line);}
+.nav-footer button{font-family:var(--sans);background:var(--panel);color:var(--text);border:1px solid var(--line);padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13.5px;}
+.nav-footer button:hover{border-color:var(--blue-accent);color:var(--white);}
+
+@media(max-width:800px){body{flex-direction:column;}#sidebar{width:100%;height:auto;position:relative;}#main{padding:24px 18px;}}
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="brand">
+    <span class="dj">⚡ SQL 20-Day Course</span>
+    <small>Fironix Technology — From Queries to Performance Tuning</small>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 20 days completed</div>
+  </div>
+  <nav class="toc" id="toc">
+    <div class="grp-label">Week 1 — SQL Foundations</div>
+    <a data-target="d1"><span class="chk">1</span> Intro &amp; Setup</a>
+    <a data-target="d2"><span class="chk">2</span> SELECT Statement</a>
+    <a data-target="d3"><span class="chk">3</span> Filtering (WHERE)</a>
+    <a data-target="d4"><span class="chk">4</span> Sorting &amp; Limiting</a>
+    <a data-target="d5"><span class="chk">5</span> Aggregations</a>
+    <div class="grp-label">Week 2 — Aggregations &amp; Joins</div>
+    <a data-target="d6"><span class="chk">6</span> Grouping (GROUP BY)</a>
+    <a data-target="d7"><span class="chk">7</span> Inner Joins</a>
+    <a data-target="d8"><span class="chk">8</span> Outer Joins</a>
+    <a data-target="d9"><span class="chk">9</span> Subqueries</a>
+    <a data-target="d10"><span class="chk">10</span> CTEs (WITH)</a>
+    <div class="grp-label">Week 3 — Data Modification &amp; Constraints</div>
+    <a data-target="d11"><span class="chk">11</span> Creating Tables (DDL)</a>
+    <a data-target="d12"><span class="chk">12</span> Constraints</a>
+    <a data-target="d13"><span class="chk">13</span> INSERT, UPDATE, DELETE</a>
+    <a data-target="d14"><span class="chk">14</span> SQL Views</a>
+    <a data-target="d15"><span class="chk">15</span> Indexing &amp; Performance</a>
+    <div class="grp-label">Week 4 — Advanced SQL &amp; Design</div>
+    <a data-target="d16"><span class="chk">16</span> Window Functions</a>
+    <a data-target="d17"><span class="chk">17</span> Normalization</a>
+    <a data-target="d18"><span class="chk">18</span> Transactions (ACID)</a>
+    <a data-target="d19"><span class="chk">19</span> Procedures &amp; Triggers</a>
+    <a data-target="d20"><span class="chk">20</span> SQL Capstone</a>
+  </nav>
+</aside>
+
+<main id="main">
+<header class="page-head">
+  <span class="daytag" id="dayTag">DAY 1 / 20</span>
+  <h1 id="pageTitle">Introduction to Databases &amp; SQL</h1>
+  <p id="pageSub">DBMS vs RDBMS, SQL categories (DDL, DML, DCL, TCL), and setting up your environment.</p>
+</header>
+
+<!-- ================= DAY 1 ================= -->
+<section class="day" data-id="d1">
+  <h2>Day 1 — Introduction &amp; Setup <button class="mark-btn" data-mark="d1">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What a Database is and how it differs from file systems</li>
+    <li>DBMS vs Relational DBMS (RDBMS)</li>
+    <li>Understanding SQL categories: DDL, DML, DCL, and TCL</li>
+    <li>Setting up a local database server (PostgreSQL or MySQL)</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>Database</b> is an organized collection of structured data, typically stored and accessed electronically. Unlike flat text files or spreadsheets, databases handle massive scale, enforce strict integrity rules, support multiple concurrent users, and guarantee data safety.</p>
+    <h4>DBMS vs RDBMS</h4>
+    <ul>
+      <li><b>DBMS (Database Management System)</b> — Software to store and manage data (flat files, XML, NoSQL documents).</li>
+      <li><b>RDBMS (Relational DBMS)</b> — Stores data in tabular formats (rows and columns) linked together by relationships. Relational systems are built on set theory and use <b>SQL</b> (Structured Query Language) as their query language. Examples: PostgreSQL, MySQL, SQLite, Oracle, SQL Server.</li>
+    </ul>
+    <h4>Categories of SQL Commands</h4>
+    <table class="reftable">
+      <tr><th>Category</th><th>Full Name</th><th>Purpose</th><th>Commands</th></tr>
+      <tr><td><b>DDL</b></td><td>Data Definition Language</td><td>Define and modify database structure</td><td><code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>TRUNCATE</code></td></tr>
+      <tr><td><b>DML</b></td><td>Data Manipulation Language</td><td>Manipulate data stored in tables</td><td><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code></td></tr>
+      <tr><td><b>DCL</b></td><td>Data Control Language</td><td>Control access permissions</td><td><code>GRANT</code>, <code>REVOKE</code></td></tr>
+      <tr><td><b>TCL</b></td><td>Transaction Control Language</td><td>Manage changes made by DML</td><td><code>COMMIT</code>, <code>ROLLBACK</code>, <code>SAVEPOINT</code></td></tr>
+    </table>
+  </div>
+
+  <div class="subhead">Installing PostgreSQL <span class="filetag">local config</span></div>
+  <p>To run SQL queries, it is recommended to install a local client and server. For these 20 days, we'll write standard SQL which works across PostgreSQL, MySQL, and SQLite.</p>
+  <ul>
+    <li>Download PostgreSQL: <b>https://www.postgresql.org/download/</b></li>
+    <li>Choose your OS (Windows, macOS, or Linux) and follow the installer.</li>
+    <li>Set a password during installation (write it down, you will need it).</li>
+    <li>Once installed, open <b>pgAdmin</b> (a graphic client) or connect via terminal using:</li>
+  </ul>
+  <pre><code class="language-sql">-- Connect to default server (run in terminal)
+psql -U postgres</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Download and install PostgreSQL or MySQL on your system.</li>
+      <li>Connect to your local server database and verify the connection.</li>
+      <li>In your notebook, write down the 4 SQL categories and categorize these commands: <code>CREATE</code>, <code>INSERT</code>, <code>COMMIT</code>, <code>REVOKE</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 2 ================= -->
+<section class="day" data-id="d2">
+  <h2>Day 2 — The SELECT Statement <button class="mark-btn" data-mark="d2">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>The basic syntax of a database query</li>
+    <li>Selecting specific columns and querying all columns with asterisk (*)</li>
+    <li>Using arithmetic expressions in query columns</li>
+    <li>Naming column aliases with `AS`</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>The <code>SELECT</code> statement is the most common command in SQL. It is a DML operation used to retrieve data from one or more database tables. The RDBMS returns the results in a grid of rows and columns called a <b>result set</b>.</p>
+    <h4>Syntax Structure</h4>
+    <p>The simplest query requires two clauses:</p>
+    <ul>
+      <li><code>SELECT</code> — specifies which columns to retrieve.</li>
+      <li><code>FROM</code> — specifies the table containing the columns.</li>
+    </ul>
+    <h4>Arithmetic &amp; Column Aliases</h4>
+    <p>You can perform calculations (addition, subtraction, multiplication, division) directly in the SELECT clause. A column alias renaming (using <code>AS</code>) changes the title displayed in the result grid temporarily. It is highly recommended to make calculations readable.</p>
+  </div>
+
+  <div class="subhead">Basic queries <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Query all columns from the employees table
+SELECT * FROM employees;
+
+-- 2. Query only specific columns
+SELECT first_name, last_name, salary FROM employees;
+
+-- 3. Arithmetic operations in queries (calculate annual salary)
+SELECT first_name, last_name, salary, salary * 12 AS annual_salary 
+FROM employees;
+
+-- 4. Concatenating strings (PostgreSQL syntax)
+SELECT first_name || ' ' || last_name AS full_name 
+FROM employees;</code></pre>
+  <div class="explain">Using <code>*</code> is convenient during database testing, but in production applications, you should always request specific columns to save memory and network bandwidth.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Imagine you have a table called <code>products</code> with columns: <code>product_name</code>, <code>price</code>, and <code>quantity_in_stock</code>.</li>
+      <li>Write a query that displays the product name and its total stock value (price * quantity) renamed as <code>inventory_value</code>.</li>
+      <li>Write a query to retrieve all customer names and emails from a table named <code>customers</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 3 ================= -->
+<section class="day" data-id="d3">
+  <h2>Day 3 — Filtering Data (WHERE Clause) <button class="mark-btn" data-mark="d3">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>How to filter results using the <code>WHERE</code> clause</li>
+    <li>Using comparison operators: <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></li>
+    <li>Logical operators: <code>AND</code>, <code>OR</code>, <code>NOT</code></li>
+    <li>Special operators: <code>BETWEEN</code>, <code>IN</code>, <code>LIKE</code>, <code>IS NULL</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>By default, queries return all rows from a table. To restrict rows, we add a <code>WHERE</code> clause. The WHERE clause contains one or more conditions. If a row satisfies the condition (it evaluates to True), it is included in the result set; otherwise, it is ignored.</p>
+    <h4>Special Operators</h4>
+    <ul>
+      <li><code>BETWEEN a AND b</code> — Filters values within an inclusive range.</li>
+      <li><code>IN (val1, val2, ...)</code> — Matches any value in a list.</li>
+      <li><code>LIKE</code> — Performs pattern matching using wildcards: <code>%</code> (zero or more characters) and <code>_</code> (exactly one character).</li>
+      <li><code>IS NULL</code> — Checks for empty or undefined values (you cannot use <code>= NULL</code>!).</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Filtering examples <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Filter by numeric comparison
+SELECT * FROM employees WHERE salary > 50000;
+
+-- 2. Combine filters with logical operators
+SELECT * FROM employees 
+WHERE department_id = 5 AND salary >= 40000;
+
+-- 3. Find employees whose salary is between 30k and 60k (inclusive)
+SELECT * FROM employees 
+WHERE salary BETWEEN 30000 AND 60000;
+
+-- 4. Find employees in specific departments
+SELECT * FROM employees 
+WHERE department_id IN (1, 3, 5);
+
+-- 5. Pattern matching (names starting with 'J')
+SELECT * FROM employees 
+WHERE first_name LIKE 'J%';
+
+-- 6. Find records with missing data
+SELECT * FROM employees 
+WHERE manager_id IS NULL;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a query to find all products with a price greater than $100 and stock level less than 10.</li>
+      <li>Write a query to find all customers whose email ends with '@gmail.com'.</li>
+      <li>Write a query to retrieve all orders placed between '2026-01-01' and '2026-06-30' that have a status of 'Completed'.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 4 ================= -->
+<section class="day" data-id="d4">
+  <h2>Day 4 — Sorting &amp; Limiting Data <button class="mark-btn" data-mark="d4">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Sorting query results with <code>ORDER BY</code></li>
+    <li>Ascending (<code>ASC</code>) vs Descending (<code>DESC</code>) sort order</li>
+    <li>Restricting result counts with <code>LIMIT</code></li>
+    <li>Skipping rows using <code>OFFSET</code> (paging queries)</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Relational databases do not store rows in a guaranteed order. If you query a table, rows are returned in whatever order the database engine finds them. To enforce a sort order, we use <code>ORDER BY</code>.</p>
+    <h4>Limit and Offset</h4>
+    <p>When dealing with tables containing millions of rows, returning everything crashes applications. <code>LIMIT</code> restricts the output count (e.g. top 10). Combining <code>LIMIT</code> with <code>OFFSET</code> allows you to create pagination (e.g., page 2 has limit 10, offset 10).</p>
+  </div>
+
+  <div class="subhead">Sorting and Paging <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Sort by salary ascending (default)
+SELECT * FROM employees 
+ORDER BY salary;
+
+-- 2. Sort by salary descending
+SELECT * FROM employees 
+ORDER BY salary DESC;
+
+-- 3. Sort by multiple columns (department first, then salary descending)
+SELECT * FROM employees 
+ORDER BY department_id ASC, salary DESC;
+
+-- 4. Get the top 5 highest-paid employees
+SELECT * FROM employees 
+ORDER BY salary DESC 
+LIMIT 5;
+
+-- 5. Paging: Get rows 11 to 20 (page 2)
+SELECT * FROM employees 
+ORDER BY employee_id 
+LIMIT 10 OFFSET 10;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a query to retrieve the 3 cheapest products in stock.</li>
+      <li>Write a query to list all customers sorted alphabetically by their last name, and then by first name.</li>
+      <li>Write a query to find the 5th to 10th highest-paid employees (offset page).</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 5 ================= -->
+<section class="day" data-id="d5">
+  <h2>Day 5 — Aggregate Functions <button class="mark-btn" data-mark="d5">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Understanding aggregation in SQL</li>
+    <li>Count records using <code>COUNT()</code></li>
+    <li>Calculate sums and averages using <code>SUM()</code> and <code>AVG()</code></li>
+    <li>Find boundaries using <code>MIN()</code> and <code>MAX()</code></li>
+    <li>How NULL values behave in aggregate computations</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Aggregate functions perform a calculation on a set of values in a column and return a single summary value. Unlike arithmetic operations which work row-by-row, aggregates summarize data vertically across multiple rows.</p>
+    <h4>Aggregate Behavior with NULLs</h4>
+    <p>Most aggregate functions ignore NULL values. For instance, <code>AVG(salary)</code> computes the average of only the rows where salary is NOT null. The exception is <code>COUNT(*)</code>, which counts every row matching filters regardless of column null values.</p>
+  </div>
+
+  <div class="subhead">Aggregation Examples <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Count all rows in employees
+SELECT COUNT(*) AS total_employees FROM employees;
+
+-- 2. Count non-null values (employees with a manager)
+SELECT COUNT(manager_id) AS managed_employees FROM employees;
+
+-- 3. Find salary statistics
+SELECT SUM(salary) AS total_payroll,
+       AVG(salary) AS average_salary,
+       MIN(salary) AS lowest_salary,
+       MAX(salary) AS highest_salary
+FROM employees;
+
+-- 4. Distinct counts (number of unique departments represented)
+SELECT COUNT(DISTINCT department_id) AS active_departments FROM employees;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Find the average price of all products in your inventory.</li>
+      <li>Write a query to find the total quantity of items sold from an <code>order_details</code> table (sum of quantity).</li>
+      <li>Count how many customers have placed orders (unique customer IDs in the orders table).</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 6 ================= -->
+<section class="day" data-id="d6">
+  <h2>Day 6 — Grouping Data (GROUP BY) <button class="mark-btn" data-mark="d6">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Split query data into category buckets using <code>GROUP BY</code></li>
+    <li>Rules of select items in grouped queries</li>
+    <li>Filtering grouped results using <code>HAVING</code></li>
+    <li>The difference between <code>WHERE</code> and <code>HAVING</code> filters</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>The <code>GROUP BY</code> clause is used in collaboration with aggregate functions to group the result set by one or more columns. For instance, instead of finding the average salary of the entire company, we can find the average salary <b>per department</b>.</p>
+    <h4>Critical Rule of Grouping</h4>
+    <p>When using <code>GROUP BY</code>, every column selected in your query must either be listed in the <code>GROUP BY</code> clause, or wrapped inside an aggregate function. Selecting columns outside this raises a syntax error.</p>
+    <h4>WHERE vs HAVING</h4>
+    <ul>
+      <li><code>WHERE</code> — Filters individual rows <b>before</b> groups are calculated. It cannot contain aggregate functions.</li>
+      <li><code>HAVING</code> — Filters grouped summary rows <b>after</b> groups are calculated. It filters on aggregated metrics.</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Grouping queries <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Calculate average salary per department
+SELECT department_id, AVG(salary) AS avg_sal 
+FROM employees 
+GROUP BY department_id;
+
+-- 2. Count employees in each job role, sorted by employee count descending
+SELECT job_title, COUNT(*) AS emp_count 
+FROM employees 
+GROUP BY job_title 
+ORDER BY emp_count DESC;
+
+-- 3. Filter groups (find departments with average salary above 50,000)
+SELECT department_id, AVG(salary) AS avg_sal 
+FROM employees 
+GROUP BY department_id 
+HAVING AVG(salary) > 50000;
+
+-- 4. Using WHERE and HAVING together
+-- (Exclude low-tier employees, then group, then filter small departments)
+SELECT department_id, COUNT(*) AS emp_count, AVG(salary) AS avg_sal
+FROM employees
+WHERE salary > 30000
+GROUP BY department_id
+HAVING COUNT(*) >= 2;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a query to display the total sales revenue (sum of amount) for each product ID.</li>
+      <li>Write a query to list all departments that have more than 5 employees.</li>
+      <li>Find the highest price product in each category, showing only categories with max price greater than $50.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 7 ================= -->
+<section class="day" data-id="d7">
+  <h2>Day 7 — Joins Part 1: Inner Joins <button class="mark-btn" data-mark="d7">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What Joins are and how they link tables</li>
+    <li>Understanding primary key vs foreign key matching</li>
+    <li>Combining tables with <code>INNER JOIN</code></li>
+    <li>Preventing name collisions with table aliases</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A relational database splits data into normalized tables. To rebuild a full view, we use <b>joins</b>. A join operation links rows from two tables based on a common matching column — typically a <b>Primary Key</b> in one table and a corresponding <b>Foreign Key</b> in the other.</p>
+    <h4>Inner Join</h4>
+    <p>An <code>INNER JOIN</code> returns rows only when there is a match in <b>both</b> tables. If a row in the first table does not have a matching ID in the second table, it is completely excluded from the result set.</p>
+  </div>
+
+  <div class="subhead">Inner Join Syntax <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Combine employees and departments tables
+SELECT e.employee_id, e.first_name, e.last_name, d.department_name
+FROM employees AS e
+INNER JOIN departments AS d 
+ON e.department_id = d.department_id;
+
+-- 2. Join three tables (employees, departments, locations)
+SELECT e.first_name, e.last_name, d.department_name, l.city
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.department_id
+INNER JOIN locations l ON d.location_id = l.location_id;</code></pre>
+  <div class="explain">Using table aliases like <code>e</code> and <code>d</code> is standard practice. It keeps joins readable, and is mandatory when both tables share matching column names (e.g. <code>department_id</code>).</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a query to join an <code>orders</code> table and a <code>customers</code> table to display order ID, order date, and customer name.</li>
+      <li>Write a query to display all products along with their supplier name, joining <code>products</code> and <code>suppliers</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 8 ================= -->
+<section class="day" data-id="d8">
+  <h2>Day 8 — Joins Part 2: Outer Joins &amp; More <button class="mark-btn" data-mark="d8">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Understanding outer join dynamics</li>
+    <li>Keep un-matched rows with <code>LEFT JOIN</code> and <code>RIGHT JOIN</code></li>
+    <li>Comprehensive combinations using <code>FULL JOIN</code></li>
+    <li>Cross Joins and Self Joins</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Inner Joins discard rows that fail to match. Sometimes, we want to retain those un-matched records (for example, displaying a list of all products, even those that have never been ordered). This is what outer joins do.</p>
+    <ul>
+      <li><b>LEFT JOIN</b> — Returns all rows from the left table, and matched rows from the right. If no match exists, NULLs are inserted for right-table columns.</li>
+      <li><b>RIGHT JOIN</b> — Returns all rows from the right table, and matched rows from the left. (Equivalent to a Left Join if you swap the table order).</li>
+      <li><b>FULL JOIN</b> — Returns rows when there is a match in either left or right tables, filling missing fields with NULLs.</li>
+      <li><b>CROSS JOIN</b> — Returns the Cartesian product of both tables (every row in A paired with every row in B).</li>
+      <li><b>SELF JOIN</b> — Joins a table to itself (useful for hierarchical structures, like matching employees to their managers inside the same table).</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Outer and Self Joins <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Left Join: List all departments, showing employee counts (even empty depts)
+SELECT d.department_name, COUNT(e.employee_id) AS total_staff
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name;
+
+-- 2. Self Join: Find employee names alongside their manager's name
+SELECT e.first_name AS employee, m.first_name AS manager
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.employee_id;
+
+-- 3. Cross Join: Generate all combinations of sizes and colors
+SELECT s.size_name, c.color_name
+FROM sizes s
+CROSS JOIN colors c;</code></pre>
+  <div class="explain">A Self Join requires giving the same table two different aliases (e.g. <code>e</code> for employee role, <code>m</code> for manager role) so the query parser treats them as separate entities.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a query to list all customers and their order details (order ID, amount). Include customers who have placed zero orders.</li>
+      <li>Write a query using a Left Join to find products that have never been ordered (where the order details foreign key is NULL).</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 9 ================= -->
+<section class="day" data-id="d9">
+  <h2>Day 9 — Subqueries <button class="mark-btn" data-mark="d9">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What a subquery is and where it can be placed</li>
+    <li>Single-row (scalar) subqueries</li>
+    <li>Multi-row subqueries using <code>IN</code>, <code>ANY</code>, and <code>ALL</code></li>
+    <li>Correlated subqueries</li>
+    <li>Checking record existence with <code>EXISTS</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>Subquery</b> (or nested query) is a query written inside another query's clauses. It acts as a dynamic source of data that feeds the outer query.</p>
+    <h4>Subquery Types</h4>
+    <ul>
+      <li><b>Scalar Subquery</b> — Returns exactly one value (one cell). Used with comparison operators like <code>=</code>, <code>&gt;</code>.</li>
+      <li><b>Multi-Row Subquery</b> — Returns a column of values. Used with <code>IN</code>, <code>ANY</code>, <code>ALL</code>.</li>
+      <li><b>Correlated Subquery</b> — References a column from the outer query. The subquery runs repeatedly (once for every row processed by the outer query).</li>
+      <li><b>EXISTS / NOT EXISTS</b> — Evaluates to True or False depending on whether the subquery returns any rows at all. Highly optimized for performance.</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Subquery Examples <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Scalar Subquery: Find employees earning more than the company average
+SELECT first_name, last_name, salary 
+FROM employees 
+WHERE salary > (SELECT AVG(salary) FROM employees);
+
+-- 2. Multi-row Subquery: Find employees working in IT locations
+SELECT first_name, last_name FROM employees 
+WHERE department_id IN (
+    SELECT department_id FROM departments 
+    WHERE location_id = 1700
+);
+
+-- 3. Correlated Subquery: Find employees earning more than their department's average
+SELECT e.first_name, e.salary, e.department_id
+FROM employees e
+WHERE e.salary > (
+    SELECT AVG(salary) 
+    FROM employees 
+    WHERE department_id = e.department_id
+);
+
+-- 4. EXISTS: Find departments that have at least one employee earning over 10k
+SELECT d.department_name FROM departments d
+WHERE EXISTS (
+    SELECT 1 FROM employees e 
+    WHERE e.department_id = d.department_id AND e.salary > 10000
+);</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a query to find the details of the product with the highest price, using a subquery.</li>
+      <li>Write a query using <code>NOT EXISTS</code> to find customers who have never placed an order.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 10 ================= -->
+<section class="day" data-id="d10">
+  <h2>Day 10 — CTEs (Common Table Expressions) <button class="mark-btn" data-mark="d10">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What a Common Table Expression (CTE) is</li>
+    <li>Declaring CTEs using the <code>WITH</code> clause</li>
+    <li>Improving query readability and maintenance over subqueries</li>
+    <li>Defining multiple CTEs in a single query</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>Common Table Expression (CTE)</b> is a temporary result set defined within the scope of a single query. It works like a virtual table that exists only during the execution of that query.</p>
+    <h4>Why use CTEs instead of Subqueries?</h4>
+    <ul>
+      <li><b>Readability</b> — CTEs are defined at the top of the script and build logically, whereas subqueries nest deeply, which is harder to read.</li>
+      <li><b>Reusability</b> — You can reference the same CTE multiple times within the query (e.g. self-joining temporary aggregations).</li>
+    </ul>
+  </div>
+
+  <div class="subhead">CTE Syntax <span class="filetag">queries</span></div>
+  <pre><code class="language-sql">-- 1. Simple CTE: Calculate department averages, then query it
+WITH dept_averages AS (
+    SELECT department_id, AVG(salary) AS avg_sal
+    FROM employees
+    GROUP BY department_id
+)
+SELECT e.first_name, e.salary, da.avg_sal
+FROM employees e
+INNER JOIN dept_averages da ON e.department_id = da.department_id
+WHERE e.salary > da.avg_sal;
+
+-- 2. Defining Multiple CTEs
+WITH regional_sales AS (
+    SELECT region_id, SUM(amount) AS total_sales
+    FROM sales
+    GROUP BY region_id
+),
+top_regions AS (
+    SELECT region_id FROM regional_sales
+    WHERE total_sales > (SELECT AVG(total_sales) FROM regional_sales)
+)
+SELECT region_id FROM top_regions;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Refactor your Day 9 department salary subquery to use a clean CTE instead.</li>
+      <li>Write a query with a CTE that calculates total order amounts per customer, and then returns the customer names who spent more than $1000 in total.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 11 ================= -->
+<section class="day" data-id="d11">
+  <h2>Day 11 — Creating &amp; Modifying Tables (DDL) <button class="mark-btn" data-mark="d11">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Designing tables with <code>CREATE TABLE</code></li>
+    <li>Common SQL datatypes: INT, VARCHAR, DECIMAL, DATE, BOOLEAN</li>
+    <li>Modifying table schema using <code>ALTER TABLE</code></li>
+    <li>Removing tables using <code>DROP TABLE</code> and <code>TRUNCATE</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Data Definition Language (DDL) commands are used to define, alter, and delete the physical structure of database schemas.</p>
+    <h4>Common Data Types</h4>
+    <ul>
+      <li><code>INTEGER</code> / <code>INT</code> — Whole numbers.</li>
+      <li><code>VARCHAR(length)</code> — Variable character text up to a maximum length limit.</li>
+      <li><code>DECIMAL(precision, scale)</code> — Exact numbers (e.g. <code>DECIMAL(10, 2)</code> stores numbers with up to 10 total digits, 2 after the decimal — ideal for currency).</li>
+      <li><code>DATE</code> — Stores calendar dates (YYYY-MM-DD).</li>
+      <li><code>BOOLEAN</code> — True or False flags.</li>
+    </ul>
+    <h4>Delete Commands Comparison</h4>
+    <ul>
+      <li><code>DELETE FROM table;</code> — DML command. Removes rows one by one. Slow but can be rolled back.</li>
+      <li><code>TRUNCATE TABLE table;</code> — DDL command. Fast operation that drops and recreates the empty structure. Cannot be rolled back.</li>
+      <li><code>DROP TABLE table;</code> — DDL command. Deletes table data AND the table structural definition completely.</li>
+    </ul>
+  </div>
+
+  <div class="subhead">DDL Operations <span class="filetag">ddl</span></div>
+  <pre><code class="language-sql">-- 1. Create a students table
+CREATE TABLE students (
+    student_id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    gpa DECIMAL(3, 2),
+    enrollment_date DATE,
+    is_active BOOLEAN
+);
+
+-- 2. Add a new column to the table
+ALTER TABLE students ADD COLUMN email VARCHAR(100);
+
+-- 3. Drop a column
+ALTER TABLE students DROP COLUMN is_active;
+
+-- 4. Delete the table structure completely
+DROP TABLE students;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a DDL statement to create a table called <code>products</code> with appropriate data types for: product ID, name, price, release date, and in-stock status.</li>
+      <li>Modify the <code>products</code> table to add a column for <code>sku_code</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 12 ================= -->
+<section class="day" data-id="d12">
+  <h2>Day 12 — Database Constraints <button class="mark-btn" data-mark="d12">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Enforcing database integrity rules</li>
+    <li>Uniqueness and identity: <code>PRIMARY KEY</code></li>
+    <li>Enforcing relationship integrity: <code>FOREIGN KEY</code></li>
+    <li>Value constraints: <code>NOT NULL</code>, <code>UNIQUE</code>, <code>CHECK</code></li>
+    <li>Setting default values with <code>DEFAULT</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Constraints are rules enforced by the RDBMS on table data columns to guarantee accuracy, validity, and consistency. If any insert or update statement violates a constraint, the database engine aborts the operation and returns an error.</p>
+    <h4>Constraint Types</h4>
+    <ul>
+      <li><code>PRIMARY KEY</code> — Uniquely identifies each row. Enforces uniqueness and NOT NULL implicitly. (Only one per table).</li>
+      <li><code>FOREIGN KEY</code> — References a Primary Key in another table, preventing orphaned records.</li>
+      <li><code>UNIQUE</code> — Guarantees all values in a column are distinct.</li>
+      <li><code>NOT NULL</code> — Prevents storing empty NULL markers in this column.</li>
+      <li><code>CHECK (condition)</code> — Restricts values to those meeting a boolean condition (e.g. price > 0).</li>
+      <li><code>DEFAULT value</code> — Sets a default fallback value if none is specified during an insert.</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Tables with constraints <span class="filetag">ddl</span></div>
+  <pre><code class="language-sql">-- 1. Create lookup categories table
+CREATE TABLE categories (
+    category_id INT PRIMARY KEY,
+    category_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- 2. Create products table linked to categories
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) DEFAULT 0.00,
+    category_id INT,
+    created_at DATE DEFAULT CURRENT_DATE,
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories(category_id),
+    CONSTRAINT chk_price CHECK (price >= 0)
+);</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Create a table called <code>users</code> with: an auto-incrementing/integer primary key, username (non-null and unique), and age (check constraint restricting age to 18+).</li>
+      <li>Create an <code>orders</code> table that references your <code>users</code> table via a foreign key.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 13 ================= -->
+<section class="day" data-id="d13">
+  <h2>Day 13 — Modifying Data (DML) <button class="mark-btn" data-mark="d13">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Adding records using <code>INSERT INTO</code></li>
+    <li>Updating columns using <code>UPDATE</code></li>
+    <li>The danger of leaving out a WHERE clause in UPDATE/DELETE</li>
+    <li>Removing rows using <code>DELETE</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Data Manipulation Language (DML) commands write, alter, and delete individual rows within a database structure.</p>
+    <h4>Insert Variants</h4>
+    <p>You can insert a single row, insert multiple rows in a single batch statement, or copy rows dynamically from another table using a combined <code>INSERT INTO ... SELECT</code> statement.</p>
+    <h4>The Dangerous WHERE Clause</h4>
+    <p>When running <code>UPDATE</code> or <code>DELETE</code>, omitting the <code>WHERE</code> clause applies the modifications to <b>every single row</b> in the table. There is no simple undo in raw database clients, so double-check before running!</p>
+  </div>
+
+  <div class="subhead">DML Operations <span class="filetag">dml</span></div>
+  <pre><code class="language-sql">-- 1. Insert a single record
+INSERT INTO categories (category_id, category_name) 
+VALUES (1, 'Electronics');
+
+-- 2. Insert multiple records at once
+INSERT INTO categories (category_id, category_name) VALUES 
+(2, 'Books'),
+(3, 'Home & Kitchen');
+
+-- 3. Update data (highly specific with WHERE)
+UPDATE products 
+SET price = price * 0.90 
+WHERE category_id = 1;
+
+-- 4. Delete specific records
+DELETE FROM products 
+WHERE product_id = 101;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Insert 3 custom test rows into the <code>users</code> table you created on Day 12.</li>
+      <li>Write an update query to raise the price of all products by 5% in your database.</li>
+      <li>Write a query to delete all users who have not verified their email (is_verified = FALSE).</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 14 ================= -->
+<section class="day" data-id="d14">
+  <h2>Day 14 — SQL Views <button class="mark-btn" data-mark="d14">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What a SQL View is (virtual tables)</li>
+    <li>Creating views using <code>CREATE VIEW</code></li>
+    <li>Simplifying complex multi-table joins using views</li>
+    <li>Security benefits of using views for access control</li>
+    <li>Dropping views with <code>DROP VIEW</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>View</b> is a virtual table whose contents are defined by a query. It does not store data physically on disk. Instead, every time a query requests rows from the view, the RDBMS runs the underlying query definition dynamically behind the scenes.</p>
+    <h4>Use Cases</h4>
+    <ul>
+      <li><b>Simplification</b> — Hide complex outer/inner joins, aggregations, and subqueries behind a simple virtual table name.</li>
+      <li><b>Security</b> — Give external users read access to a view that hides sensitive columns (like salary or passwords) while protecting the main tables.</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Views Implementation <span class="filetag">views</span></div>
+  <pre><code class="language-sql">-- 1. Create a view that returns employees with department details
+CREATE VIEW v_employee_details AS
+SELECT e.employee_id, e.first_name, e.last_name, d.department_name, e.salary
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.department_id;
+
+-- 2. Query the view just like a normal table
+SELECT first_name, department_name 
+FROM v_employee_details 
+WHERE salary > 50000;
+
+-- 3. Delete the view definition
+DROP VIEW v_employee_details;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a query that joins <code>orders</code>, <code>customers</code>, and <code>order_details</code>.</li>
+      <li>Package that query into a clean view called <code>v_order_summary</code>.</li>
+      <li>Query the view to find all orders placed by a specific customer.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 15 ================= -->
+<section class="day" data-id="d15">
+  <h2>Day 15 — Indexing &amp; Performance Tuning <button class="mark-btn" data-mark="d15">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>How RDBMS searches for data: Full Table Scan vs Index Scan</li>
+    <li>Creating indexes with <code>CREATE INDEX</code></li>
+    <li>How indexes speed up SELECT, but slow down INSERT/UPDATE</li>
+    <li>Analyzing execution plans using <code>EXPLAIN</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Without indexes, if a query requests a specific record (e.g. <code>WHERE email = 'user@example.com'</code>), the database must run a <b>Full Table Scan</b> — reading every single data block from the disk top-to-bottom. If you have 10 million rows, this is extremely slow.</p>
+    <h4>What is an Index?</h4>
+    <p>An <b>Index</b> is a separate data structure (typically a B-Tree) containing sorted pointers to rows. It allows the database engine to search for a key in logarithmic time (<b>Index Scan</b>), similar to looking up a word in a book index.</p>
+    <h4>The Trade-off</h4>
+    <p>Indexes speed up read queries (<code>SELECT</code>), but they slow down writes (<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>) because the database must update the index structure on disk every time rows change. Only index columns that are frequently filtered on (like email or IDs) or used in joins.</p>
+  </div>
+
+  <div class="subhead">Indexes and Explain <span class="filetag">tuning</span></div>
+  <pre><code class="language-sql">-- 1. Create an index on the email column of users table
+CREATE INDEX idx_user_email ON users(email);
+
+-- 2. Analyze query execution path (PostgreSQL / MySQL syntax)
+EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';
+
+-- 3. Drop index
+DROP INDEX idx_user_email;</code></pre>
+  <div class="explain">Running <code>EXPLAIN</code> outputs the execution plan grid. Look for <code>Seq Scan</code> (sequential table scan, bad) vs <code>Index Scan</code> (indexed lookup, good) to evaluate optimization.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a statement to create an index on the <code>product_name</code> column of your <code>products</code> table.</li>
+      <li>List two reasons why you shouldn't create indexes on every single column in your database.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 16 ================= -->
+<section class="day" data-id="d16">
+  <h2>Day 16 — Window Functions <button class="mark-btn" data-mark="d16">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Understanding Window Functions and how they differ from GROUP BY</li>
+    <li>The <code>OVER</code> clause with <code>PARTITION BY</code> and <code>ORDER BY</code></li>
+    <li>Ranking functions: <code>ROW_NUMBER()</code>, <code>RANK()</code>, <code>DENSE_RANK()</code></li>
+    <li>Value offset functions: <code>LAG()</code> and <code>LEAD()</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Like aggregates, window functions calculate aggregates across a partition of rows. However, unlike <code>GROUP BY</code>, they do not collapse rows into a single summary row. Every row in the input remains distinct in the result grid, alongside its corresponding partition value.</p>
+    <h4>Key Window Syntax</h4>
+    <ul>
+      <li><code>OVER (PARTITION BY col)</code> — Defines the slices of rows to compute the calculation within.</li>
+      <li><code>ROW_NUMBER()</code> — Returns a unique index sequence (1, 2, 3...) per partition.</li>
+      <li><code>RANK()</code> vs <code>DENSE_RANK()</code> — Handles values with matching sorting. Rank skips sequence slots (1, 2, 2, 4); Dense Rank does not (1, 2, 2, 3).</li>
+      <li><code>LAG() / LEAD()</code> — Fetches values from the previous or next row in the partition (great for tracking period-over-period changes).</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Window Functions <span class="filetag">window</span></div>
+  <pre><code class="language-sql">-- 1. Rank employees by salary within their department
+SELECT employee_id, first_name, department_id, salary,
+       ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS row_num,
+       DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS sal_rank
+FROM employees;
+
+-- 2. Lag query: Compare this month's sales to last month's sales
+SELECT sales_month, total_sales,
+       LAG(total_sales, 1) OVER (ORDER BY sales_month) AS prev_month_sales
+FROM monthly_sales;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Use <code>ROW_NUMBER()</code> to write a query that ranks all products by price descending in each category.</li>
+      <li>Use the <code>LAG()</code> query pattern above to calculate the percentage change in monthly sales compared to the previous month.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 17 ================= -->
+<section class="day" data-id="d17">
+  <h2>Day 17 — Database Normalization <button class="mark-btn" data-mark="d17">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What normalization is and why it prevents data anomalies</li>
+    <li>1st Normal Form (1NF) — Atomic values</li>
+    <li>2nd Normal Form (2NF) — Partial dependency removal</li>
+    <li>3rd Normal Form (3NF) — Transitive dependency removal</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Normalization</b> is the systematic design process of organizing database columns and tables to eliminate data redundancy (which wastes disk space) and prevent database modification anomalies (insert, update, and delete issues).</p>
+    <h4>The Normal Forms</h4>
+    <table class="reftable">
+      <tr><th>Form</th><th>Rule Requirement</th><th>Action to resolve</th></tr>
+      <tr><td><b>1NF</b></td><td>Atomic values only. No repeating groups or multi-valued cells.</td><td>Split comma-separated values into distinct rows.</td></tr>
+      <tr><td><b>2NF</b></td><td>Must be in 1NF. Remove partial dependencies (columns depending on only part of a composite primary key).</td><td>Move partial columns to their own lookup table.</td></tr>
+      <tr><td><b>3NF</b></td><td>Must be in 2NF. Remove transitive dependencies (non-key columns depending on other non-key columns).</td><td>If column B depends on column A, which depends on PK, move A and B to a separate table.</td></tr>
+    </table>
+  </div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Look at this bad table row: <code>Student_ID: 1, Name: 'Alex', Courses: 'Math, Science'</code>. Explain why this violates 1NF and how you would rewrite it.</li>
+      <li>Define in your own words the difference between a primary key and a foreign key.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 18 ================= -->
+<section class="day" data-id="d18">
+  <h2>Day 18 — Transactions &amp; Concurrency (ACID) <button class="mark-btn" data-mark="d18">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What a database Transaction is</li>
+    <li>Understanding the ACID properties</li>
+    <li>Managing transactions with <code>COMMIT</code> and <code>ROLLBACK</code></li>
+    <li>Transaction Isolation levels overview</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>Transaction</b> is a single logical unit of database work containing one or more SQL commands. (For example, transferring money: step 1 is deducting money from Account A, step 2 is adding money to Account B. If step 2 fails, step 1 must be reverted).</p>
+    <h4>ACID Properties</h4>
+    <ul>
+      <li><b>Atomicity</b> — "All or nothing". Either the entire transaction succeeds, or the database reverts every change.</li>
+      <li><b>Consistency</b> — The database moves from one valid structural state to another, violating no schema constraints.</li>
+      <li><b>Isolation</b> — Concurrent transactions run independently without interfering with each other's partial states.</li>
+      <li><b>Durability</b> — Once committed, changes are written to non-volatile storage and survive power outages or crashes.</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Transactions control <span class="filetag">tcl</span></div>
+  <pre><code class="language-sql">-- 1. Start a database transaction (PostgreSQL syntax)
+BEGIN;
+
+-- 2. Perform updates
+UPDATE accounts SET balance = balance - 100 WHERE account_id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE account_id = 2;
+
+-- 3. Confirm modifications permanently
+COMMIT;
+
+-- Or if something failed mid-way:
+-- ROLLBACK;</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a TCL script simulating ordering a product: deduct 1 from product stock, and insert a row into an orders table. Add transaction boundaries (BEGIN and COMMIT).</li>
+      <li>Describe what happens if you run a transaction block and the system crashes before you commit.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 19 ================= -->
+<section class="day" data-id="d19">
+  <h2>Day 19 — Stored Procedures &amp; Triggers <button class="mark-btn" data-mark="d19">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What Stored Procedures and Functions are</li>
+    <li>Writing a basic stored procedure (PL/pgSQL syntax)</li>
+    <li>Understanding Triggers (event-driven database operations)</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Stored Procedures and Functions are SQL scripts compiled and stored directly inside the database catalog. They can contain control flow logic (loops, conditionals, variables) and are executed directly by the server, reducing network traffic.</p>
+    <h4>Triggers</h4>
+    <p>A <b>Trigger</b> is a special procedure that executes automatically in response to database modifications. Triggers can run: <code>BEFORE</code> or <code>AFTER</code> an <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code> command is processed on a table.</p>
+  </div>
+
+  <div class="subhead">Procedure Example <span class="filetag">procs</span></div>
+  <pre><code class="language-sql">-- 1. Create a function to add two numbers (PostgreSQL syntax)
+CREATE FUNCTION fn_add_numbers(a INT, b INT) 
+RETURNS INT AS $$
+BEGIN
+    RETURN a + b;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 2. Call the function
+SELECT fn_add_numbers(10, 25);</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Describe a real-world scenario where you would use a database Trigger (e.g. audit logs, auto-calculating inventory).</li>
+      <li>What is the main security benefit of database stored procedures?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 20 ================= -->
+<section class="day" data-id="d20">
+  <h2>Day 20 — SQL Capstone Project <button class="mark-btn" data-mark="d20">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Designing an entire relational database model from scratch</li>
+    <li>Creating tables with relationships and constraints</li>
+    <li>Writing complex analysis queries</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Congratulations on completing the 20-day SQL curriculum! Today, you'll combine DDL, constraints, joins, CTEs, and window functions to design and query a functional database schema.</p>
+    <h4>Capstone Scenario</h4>
+    <p>You are designing the back-end database for a miniature online store. The store requires tracking: customers, products, and sales orders. Your schema should enforce relational integrity, restrict numeric limits, and support advanced reports.</p>
+  </div>
+
+  <div class="subhead">Capstone Schema Design <span class="filetag">ddl</span></div>
+  <pre><code class="language-sql">-- STEP 1: CREATE STRUCTURES
+CREATE TABLE cap_customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE cap_products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    price DECIMAL(10,2) CHECK (price > 0),
+    stock_quantity INT DEFAULT 0
+);
+
+CREATE TABLE cap_orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT REFERENCES cap_customers(customer_id),
+    order_date DATE DEFAULT CURRENT_DATE,
+    total_amount DECIMAL(10,2)
+);</code></pre>
+
+  <div class="practice">
+    <h3>Final Capstone Challenge</h3>
+    <ol>
+      <li>Write the queries to create the 3 tables above on your local server.</li>
+      <li>Write insert queries to populate: 3 customers, 3 products, and 3 orders.</li>
+      <li>Write a query using a Left Join to show every customer and their total order expenses.</li>
+      <li>Write a query using a CTE and a window function to find the top-selling product.</li>
+    </ol>
+  </div>
+</section>
+
+<div class="nav-footer">
+  <button id="prevBtn">&larr; Previous day</button>
+  <button id="nextBtn">Next day &rarr;</button>
+</div>
+
+</main>
+
+<script>
+document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+
+const order = [];
+for(let i=1;i<=20;i++){ order.push('d'+i); }
+
+const titles = {
+  d1:["Introduction & Setup","DBMS vs RDBMS, SQL command categories, and database installation."],
+  d2:["The SELECT Statement","Retrieving specific columns, all columns, and naming column aliases."],
+  d3:["Filtering Data (WHERE)","Using comparison and logical operators to filter result rows."],
+  d4:["Sorting & Limiting","Ordering results alphabetically or numerically, and paging results."],
+  d5:["Aggregate Functions","Summarizing data tables using count, sum, average, min, and max."],
+  d6:["Grouping Data (GROUP BY)","Grouping aggregated values, and filtering groups using HAVING."],
+  d7:["Joins Part 1: Inner Joins","Connecting relational tables based on shared column values."],
+  d8:["Joins Part 2: Outer Joins & More","Understanding left, right, full outer joins, cross, and self joins."],
+  d9:["Subqueries","Writing nested queries in SELECT, WHERE, and FROM clauses."],
+  d10:["CTEs (Common Table Expressions)","Writing readable and reusable queries using the WITH clause."],
+  d11:["Creating & Modifying Tables","Using DDL commands and datatypes (Int, Varchar, Decimal, Date) to build tables."],
+  d12:["Database Constraints","Enforcing data integrity using primary keys, foreign keys, and values."],
+  d13:["Modifying Data (DML)","Inserting new rows, updating records, and deleting table data."],
+  d14:["SQL Views","Saving complex query definitions behind virtual read-only tables."],
+  d15:["Indexing & Performance","Speeding up database scans, index scans, and using EXPLAIN plans."],
+  d16:["Window Functions","Running advanced partitions and offsets (Row Number, Rank, Lag, Lead) without collapsing rows."],
+  d17:["Database Normalization","Designing clean schemas and understanding normal forms (1NF, 2NF, 3NF)."],
+  d18:["Transactions & Concurrency","Ensuring atomic operations and safety using transactions (ACID properties)."],
+  d19:["Procedures & Triggers","Compiling reusable logic and triggers inside the database catalog."],
+  d20:["SQL Capstone Project","Designing, loading, and analyzing an online store database from scratch."]
+};
+
+let completed = new Set();
+
+// Load completed days from localStorage if available
+try {
+  const saved = localStorage.getItem('sql_completed_days');
+  if (saved) {
+    const list = JSON.parse(saved);
+    list.forEach(item => {
+      completed.add(item);
+      const link = document.querySelector(`nav.toc a[data-target="${item}"]`);
+      if (link) {
+        link.classList.add('done');
+        const chk = link.querySelector('.chk');
+        if (chk) chk.textContent = '✓';
+      }
+    });
+  }
+} catch(e) {
+  console.error("Local storage error:", e);
+}
+
+function showDay(id){
+  document.querySelectorAll('section.day').forEach(s => s.classList.remove('active'));
+  const targetSec = document.querySelector(`section.day[data-id="${id}"]`);
+  if (targetSec) targetSec.classList.add('active');
+  
+  document.querySelectorAll('nav.toc a').forEach(a => a.classList.remove('active'));
+  const activeLink = document.querySelector(`nav.toc a[data-target="${id}"]`);
+  if (activeLink) activeLink.classList.add('active');
+  
+  const dayNum = order.indexOf(id) + 1;
+  document.getElementById('dayTag').textContent = `DAY ${dayNum} / 20`;
+  document.getElementById('pageTitle').textContent = titles[id][0];
+  document.getElementById('pageSub').textContent = titles[id][1];
+  document.getElementById('main').scrollTop = 0;
+  window.scrollTo({top:0, behavior:'instant'});
+  
+  // Set up the mark-complete button state
+  const btn = document.querySelector(`section.day[data-id="${id}"] .mark-btn`);
+  if (btn) {
+    if (completed.has(id)) {
+      btn.classList.add('done');
+      btn.textContent = '✓ Completed';
+    } else {
+      btn.classList.remove('done');
+      btn.textContent = 'Mark complete';
+    }
+  }
+}
+
+document.querySelectorAll('nav.toc a').forEach(a=>{
+  a.addEventListener('click', ()=> showDay(a.dataset.target));
+});
+
+document.querySelectorAll('.mark-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const id = btn.dataset.mark;
+    const chk = document.querySelector(`nav.toc a[data-target="${id}"] .chk`);
+    if(completed.has(id)){
+      completed.delete(id);
+      btn.classList.remove('done');
+      btn.textContent='Mark complete';
+      document.querySelector(`nav.toc a[data-target="${id}"]`).classList.remove('done');
+      if (chk) chk.textContent = order.indexOf(id)+1;
+    } else {
+      completed.add(id);
+      btn.classList.add('done');
+      btn.textContent='✓ Completed';
+      document.querySelector(`nav.toc a[data-target="${id}"]`).classList.add('done');
+      if (chk) chk.textContent = '✓';
+    }
+    updateProgress();
+    
+    // Save to localStorage
+    try {
+      localStorage.setItem('sql_completed_days', JSON.stringify(Array.from(completed)));
+    } catch(e) {
+      console.error(e);
+    }
+  });
+});
+
+function updateProgress(){
+  const pct = Math.round((completed.size/order.length)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = `${completed.size} / 20 days completed`;
+}
+
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  const activeLink = document.querySelector('nav.toc a.active');
+  if (activeLink) {
+    const current = activeLink.dataset.target;
+    const idx = order.indexOf(current);
+    if(idx>0) showDay(order[idx-1]);
+  }
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  const activeLink = document.querySelector('nav.toc a.active');
+  if (activeLink) {
+    const current = activeLink.dataset.target;
+    const idx = order.indexOf(current);
+    if(idx<order.length-1) showDay(order[idx+1]);
+  }
+});
+
+// Update progress bar on start
+updateProgress();
+
+// Initial load
+showDay('d1');
+</script>
+</body>
+</html>

@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Notes — Fironix Technology</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#0f1620;
+  --panel-2:#121a26;
+  --line:#1e2a38;
+  --blue:#4B8BBE;
+  --yellow:#FFD43B;
+  --text:#c9d6e3;
+  --text-dim:#7c8fa3;
+  --white:#eef4fa;
+  --green:#5fd88f;
+  --red:#ff6b6b;
+  --radius:10px;
+  --mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+  --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
+body{display:flex;min-height:100vh;}
+
+/* ---------- Sidebar ---------- */
+#sidebar{
+  width:270px;flex-shrink:0;background:var(--panel);
+  border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  padding:20px 0 40px;
+}
+#sidebar::-webkit-scrollbar{width:6px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+.brand{
+  padding:0 20px 18px;border-bottom:1px solid var(--line);margin-bottom:14px;
+}
+.brand .py{color:var(--yellow);font-family:var(--mono);font-weight:700;font-size:22px;}
+.brand small{display:block;color:var(--text-dim);margin-top:4px;font-size:12px;letter-spacing:.5px;}
+.progress-wrap{padding:0 20px 16px;}
+.progress-track{height:6px;background:var(--panel-2);border-radius:6px;overflow:hidden;border:1px solid var(--line);}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--yellow));transition:width .4s ease;}
+.progress-label{font-size:11px;color:var(--text-dim);margin-top:6px;font-family:var(--mono);}
+
+nav.toc{padding:0 10px;}
+nav.toc a{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;margin:2px 0;border-radius:8px;
+  color:var(--text-dim);text-decoration:none;font-size:13.5px;
+  border-left:2px solid transparent;cursor:pointer;
+}
+nav.toc a:hover{background:var(--panel-2);color:var(--white);}
+nav.toc a.active{background:var(--panel-2);color:var(--yellow);border-left:2px solid var(--yellow);}
+nav.toc a .chk{
+  width:15px;height:15px;border-radius:4px;border:1px solid var(--line);
+  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;
+}
+nav.toc a.done .chk{background:var(--green);border-color:var(--green);color:#08130c;}
+nav.toc .grp-label{
+  font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);
+  padding:14px 12px 6px;
+}
+
+/* ---------- Main ---------- */
+#main{flex:1;padding:36px 48px;max-width:980px;}
+header.page-head{margin-bottom:30px;}
+header.page-head h1{
+  font-family:var(--mono);font-size:30px;margin:0 0 6px;color:var(--white);
+}
+header.page-head p{color:var(--text-dim);margin:0;font-size:14.5px;}
+
+section.topic{display:none;animation:fade .3s ease;}
+section.topic.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.topic h2{
+  font-family:var(--mono);color:var(--yellow);font-size:22px;
+  border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.mark-btn{
+  font-family:var(--sans);font-size:12px;background:var(--panel-2);color:var(--text-dim);
+  border:1px solid var(--line);padding:6px 12px;border-radius:20px;cursor:pointer;
+}
+.mark-btn.done{background:var(--green);color:#08130c;border-color:var(--green);}
+
+.theory{
+  background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--blue);
+  border-radius:var(--radius);padding:16px 18px;margin:14px 0;font-size:14.5px;line-height:1.65;
+}
+.theory h3{margin:0 0 8px;color:var(--blue);font-size:15px;font-family:var(--mono);}
+.theory ul{margin:8px 0 0;padding-left:20px;}
+.theory code{background:var(--panel-2);padding:1px 6px;border-radius:4px;color:var(--yellow);font-family:var(--mono);font-size:13px;}
+
+.subhead{color:var(--white);font-size:15.5px;margin:22px 0 8px;font-weight:600;}
+.subhead .tag{
+  font-family:var(--mono);font-size:10.5px;background:var(--panel-2);color:var(--green);
+  border:1px solid var(--line);padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;
+}
+
+pre{
+  background:#0d1117 !important;border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 18px;overflow-x:auto;margin:10px 0 18px;font-size:13px;
+}
+code.hljs{background:transparent !important;font-family:var(--mono);}
+
+.explain{
+  font-size:13.5px;color:var(--text-dim);background:var(--panel-2);border:1px dashed var(--line);
+  border-radius:8px;padding:10px 14px;margin:-10px 0 18px;line-height:1.6;
+}
+.explain b{color:var(--text);}
+.explain .out{color:var(--green);font-family:var(--mono);}
+
+table.reftable{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:13.5px;}
+table.reftable th,table.reftable td{border:1px solid var(--line);padding:8px 12px;text-align:left;}
+table.reftable th{background:var(--panel-2);color:var(--yellow);font-family:var(--mono);font-size:12.5px;}
+table.reftable td code{font-family:var(--mono);color:var(--blue);}
+table.reftable tr:nth-child(even){background:var(--panel);}
+
+.nav-footer{display:flex;justify-content:space-between;margin-top:34px;padding-top:16px;border-top:1px solid var(--line);}
+.nav-footer button{
+  font-family:var(--sans);background:var(--panel);color:var(--text);border:1px solid var(--line);
+  padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13.5px;
+}
+.nav-footer button:hover{border-color:var(--blue);color:var(--white);}
+
+@media(max-width:800px){
+  body{flex-direction:column;}
+  #sidebar{width:100%;height:auto;position:relative;}
+  #main{padding:24px 18px;}
+}
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="brand">
+    <span class="py">&gt;_ Python Notes</span>
+    <small>Fironix Technology — Full Reference</small>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 17 topics completed</div>
+  </div>
+  <nav class="toc" id="toc">
+    <div class="grp-label">Core Basics</div>
+    <a data-target="basics"><span class="chk">1</span> Print &amp; Basics</a>
+    <a data-target="datatypes"><span class="chk">2</span> Data Types</a>
+    <a data-target="operators"><span class="chk">3</span> Operators</a>
+    <div class="grp-label">Control Flow</div>
+    <a data-target="conditionals"><span class="chk">4</span> If / Elif / Else</a>
+    <a data-target="loops"><span class="chk">5</span> Loops</a>
+    <div class="grp-label">Data Structures</div>
+    <a data-target="lists"><span class="chk">6</span> Lists</a>
+    <a data-target="tuples"><span class="chk">7</span> Tuples</a>
+    <a data-target="dictsets"><span class="chk">8</span> Dict &amp; Set</a>
+    <div class="grp-label">Functions</div>
+    <a data-target="functions"><span class="chk">9</span> Functions &amp; Lambda</a>
+    <a data-target="builtins"><span class="chk">10</span> Built-in Functions</a>
+    <div class="grp-label">I/O &amp; Errors</div>
+    <a data-target="files"><span class="chk">11</span> File Handling</a>
+    <a data-target="exceptions"><span class="chk">12</span> Exception Handling</a>
+    <div class="grp-label">Data &amp; Web</div>
+    <a data-target="json"><span class="chk">13</span> JSON</a>
+    <a data-target="api"><span class="chk">14</span> Working with APIs</a>
+    <div class="grp-label">Data Science Stack</div>
+    <a data-target="numpy"><span class="chk">15</span> NumPy</a>
+    <a data-target="pandas"><span class="chk">16</span> Pandas</a>
+    <a data-target="matplotlib"><span class="chk">17</span> Matplotlib</a>
+  </nav>
+</aside>
+
+<main id="main">
+<header class="page-head">
+  <h1 id="pageTitle">Print &amp; Basics</h1>
+  <p id="pageSub">Core syntax every Python program starts with.</p>
+</header>
+
+<!-- ============ 1. BASICS ============ -->
+<section class="topic" data-id="basics">
+  <h2>1. Print &amp; Basics <button class="mark-btn" data-mark="basics">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><code>print()</code> is Python's built-in function to display output on the console. It can take multiple values,
+    and the <code>sep</code> keyword argument controls what string is inserted between the values (default is a single space).
+    Python programs are read top to bottom, and every topic below (data types, operators, loops, functions) builds on
+    this basic ability to see what your code is doing.</p>
+  </div>
+
+  <div class="subhead">Your code <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">print("Hello","World!", sep="-")</code></pre>
+  <div class="explain">Prints <b>"Hello"</b> and <b>"World!"</b> joined by a hyphen instead of the default space.
+  Output: <span class="out">Hello-World!</span></div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># print with no separator argument (default sep=" ")
+print("Python", "is", "fun")          # Python is fun
+
+# print with end argument (default end="\n")
+print("Loading", end="...")
+print("Done")                          # Loading...Done
+
+# printing multiple data types together
+print("Age:", 21, "Passed:", True)</code></pre>
+</section>
+
+<!-- ============ 2. DATA TYPES ============ -->
+<section class="topic" data-id="datatypes">
+  <h2>2. Data Types <button class="mark-btn" data-mark="datatypes">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>data type</b> tells Python what kind of value a variable holds and what operations are valid on it.
+    Python is <i>dynamically typed</i> — you don't declare a type, Python infers it from the value assigned.</p>
+    <ul>
+      <li><code>int</code> — whole numbers (10, -5)</li>
+      <li><code>float</code> — decimal numbers (3.14)</li>
+      <li><code>str</code> — text, written in quotes ("Hello")</li>
+      <li><code>bool</code> — True / False</li>
+      <li><code>list</code> — ordered, changeable collection <code>[1,2,3]</code></li>
+      <li><code>tuple</code> — ordered, unchangeable collection <code>(1,2,3)</code></li>
+      <li><code>dict</code> — key-value pairs <code>{"key":"value"}</code></li>
+      <li><code>set</code> — unordered collection of unique items <code>{1,2,3}</code></li>
+    </ul>
+  </div>
+
+  <div class="subhead">Your code <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">#int, float, str, bool, list, tuple, dict, set
+x = 10 #int
+y = 3.14 #float
+z = "Hello"  #str
+a = True #bool
+b = [1, 2, 3] #list
+c = (4, 5, 6) #tuple
+d = {"name": "Alice", "age": 30} #dict
+e = {1, 2, 3} #set
+print(type(x), type(y), type(z), type(a), type(b), type(c), type(d),type(e), sep="\n")</code></pre>
+  <div class="explain">
+    <code>type()</code> is a built-in function that returns the data type of any object.
+    Output (each on a new line because <code>sep="\n"</code>):
+    <span class="out">&lt;class 'int'&gt; &lt;class 'float'&gt; &lt;class 'str'&gt; &lt;class 'bool'&gt; &lt;class 'list'&gt; &lt;class 'tuple'&gt; &lt;class 'dict'&gt; &lt;class 'set'&gt;</span>
+  </div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># type conversion (casting)
+num_str = "25"
+num_int = int(num_str)      # str -> int
+num_float = float(num_int)  # int -> float
+back_to_str = str(num_float)
+
+print(type(num_int), type(num_float), type(back_to_str))
+
+# checking type explicitly
+print(isinstance(10, int))     # True
+print(isinstance("hi", (int, float)))  # False</code></pre>
+</section>
+
+<!-- ============ 3. OPERATORS ============ -->
+<section class="topic" data-id="operators">
+  <h2>3. Operators <button class="mark-btn" data-mark="operators">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Operators perform actions on values (called <b>operands</b>). Python groups them into:
+    arithmetic (math), comparison (compare two values, return bool), logical (combine booleans),
+    assignment (store/update values), and special membership/identity operators.</p>
+  </div>
+
+  <div class="subhead">Arithmetic operators <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a=10
+b=20
+z="Hello World"
+
+#arithmetic operators: +, -, *, /, %, **, //
+
+print("a + b =", a + b)
+print("a - b =", a - b)
+print("a * b =", a * b)
+print("a / b =", a / b)
+print("a % b =", a % b)
+print("a ** b =", a ** b)
+print("a // b =", a // b)</code></pre>
+  <div class="explain">
+    <code>/</code> always returns a float (division). <code>%</code> is the <b>modulus</b> — the remainder after division
+    (a % b = 10, since 10 fits into 20 zero times, remainder 10). <code>**</code> is exponent (a to the power b).
+    <code>//</code> is <b>floor division</b> — division rounded down to the nearest whole number.
+  </div>
+
+  <div class="subhead">Comparison operators <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">#comparison operators: ==, !=, >, <, >=, <=
+
+print("a == b:", a == b)
+print("a != b:", a != b)
+print("a > b:", a > b)
+print("a < b:", a < b)
+print("a >= b:", a >= b)
+print("a <= b:", a <= b)</code></pre>
+  <div class="explain">Each of these always returns a <code>bool</code> (<b>True</b> or <b>False</b>) — they are what drives
+  every <code>if</code> statement you'll see later.</div>
+
+  <div class="subhead">Logical operators <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">#logical operators: and, or, not
+
+print("a > 5 and b > 15:", a > 5 and b > 15) #true + true = true, true + false = false, false + false = false
+print("a > 5 or b > 25:", a > 5 or b > 25)
+print("not (a > 5):", not (a > 5))</code></pre>
+  <div class="explain"><code>and</code> needs <b>both</b> sides True. <code>or</code> needs <b>at least one</b> side True.
+  <code>not</code> flips a boolean.</div>
+
+  <div class="subhead">Assignment operators <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">#assignment operators: =, +=, -=, *=, /=, %=, **=, //=
+
+print("initial a:", a)
+a += 5 # a = a + 5
+print("after a += 5:", a)
+a *= 2 # a = a * 2
+print("after a *= 2:", a)
+a-= 10 # a = a - 10
+print("after a -= 10:", a)</code></pre>
+  <div class="explain">Shorthand operators combine an arithmetic operation with assignment in one step —
+  <code>a += 5</code> is identical to writing <code>a = a + 5</code>, just shorter.
+  Trace: a=10 → +5 → 15 → *2 → 30 → -10 → <span class="out">20</span>.</div>
+
+  <div class="subhead">Special operators (in / not in / is / is not) <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">#special operators: in, not in, is, is not
+print("'H' in z:", 'H' in z) #z= 'Hello World'
+print("'h' in z:", 'h' in z) #z= 'Hello World'
+print("'World' in z:", 'World' in z) #z= 'Hello World'
+print("'world' in z:", 'world' in z) #z= 'Hello World'
+
+print("'H' not in z:", 'H' not in z) #z= 'Hello World'
+print("'h' not in z:", 'h' not in z) #z= 'Hello World'
+print("'World' not in z:", 'World' not in z) #z= 'Hello World'
+print("'world' not in z:", 'world' not in z) #z= 'Hello World'  
+
+print("a is b:", a is b) #a=20, b=20
+print("a is not b:", a is not b) #a=20, b=20</code></pre>
+  <div class="explain">
+    <code>in</code> / <code>not in</code> check <b>membership</b> and are case-sensitive (so 'h' in "Hello World" is False, only
+    capital 'H' is present). <code>is</code> / <code>is not</code> check <b>identity</b> — whether two variables point to the
+    exact same object in memory, not just equal values. This is different from <code>==</code>, which checks value equality.
+  </div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># chained comparisons
+x = 5
+print(1 < x < 10)      # True (same as 1 < x and x < 10)
+
+# identity vs equality with lists
+list1 = [1, 2, 3]
+list2 = [1, 2, 3]
+print(list1 == list2)  # True  (same values)
+print(list1 is list2)  # False (different objects in memory)</code></pre>
+</section>
+
+<!-- ============ 4. CONDITIONALS ============ -->
+<section class="topic" data-id="conditionals">
+  <h2>4. If / Elif / Else <button class="mark-btn" data-mark="conditionals">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Conditional statements let a program make decisions and run different code depending on whether a
+    condition is True or False. Python uses indentation (not curly braces) to define which lines belong to
+    which block — this is strict and must be consistent (4 spaces is the convention).</p>
+    <ul>
+      <li><code>if</code> — runs a block only if the condition is True</li>
+      <li><code>elif</code> — checked only if the previous conditions were False; you can chain many</li>
+      <li><code>else</code> — catches everything not covered above</li>
+      <li>Nested <code>if</code> — an if/else placed inside another if/else, for multi-level decisions</li>
+    </ul>
+  </div>
+
+  <div class="subhead">if <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a=int(input("Enter a number: "))
+b=int(input("Enter another number: "))
+
+if a<b:
+    print("a is less than b")</code></pre>
+  <div class="explain"><code>input()</code> always returns a string, so <code>int()</code> converts the typed text into a
+  whole number before comparing.</div>
+
+  <div class="subhead">if / else <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">if a>b:
+    print("a is greater than b")
+else:
+    print("a is equal to or less than b")</code></pre>
+
+  <div class="subhead">if / elif / else <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">if a>b:
+    print("a is greater than b")
+elif a<b:
+    print("a is less than b")
+else:
+    print("a is equal to b")</code></pre>
+  <div class="explain">Python checks conditions top to bottom and stops at the <b>first</b> True one — the rest are skipped
+  even if they'd also be True.</div>
+
+  <div class="subhead">Real-world example: ATM cash logic <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">b= 20000
+if b >= 10000:
+    print("10000 cash out" )
+elif b >= 5000:
+    print("5000 cash out")
+else:
+    print("No cash out &", b )</code></pre>
+  <div class="explain">Since b=20000 satisfies the first condition, it prints <span class="out">10000 cash out</span> and never
+  even checks the elif.</div>
+
+  <div class="subhead">Nested if <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">if a > 0:
+    if b > 0:
+        print("Both a and b are positive")
+    else:
+        print("a is positive but b is not")
+elif a < 0:
+    if b < 0:
+        print("Both a and b are negative")
+    else:
+        print("a is negative but b is not")
+else:
+    print("a is zero")</code></pre>
+  <div class="explain">A nested if is simply an if/else written inside the body of another if/else — used when a decision
+  depends on more than one variable at multiple levels.</div>
+
+  <div class="subhead">Real-world example: ATM with card check <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a = True
+b = 20000
+
+if a == True:
+    if b >= 10000:
+        print("10000 cash out" )
+    elif b >= 5000:
+        print("5000 cash out")
+    else:
+        print("No cash out &", b )
+else:
+    print("insert ATM cards" )</code></pre>
+
+  <div class="subhead">Real-world example: filling missing pandas values <span class="tag">unchanged</span></div>
+  <pre><code class="language-python"># Categorical columns: fill with mode
+categorical_fill = ["brand", "processor_brand", "processor_name",
+                    "ram_type", "os", "os_bit"]
+for col in categorical_fill:
+    if col in df.columns and df[col].isnull().any():
+        mode_val = df[col].mode()
+        if not mode_val.empty:
+            df[col].fillna(mode_val[0], inplace=True)
+            print(f"✔ {col} NaN → filled with mode ({mode_val[0]})")</code></pre>
+  <div class="explain">This combines an <code>if</code> condition with a <code>for</code> loop (covered next section) — a common
+  real-world pattern in data cleaning. For every categorical column, it checks if the column exists <b>and</b> has
+  missing values, then fills those blanks with the <b>mode</b> (most frequent value) of that column.</div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># ternary (one-line if/else) expression
+age = 20
+status = "Adult" if age >= 18 else "Minor"
+print(status)   # Adult
+
+# multiple elif chain — grading example
+marks = 72
+if marks >= 90:
+    grade = "A+"
+elif marks >= 75:
+    grade = "A"
+elif marks >= 60:
+    grade = "B"
+else:
+    grade = "C"
+print(grade)    # B</code></pre>
+</section>
+
+<!-- ============ 5. LOOPS ============ -->
+<section class="topic" data-id="loops">
+  <h2>5. Loops <button class="mark-btn" data-mark="loops">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Loops repeat a block of code. <code>for</code> loops iterate over a known sequence (a <code>range()</code>, list,
+    string, etc.) a defined number of times. <code>while</code> loops repeat as long as a condition stays True — useful
+    when you don't know in advance how many times you'll need to repeat.</p>
+    <ul>
+      <li><code>range(start, stop)</code> generates numbers from start up to (not including) stop</li>
+      <li>Loops can be <b>nested</b> — a loop inside another loop, common for grids/tables</li>
+      <li><code>break</code> exits a loop early; <code>continue</code> skips to the next iteration</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Nested for loop <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">for i in range(0, 11):
+    for j in range(0, 11):
+        print(i, j)</code></pre>
+  <div class="explain">For every value of <code>i</code> (0 to 10), the inner loop runs completely through <code>j</code>
+  (0 to 10) before <code>i</code> moves to its next value — producing 121 printed pairs total.</div>
+
+  <div class="subhead">Multiplication table <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">for i in range(1, 11):
+    for j in range(1, 11):
+        print(f"{j} x {i} = {i * j}")
+    print("the new table") </code></pre>
+  <div class="explain">The <code>f"{j} x {i} = {i * j}"</code> is an <b>f-string</b> — it lets you embed variables and
+  expressions directly inside a string using curly braces. The second print (outside the inner loop, but inside the
+  outer loop) marks the end of each table of 10.</div>
+
+  <div class="subhead">Looping over a list <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">ls = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+for i in ls: 
+    print(i)</code></pre>
+  <div class="explain">A <code>for</code> loop can iterate directly over any list — no need for <code>range()</code> or
+  index numbers.</div>
+
+  <div class="subhead">While loop <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a = 0
+while a < 5:
+    print(a)
+    a += 1</code></pre>
+  <div class="explain">Prints 0,1,2,3,4. The loop keeps running as long as <code>a &lt; 5</code> stays True; forgetting
+  <code>a += 1</code> would cause an <b>infinite loop</b>.</div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># break and continue
+for n in range(1, 10):
+    if n == 5:
+        break          # stop the loop completely
+    if n % 2 == 0:
+        continue        # skip even numbers, go to next iteration
+    print(n)             # prints 1, 3
+
+# looping with enumerate() to get index + value
+fruits = ["apple", "banana", "cherry"]
+for index, fruit in enumerate(fruits):
+    print(index, fruit)
+
+# while with else (runs when loop completes without break)
+count = 0
+while count < 3:
+    print("count:", count)
+    count += 1
+else:
+    print("loop finished normally")</code></pre>
+</section>
+
+<!-- ============ 6. LISTS ============ -->
+<section class="topic" data-id="lists">
+  <h2>6. Lists <button class="mark-btn" data-mark="lists">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>list</b> is an ordered, mutable (changeable) collection written with square brackets. Items are
+    accessed by <b>index</b>, starting at 0. Negative indexes count from the end (-1 is the last item).
+    <b>Slicing</b> (<code>list[start:stop:step]</code>) extracts a sub-portion without changing the original.</p>
+  </div>
+
+  <div class="subhead">Indexing &amp; slicing <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a = [1, 2, 3, 4, 5]
+print(a[0])#1
+print(a[1]+a[3])#6
+
+print(a[1:4])#2, 3, 4
+print(a[:3])#1, 2, 3
+print(a[3:])#4, 5
+print(a[-1])#5
+print(a[0:4:2])#1 ,3 
+print(a[::2])#1,3,5
+print(a[::-2])#5,3,1</code></pre>
+  <div class="explain">
+    <code>a[start:stop:step]</code> — leaving <code>start</code> empty means "from the beginning", leaving
+    <code>stop</code> empty means "to the end". A negative <code>step</code> like <code>-2</code> walks backwards,
+    picking every 2nd element from the end.
+  </div>
+
+  <div class="subhead">Aggregation &amp; mutation methods <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">print(len(a))#5
+print(sum(a))# 15
+print(max(a))#5
+print(min(a))#1
+
+print(a.append(6))
+print(a.extend([7, 8, 9]))
+print(a.pop())#9
+print(a.pop(0))#1
+
+print(a)</code></pre>
+  <div class="explain">
+    <code>.append(x)</code> adds one item to the end. <code>.extend([..])</code> adds multiple items from another list.
+    <code>.pop()</code> removes and returns the <b>last</b> item; <code>.pop(0)</code> removes and returns the item at
+    index 0. Note: <code>append</code>/<code>extend</code>/<code>pop</code> all modify the list <b>in place</b> and
+    return <code>None</code> (except pop, which returns the removed item) — so <code>print(a.append(6))</code> actually
+    prints <span class="out">None</span>, not the list itself.
+  </div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># common list built-ins & methods
+nums = [5, 3, 8, 1, 9]
+nums.sort()                 # in-place ascending sort
+print(nums)                  # [1, 3, 5, 8, 9]
+nums.sort(reverse=True)
+print(nums)                  # [9, 8, 5, 3, 1]
+print(sorted([3,1,2]))       # returns a new sorted list, original unchanged
+
+nums.insert(1, 100)          # insert 100 at index 1
+nums.remove(100)             # remove first occurrence of 100
+print(nums.count(3))         # how many times 3 appears
+print(nums.index(5))         # index of first occurrence of 5
+
+# list comprehension — build a list in one line
+squares = [x**2 for x in range(1, 6)]
+print(squares)                # [1, 4, 9, 16, 25]
+
+evens = [x for x in range(20) if x % 2 == 0]
+print(evens)</code></pre>
+</section>
+
+<!-- ============ 7. TUPLES ============ -->
+<section class="topic" data-id="tuples">
+  <h2>7. Tuples <button class="mark-btn" data-mark="tuples">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>tuple</b> looks and behaves like a list for reading (indexing, slicing, <code>len/sum/max/min</code> all
+    work) but it is <b>immutable</b> — once created, it cannot be changed. This makes tuples faster and safer for
+    data that shouldn't be modified (e.g. coordinates, fixed configuration values).</p>
+  </div>
+
+  <div class="subhead">Indexing &amp; slicing <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">b = (1, 2, 3, 4, 5)
+print(b[0])#1
+print(b[1]+b[3])#6
+
+print(b[1:4])#2, 3, 4
+print(b[:3])#1, 2, 3
+print(b[3:])#4, 5
+print(b[-1])#5 
+print(b[0:4:2])#1 ,3
+print(b[::2])#1,3,5 
+print(b[::-2])#5,3,1
+
+print(len(b))#5
+print(sum(b))# 15
+print(max(b))#5
+print(min(b))#1</code></pre>
+
+  <div class="subhead">Why mutation fails <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">print(b.append(6))#AttributeError: 'tuple' object has no attribute 'append'
+print(b.extend([7, 8, 9]))#AttributeError: 'tuple' object has no attribute 'extend'
+print(b.pop())#AttributeError: 'tuple' object has no attribute 'pop'
+print(b.pop(0))#AttributeError: 'tuple' object has no attribute 'pop'</code></pre>
+  <div class="explain">Tuples deliberately don't have <code>append</code>, <code>extend</code>, or <code>pop</code> because
+  they are immutable — trying to call these raises an <b>AttributeError</b>, telling you the method doesn't exist for
+  this type. If you need to "change" a tuple, you must build a new one.</div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># tuple packing & unpacking
+point = (10, 20)
+x_coord, y_coord = point       # unpacking into two variables
+print(x_coord, y_coord)         # 10 20
+
+# tuples are commonly used for multiple return values
+def min_max(numbers):
+    return min(numbers), max(numbers)   # returns a tuple
+
+low, high = min_max([4, 9, 1, 7])
+print(low, high)   # 1 9
+
+# converting between list and tuple
+as_list = list((1, 2, 3))
+as_tuple = tuple([1, 2, 3])</code></pre>
+</section>
+
+<!-- ============ 8. DICT & SET ============ -->
+<section class="topic" data-id="dictsets">
+  <h2>8. Dictionary &amp; Set <button class="mark-btn" data-mark="dictsets">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>dictionary</b> stores data as <code>key: value</code> pairs and is accessed by key instead of position —
+    ideal for labeled data. A <b>set</b> stores only unique, unordered values — useful for removing duplicates or
+    membership tests.</p>
+  </div>
+
+  <div class="subhead">Basic access <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">d = {"key": "value"}
+print(d["key"])#value
+print(d.get("key"))#value
+
+d = {"name": "Alice", 
+    "age": 30,
+    "city": "New York"
+     }
+print(d['name'])#Alice
+print(d.get('age'))#30</code></pre>
+  <div class="explain">Both <code>d["key"]</code> and <code>d.get("key")</code> retrieve a value, but
+  <code>d["missing"]</code> raises a <b>KeyError</b> if the key doesn't exist, while <code>d.get("missing")</code>
+  safely returns <code>None</code> instead of crashing.</div>
+
+  <div class="subhead">Add / remove / update <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">#adding new key-value pair
+d['country'] = 'USA'
+print(d)#{'name': 'Alice', 'age': 30, 'city': 'New York', 'country': 'USA'}
+
+#remioving key-value pair
+d.pop('city')
+print(d)#{'name': 'Alice', 'age': 30, 'country': 'USA'}
+
+#updating value
+d['age'] = 31
+print(d)#{'name': 'Alice', 'age': 31, 'country': 'USA'}</code></pre>
+
+  <div class="subhead">List of dictionaries <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">students = [
+    {"name": "Alice", "age": 30},
+    {"name": "Bob", "age": 25},
+    {"name": "Charlie", "age": 35}
+]
+print(students[0])#{'name': 'Alice', 'age': 30}
+print(students[1]['name'])#Bob</code></pre>
+  <div class="explain">A very common real-world shape for data (e.g. rows from a database, JSON API responses) — a
+  list where each element is a dictionary representing one record.</div>
+
+  <div class="subhead">Dictionary of lists <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">courses = {
+    "course1": ["Alice", "Bob"],
+    "course2": ["Charlie", "David"]
+}
+print(courses["course1"])#['Alice', 'Bob']
+print(courses["course2"][0])#Charlie</code></pre>
+
+  <div class="subhead">Dictionary comprehension <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">squares = {x: x**2 for x in range(1, 6)}
+print(squares)#{1: 1, 2: 4, 3: 9, 4: 16, 5: 25}</code></pre>
+  <div class="explain">Same idea as a list comprehension, but builds a dictionary: for every <code>x</code> in
+  range(1,6), the key is <code>x</code> and the value is <code>x**2</code>.</div>
+
+  <div class="subhead">Looping through a dictionary <span class="tag">added</span></div>
+  <pre><code class="language-python"># looping through a dictionary
+d = {"name": "Alice", "age": 31, "country": "USA"}
+for key in d:
+    print(key, "->", d[key])
+
+for key, value in d.items():
+    print(key, value)
+
+print(list(d.keys()))     # ['name', 'age', 'country']
+print(list(d.values()))   # ['Alice', 31, 'USA']</code></pre>
+
+  <div class="theory">
+    <h3>Set — dedicated theory</h3>
+    <p>A <b>set</b> is an unordered collection that automatically removes duplicates and stores only
+    <b>unique</b> values. Sets are written with curly braces like a dict, but hold single values instead of
+    key:value pairs. Because sets have no order, you cannot index or slice them (<code>s[0]</code> is invalid).
+    Sets are built for two jobs: quickly checking <b>membership</b> (<code>in</code>) and performing
+    <b>mathematical set operations</b> — union, intersection, difference — just like in set theory.</p>
+    <ul>
+      <li><code>{1, 2, 3}</code> — creates a set directly</li>
+      <li><code>set()</code> — creates an <b>empty</b> set (⚠️ <code>{}</code> alone creates an empty <b>dict</b>, not a set)</li>
+      <li>Sets are <b>mutable</b> (you can add/remove items) but the items inside must themselves be immutable (no lists inside a set)</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Creating a set &amp; removing duplicates <span class="tag">added</span></div>
+  <pre><code class="language-python"># sets automatically drop duplicate values
+s1 = {1, 2, 3, 3, 2}
+print(s1)                    # {1, 2, 3} — duplicates removed automatically
+print(type(s1))               # <class 'set'>
+
+empty_set = set()              # correct way to make an empty set
+not_a_set = {}                  # this is actually an empty dict!
+print(type(empty_set), type(not_a_set))
+
+# turning a list with duplicates into a set is a common way to de-duplicate
+names = ["Alice", "Bob", "Alice", "Charlie", "Bob"]
+unique_names = set(names)
+print(unique_names)            # {'Alice', 'Bob', 'Charlie'}</code></pre>
+
+  <div class="subhead">Adding &amp; removing items <span class="tag">added</span></div>
+  <pre><code class="language-python">s1 = {1, 2, 3}
+
+s1.add(10)              # add a single item
+print(s1)                # {1, 2, 3, 10}
+
+s1.update([20, 30])      # add multiple items at once
+print(s1)                # {1, 2, 3, 10, 20, 30}
+
+s1.discard(1)             # removes 1 if present, does NOT error if missing
+s1.remove(2)               # removes 2, but RAISES KeyError if missing
+popped = s1.pop()           # removes and returns a random item (sets are unordered)
+print(s1, popped)
+
+s1.clear()                   # empties the set completely
+print(s1)                     # set()</code></pre>
+  <div class="explain"><code>.discard()</code> and <code>.remove()</code> both delete an item, but
+  <code>.discard()</code> silently does nothing if the item isn't there, while <code>.remove()</code> raises a
+  <b>KeyError</b> — same safe-vs-strict pattern you saw with dict's <code>.get()</code> vs <code>d["key"]</code>.</div>
+
+  <div class="subhead">Mathematical set operations <span class="tag">added</span></div>
+  <pre><code class="language-python">s1 = {1, 2, 3, 4}
+s2 = {3, 4, 5, 6}
+
+print(s1 | s2)   # union() — all items from both:            {1,2,3,4,5,6}
+print(s1 & s2)   # intersection() — items in both:            {3,4}
+print(s1 - s2)   # difference() — in s1 but not s2:            {1,2}
+print(s2 - s1)   # difference() — in s2 but not s1:            {5,6}
+print(s1 ^ s2)   # symmetric_difference() — in one but not both: {1,2,5,6}
+
+# same operations using method names instead of symbols
+print(s1.union(s2))
+print(s1.intersection(s2))
+print(s1.difference(s2))
+print(s1.symmetric_difference(s2))</code></pre>
+
+  <div class="subhead">Membership &amp; comparison <span class="tag">added</span></div>
+  <pre><code class="language-python">a = {1, 2, 3}
+b = {1, 2, 3, 4, 5}
+
+print(3 in a)              # True — fast membership check, sets are optimized for this
+print(a.issubset(b))        # True — every item in a is also in b
+print(b.issuperset(a))       # True — b contains all of a
+print(a.isdisjoint({7, 8}))   # True — no overlap at all
+
+# set comprehension — same idea as list/dict comprehension
+squares_set = {x**2 for x in range(1, 6)}
+print(squares_set)            # {1, 4, 9, 16, 25}
+
+# frozenset — an immutable version of a set (can be used as a dict key)
+fs = frozenset([1, 2, 3])
+# fs.add(4)  # AttributeError: frozenset has no add()</code></pre>
+</section>
+
+<!-- ============ 9. FUNCTIONS ============ -->
+<section class="topic" data-id="functions">
+  <h2>9. Functions &amp; Lambda <button class="mark-btn" data-mark="functions">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>function</b> is a reusable, named block of code defined with the <code>def</code> keyword. Functions can
+    optionally accept <b>parameters</b> (inputs) and optionally use <code>return</code> to send a value back to the
+    caller. There are 4 combinations based on whether a function takes parameters and/or returns a value.
+    A <b>lambda</b> is a small, unnamed (anonymous) function limited to a single expression — handy for short,
+    throwaway logic.</p>
+  </div>
+
+  <div class="subhead">Basic function <span class="tag">unchanged</span></div>
+  <pre><code class="language-python"># def = function keyword
+# def function_name(parameters):
+def greet(name):
+    return f"Hello, {name}!"
+print(greet("suresh"))#Hello, suresh!</code></pre>
+
+  <div class="subhead">The 4 function types <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">#with return value, with parameters
+#without return value, without parameters
+#with return value, without parameters
+#without return value, with parameters
+
+#with return value, without parameters
+def get_greeting():
+    return "Hello, World!"
+print(get_greeting())#Hello, World!
+
+#without return value, without parameters
+def print_greeting():
+    print("Hello, World!")
+print_greeting()#Hello, World!
+
+#with return value, with parameters
+def greet(name = "World"):
+    return f"Hello, {name}!"
+print(greet("suresh"))#Hello, suresh!
+print(greet()) #Hello, World!
+a= greet()
+print(a)#Hello, World!
+
+#without return value, with parameters
+def print_greet(name):
+    print(f"Hello, {name}!")
+print_greet("suresh")#Hello, suresh!</code></pre>
+  <div class="explain">
+    <code>name = "World"</code> in the function definition is a <b>default parameter value</b> — if the caller
+    doesn't pass an argument, "World" is used automatically. A function <b>without</b> return implicitly returns
+    <code>None</code>; a function <b>with</b> return sends a real value back, which can be stored in a variable
+    (like <code>a = greet()</code>) or used directly.
+  </div>
+
+  <div class="subhead">Lambda function <span class="tag">unchanged</span></div>
+  <pre><code class="language-python"># anonymous function, can have any number of arguments but only one expression
+add = lambda x, y: x + y
+print(add("a", "b"))#ab
+
+print_greet = lambda name: print(f"Hello, {name}!")
+print_greet("suresh")#Hello, suresh!</code></pre>
+  <div class="explain">Because strings support <code>+</code> for concatenation, <code>add("a","b")</code> returns
+  <span class="out">ab</span> instead of doing math — Python's <code>+</code> operator behaves differently depending
+  on the data type of the operands.</div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># *args and **kwargs — variable number of arguments
+def add_all(*numbers):          # collects extra positional args into a tuple
+    return sum(numbers)
+print(add_all(1, 2, 3, 4))       # 10
+
+def show_info(**details):        # collects extra keyword args into a dict
+    for k, v in details.items():
+        print(k, ":", v)
+show_info(name="Nahul", role="Instructor")
+
+# lambda used with built-in functions
+nums = [5, 2, 8, 1]
+print(sorted(nums, key=lambda n: -n))   # sort descending using a lambda key
+print(list(map(lambda n: n * 2, nums))) # [10, 4, 16, 2]
+print(list(filter(lambda n: n > 3, nums))) # [5, 8]</code></pre>
+</section>
+
+<!-- ============ 10. BUILT-IN FUNCTIONS ============ -->
+<section class="topic" data-id="builtins">
+  <h2>10. Built-in Functions <button class="mark-btn" data-mark="builtins">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Python ships with dozens of <b>built-in functions</b> that are always available — no import needed. You've
+    already used several (<code>print</code>, <code>len</code>, <code>type</code>, <code>int</code>). Below is a
+    reference of the most commonly used ones, grouped by purpose.</p>
+  </div>
+
+  <div class="subhead">I/O &amp; general <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">print() #prints to console
+input() #takes input from user
+len() #returns length of an object
+sum() #returns sum of an iterable
+max() #returns maximum value from an iterable
+min() #returns minimum value from an iterable</code></pre>
+
+  <div class="subhead">Reference table <span class="tag">added</span></div>
+  <table class="reftable">
+    <tr><th>Function</th><th>Purpose</th><th>Example</th></tr>
+    <tr><td><code>type()</code></td><td>Returns the data type of a value</td><td><code>type(5) → int</code></td></tr>
+    <tr><td><code>int() / float() / str()</code></td><td>Convert between data types</td><td><code>int("5") → 5</code></td></tr>
+    <tr><td><code>abs()</code></td><td>Absolute (positive) value</td><td><code>abs(-7) → 7</code></td></tr>
+    <tr><td><code>round()</code></td><td>Rounds a number to n decimals</td><td><code>round(3.567, 2) → 3.57</code></td></tr>
+    <tr><td><code>sorted()</code></td><td>Returns a new sorted list</td><td><code>sorted([3,1,2]) → [1,2,3]</code></td></tr>
+    <tr><td><code>enumerate()</code></td><td>Adds index while looping</td><td><code>enumerate(list)</code></td></tr>
+    <tr><td><code>zip()</code></td><td>Combines multiple iterables pairwise</td><td><code>zip([1,2],[3,4]) → (1,3)(2,4)</code></td></tr>
+    <tr><td><code>map()</code></td><td>Applies a function to every item</td><td><code>map(str, [1,2])</code></td></tr>
+    <tr><td><code>filter()</code></td><td>Keeps items matching a condition</td><td><code>filter(fn, list)</code></td></tr>
+    <tr><td><code>range()</code></td><td>Generates a sequence of numbers</td><td><code>range(1,10)</code></td></tr>
+    <tr><td><code>isinstance()</code></td><td>Checks the type of an object</td><td><code>isinstance(5,int) → True</code></td></tr>
+    <tr><td><code>id()</code></td><td>Returns the memory address / identity</td><td><code>id(x)</code></td></tr>
+    <tr><td><code>help()</code></td><td>Shows documentation for an object</td><td><code>help(str)</code></td></tr>
+    <tr><td><code>dir()</code></td><td>Lists attributes/methods of an object</td><td><code>dir(list)</code></td></tr>
+  </table>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python">print(abs(-15))          # 15
+print(round(3.14159, 2)) # 3.14
+print(sorted([4,1,3,2]))  # [1, 2, 3, 4]
+
+names = ["Alice", "Bob"]
+ages = [30, 25]
+for name, age in zip(names, ages):
+    print(name, age)
+
+print(list(map(str, [1, 2, 3])))    # ['1', '2', '3']
+print(list(filter(lambda x: x % 2 == 0, range(10))))  # [0,2,4,6,8]</code></pre>
+</section>
+
+<!-- ============ 11. FILE HANDLING ============ -->
+<section class="topic" data-id="files">
+  <h2>11. File Handling <button class="mark-btn" data-mark="files">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><code>open("file", "mode")</code> opens a file for reading/writing. Common modes:</p>
+    <ul>
+      <li><code>"r"</code> — read (default). File must already exist.</li>
+      <li><code>"w"</code> — write. Creates the file if missing, <b>overwrites</b> if it exists.</li>
+      <li><code>"a"</code> — append. Creates the file if missing, adds to the end if it exists.</li>
+      <li><code>"r+"</code> — read and write. File must exist.</li>
+    </ul>
+    <p>Always <code>.close()</code> a file when done to free system resources (or better — use a
+    <code>with open(...) as f:</code> block, which auto-closes it).</p>
+  </div>
+
+  <div class="subhead">Read mode <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a = open("output.txt", "r")
+print(a.read())
+a.close()</code></pre>
+
+  <div class="subhead">Write mode <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a = open("output.txt", "w")
+a.write("Hello, World!")
+a.close()</code></pre>
+  <div class="explain">Since mode is <code>"w"</code>, any previous content in output.txt is erased before writing
+  "Hello, World!".</div>
+
+  <div class="subhead">Read again to verify <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a = open("output.txt", "r")
+print(a.read())
+a.close()</code></pre>
+
+  <div class="subhead">Append mode <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a = open("output.txt", "a")
+a.write("\nWelcome to Python programming!")
+a.close()</code></pre>
+
+  <div class="subhead">r+ mode <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">a = open("output.txt", "r+")
+print(a.read())
+a.write("\nThis is a new line.")
+a.close()</code></pre>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># recommended pattern: 'with' auto-closes the file even if an error occurs
+with open("output.txt", "r") as f:
+    content = f.read()
+print(content)
+
+# reading line by line
+with open("output.txt", "r") as f:
+    for line in f:
+        print(line.strip())   # .strip() removes the trailing newline
+
+# reading all lines into a list
+with open("output.txt", "r") as f:
+    lines = f.readlines()
+print(lines)</code></pre>
+</section>
+
+<!-- ============ 12. EXCEPTIONS ============ -->
+<section class="topic" data-id="exceptions">
+  <h2>12. Exception Handling <button class="mark-btn" data-mark="exceptions">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><code>try / except / finally</code> lets a program handle errors gracefully instead of crashing.</p>
+    <ul>
+      <li><code>try</code> — the code that might raise an error</li>
+      <li><code>except</code> — runs only if an error occurs; you can target a specific error type</li>
+      <li><code>finally</code> — always runs, whether or not an error happened (great for cleanup, e.g. closing a file)</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Your code <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">try:
+    print('hi')
+    a = 1/0
+    print(a)
+except ZeroDivisionError:
+    print("Error: Division by zero is not allowed!")
+finally:
+    print("This will always execute.")</code></pre>
+  <div class="explain">
+    "hi" prints first, then <code>1/0</code> raises a <b>ZeroDivisionError</b> — execution jumps straight to the
+    matching <code>except</code> block (the <code>print(a)</code> line never runs), then <code>finally</code> always
+    runs last. Output: <span class="out">hi</span> → <span class="out">Error: Division by zero is not allowed!</span> →
+    <span class="out">This will always execute.</span>
+  </div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># catching multiple specific exception types
+try:
+    num = int(input("Enter a number: "))
+    result = 10 / num
+except ValueError:
+    print("That wasn't a valid number.")
+except ZeroDivisionError:
+    print("Can't divide by zero.")
+else:
+    print("Result:", result)   # runs only if no exception occurred
+finally:
+    print("Done trying.")
+
+# raising your own exception
+def withdraw(balance, amount):
+    if amount > balance:
+        raise ValueError("Insufficient balance")
+    return balance - amount
+
+try:
+    withdraw(100, 500)
+except ValueError as e:
+    print("Error:", e)</code></pre>
+</section>
+
+<!-- ============ 13. JSON ============ -->
+<section class="topic" data-id="json">
+  <h2>13. JSON <button class="mark-btn" data-mark="json">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>JSON</b> (JavaScript Object Notation) is a lightweight, text-based format for exchanging data — it looks
+    almost identical to a Python dictionary and is the standard format used by most web APIs. Python's built-in
+    <code>json</code> module converts between JSON text and Python objects:</p>
+    <ul>
+      <li><code>json.dumps(obj)</code> — Python object → JSON string</li>
+      <li><code>json.loads(text)</code> — JSON string → Python object</li>
+      <li><code>json.dump(obj, file)</code> — Python object → write directly to a file</li>
+      <li><code>json.load(file)</code> — read a JSON file → Python object</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Examples <span class="tag">added</span></div>
+  <pre><code class="language-python">import json
+
+# Python dict -> JSON string
+data = {
+    "name": "Alice",
+    "age": 30,
+    "skills": ["Python", "SQL", "Power BI"],
+    "is_active": True
+}
+json_string = json.dumps(data, indent=4)
+print(json_string)
+
+# JSON string -> Python dict
+raw = '{"name": "Bob", "age": 25}'
+parsed = json.loads(raw)
+print(parsed["name"])   # Bob
+print(type(parsed))      # <class 'dict'>
+
+# writing JSON to a file
+with open("data.json", "w") as f:
+    json.dump(data, f, indent=4)
+
+# reading JSON from a file
+with open("data.json", "r") as f:
+    loaded = json.load(f)
+print(loaded)</code></pre>
+  <div class="explain"><code>indent=4</code> makes the output human-readable with 4-space indentation — without it,
+  <code>dumps()</code> produces a single compact line. JSON keys are always strings, and JSON's <code>true/false/null</code>
+  map to Python's <code>True/False/None</code> automatically during conversion.</div>
+</section>
+
+<!-- ============ 14. APIs ============ -->
+<section class="topic" data-id="api">
+  <h2>14. Working with APIs <button class="mark-btn" data-mark="api">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>An <b>API</b> (Application Programming Interface) lets your program request data from another service over
+    the internet — most commonly using HTTP. Python's <code>requests</code> library (install with
+    <code>pip install requests</code>) is the standard tool for calling web APIs, and responses usually come back
+    as JSON, which pairs directly with the <code>json</code> module above.</p>
+    <ul>
+      <li><code>requests.get(url)</code> — fetch data from an API</li>
+      <li><code>requests.post(url, json=data)</code> — send data to an API</li>
+      <li><code>response.status_code</code> — 200 means success, 404 means not found, etc.</li>
+      <li><code>response.json()</code> — parses the response body straight into a Python dict/list</li>
+    </ul>
+  </div>
+
+  <div class="subhead">GET request example <span class="tag">added</span></div>
+  <pre><code class="language-python">import requests
+
+# fetch data from a public API
+response = requests.get("https://api.github.com/users/octocat")
+
+print(response.status_code)      # 200 = success
+
+if response.status_code == 200:
+    user_data = response.json()   # parse JSON response into a dict
+    print(user_data["login"])
+    print(user_data["public_repos"])
+else:
+    print("Request failed with status:", response.status_code)</code></pre>
+
+  <div class="subhead">GET with query parameters &amp; headers <span class="tag">added</span></div>
+  <pre><code class="language-python">params = {"q": "python", "sort": "stars"}
+headers = {"Accept": "application/json"}
+
+response = requests.get("https://api.github.com/search/repositories",
+                         params=params, headers=headers)
+data = response.json()
+print(data["total_count"])
+
+for repo in data["items"][:5]:
+    print(repo["name"], "-", repo["stargazers_count"], "stars")</code></pre>
+
+  <div class="subhead">POST request example <span class="tag">added</span></div>
+  <pre><code class="language-python">payload = {"title": "New Task", "completed": False}
+response = requests.post("https://jsonplaceholder.typicode.com/todos",
+                          json=payload)
+print(response.status_code)   # 201 = created
+print(response.json())</code></pre>
+
+  <div class="subhead">Error handling with APIs <span class="tag">added</span></div>
+  <pre><code class="language-python">try:
+    response = requests.get("https://api.github.com/users/octocat", timeout=5)
+    response.raise_for_status()   # raises an error for 4xx/5xx status codes
+    print(response.json())
+except requests.exceptions.Timeout:
+    print("The request timed out.")
+except requests.exceptions.RequestException as e:
+    print("API request failed:", e)</code></pre>
+  <div class="explain"><code>timeout=5</code> stops the request from hanging forever if the server doesn't respond.
+  <code>raise_for_status()</code> automatically raises an exception for failed requests (status 400+), which the
+  <code>except</code> blocks then catch — combining everything learned in the Exception Handling section.</div>
+</section>
+
+<!-- ============ 15. NUMPY ============ -->
+<section class="topic" data-id="numpy">
+  <h2>15. NumPy <button class="mark-btn" data-mark="numpy">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>NumPy</b> (Numerical Python) is the foundation of Python's data science stack. Its core object is the
+    <code>ndarray</code> — a fast, fixed-type, multi-dimensional array. Unlike Python lists, NumPy arrays support
+    fast <b>vectorized</b> math (operations applied to every element at once, no manual loop needed) and
+    <b>broadcasting</b> (automatically applying operations between arrays of different shapes).</p>
+  </div>
+
+  <div class="subhead">Create arrays &amp; inspect them <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">import numpy as np
+
+# 1. Create arrays
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([[1, 2, 3],
+              [4, 5, 6]])
+print("a:", a)
+print("b:\n", b)
+
+# 2. Inspect shape and type
+print("a shape:", a.shape)
+print("b shape:", b.shape)
+print("a dtype:", a.dtype)</code></pre>
+  <div class="explain"><code>a</code> is a 1-D array (shape <code>(5,)</code>); <code>b</code> is a 2-D array — 2 rows,
+  3 columns (shape <code>(2,3)</code>). <code>.dtype</code> shows the type stored inside the array
+  (e.g. <code>int64</code>) — every element in a NumPy array must share the same dtype.</div>
+
+  <div class="subhead">Elementwise arithmetic &amp; broadcasting <span class="tag">unchanged</span></div>
+  <pre><code class="language-python"># 3. Elementwise arithmetic
+print("a + 1:", a + 1)
+print("a * 2:", a * 2)
+print("a squared:", a ** 2)
+
+# 4. Array broadcasting
+c = np.array([10, 20, 30, 40, 50])
+print("a + c:", a + c)</code></pre>
+  <div class="explain">Every operation applies to <b>each element</b> automatically — no <code>for</code> loop needed.
+  <code>a + c</code> adds two same-shaped arrays element by element: [1+10, 2+20, 3+30, 4+40, 5+50].</div>
+
+  <div class="subhead">Indexing &amp; slicing <span class="tag">unchanged</span></div>
+  <pre><code class="language-python"># 5. Indexing and slicing
+print("first element:", a[0])
+print("slice a[1:4]:", a[1:4])
+print("last two elements:", a[-2:])
+
+# 6. 2D array operations
+print("first row of b:", b[0])
+print("second column of b:", b[:, 1])
+print("element b[1, 2]:", b[1, 2])</code></pre>
+  <div class="explain"><code>b[:, 1]</code> means "all rows, column index 1" — the colon <code>:</code> alone selects
+  everything along that axis. This 2D indexing style (row, column) is used constantly in pandas too.</div>
+
+  <div class="subhead">Aggregation functions <span class="tag">unchanged</span></div>
+  <pre><code class="language-python"># 7. Aggregation functions
+print("sum of a:", a.sum())
+print("mean of a:", a.mean())
+print("min/max of b:", b.min(), b.max())</code></pre>
+
+  <div class="subhead">Reshape, transpose &amp; matrix multiply <span class="tag">unchanged</span></div>
+  <pre><code class="language-python"># 8. Reshape and transpose
+d = np.arange(12)          # array [0, 1, ..., 11]
+d2 = d.reshape((3, 4))     # shape becomes 3x4
+print("d2:\n", d2)
+print("d2 transpose:\n", d2.T)
+
+# 9. Matrix multiplication
+m1 = np.array([[1, 2], [3, 4]])
+m2 = np.array([[5, 6], [7, 8]])
+print("matrix product:\n", m1 @ m2)</code></pre>
+  <div class="explain"><code>np.arange(12)</code> is NumPy's version of <code>range()</code> that returns an array.
+  <code>.reshape((3,4))</code> rearranges the same 12 values into 3 rows × 4 columns (must multiply to the same total
+  count). <code>.T</code> flips rows and columns. <code>@</code> performs true <b>matrix multiplication</b>
+  (different from <code>*</code>, which multiplies elementwise).</div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># useful array creation shortcuts
+print(np.zeros((2,3)))     # array of all zeros
+print(np.ones((3,3)))       # array of all ones
+print(np.linspace(0, 1, 5)) # 5 evenly spaced numbers between 0 and 1
+print(np.random.rand(3))    # 3 random numbers between 0 and 1
+
+# boolean masking / filtering
+arr = np.array([10, 25, 3, 40, 5])
+print(arr[arr > 10])          # array([25, 40])
+arr[arr < 10] = 0              # replace all values under 10 with 0
+print(arr)</code></pre>
+</section>
+
+<!-- ============ 16. PANDAS ============ -->
+<section class="topic" data-id="pandas">
+  <h2>16. Pandas <button class="mark-btn" data-mark="pandas">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Pandas</b> is Python's main library for working with tabular data (rows and columns, like an Excel sheet
+    or a database table). Its two core objects are the <code>Series</code> (one column) and the
+    <code>DataFrame</code> (a full table). Pandas is built on top of NumPy.</p>
+  </div>
+
+  <div class="subhead">Create &amp; export a DataFrame <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">import pandas as pd
+
+#create a dataframe
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
+    'Age': [25, 30, 35, 40, 45],
+    'City': ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix']
+}
+
+df = pd.DataFrame(data)
+print(df)
+df.to_excel('output.xlsx', index=False)</code></pre>
+  <div class="explain">A DataFrame is built directly from a dictionary — each key becomes a column name, each value
+  (a list) becomes that column's data. <code>index=False</code> in <code>to_excel()</code> stops pandas from writing
+  its own row-number column into the Excel file.</div>
+
+  <div class="subhead">Read &amp; explore a DataFrame <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">df = pd.read_excel('output.xlsx')
+print(df)
+print(df.head())
+print(df.tail())
+print(df.info())
+print(df.describe())
+print(df['Age'])
+print(df[df['Age'] > 30])
+print(df[(df['Age'] > 30) & (df['City'] == 'Chicago')])</code></pre>
+  <div class="explain">
+    <code>.head()</code>/<code>.tail()</code> preview the first/last 5 rows. <code>.info()</code> shows column
+    names, data types, and non-null counts. <code>.describe()</code> gives summary statistics (mean, std, min, max,
+    quartiles) for numeric columns. <code>df['Age']</code> selects a single column (returns a Series).
+    <code>df[df['Age'] > 30]</code> is <b>boolean filtering</b> — it keeps only rows where the condition is True.
+    Combining conditions requires <code>&amp;</code> (and) or <code>|</code> (or) with each condition in parentheses,
+    <b>not</b> Python's normal <code>and</code>/<code>or</code>.
+  </div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># adding, dropping and grouping columns
+df['Senior'] = df['Age'] > 35            # new column from a condition
+df = df.drop(columns=['Senior'])          # remove a column
+print(df.sort_values('Age', ascending=False))
+
+# groupby — aggregate data by category
+grouped = df.groupby('City')['Age'].mean()
+print(grouped)
+
+# handling missing data
+print(df.isnull().sum())          # count missing values per column
+df['Age'] = df['Age'].fillna(df['Age'].mean())   # fill blanks with the mean
+
+# reading/writing CSV (as common as Excel)
+df.to_csv('output.csv', index=False)
+df2 = pd.read_csv('output.csv')</code></pre>
+</section>
+
+<!-- ============ 17. MATPLOTLIB ============ -->
+<section class="topic" data-id="matplotlib">
+  <h2>17. Matplotlib <button class="mark-btn" data-mark="matplotlib">Mark complete</button></h2>
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Matplotlib</b> is Python's foundational plotting library, used to turn raw numbers (often from NumPy
+    arrays or pandas DataFrames) into visual charts. <code>pyplot</code> (usually imported as <code>plt</code>) gives
+    a simple, step-by-step interface: build up a chart with function calls, then <code>show()</code> it.</p>
+  </div>
+
+  <div class="subhead">Your code <span class="tag">unchanged</span></div>
+  <pre><code class="language-python">import matplotlib.pyplot as plt
+
+a = [1, 2, 3, 4, 5]
+b = [2, 3, 4, 5, 6]
+plt.plot(a, b)
+plt.xlabel('a')
+plt.ylabel('b')
+plt.title('Line Plot of a vs b')
+plt.show()</code></pre>
+  <div class="explain"><code>plt.plot(a, b)</code> draws a line connecting each (a,b) coordinate pair.
+  <code>xlabel</code>/<code>ylabel</code>/<code>title</code> add text labels to the chart. <code>plt.show()</code>
+  renders the plot in a window (or inline, in a notebook) — nothing appears on screen without it.</div>
+
+  <div class="subhead">More examples <span class="tag">added</span></div>
+  <pre><code class="language-python"># other common chart types
+plt.bar(['A', 'B', 'C'], [10, 25, 15])       # bar chart
+plt.title('Bar Chart')
+plt.show()
+
+plt.scatter(a, b, color='red')                 # scatter plot
+plt.title('Scatter Plot')
+plt.show()
+
+plt.hist([1,2,2,3,3,3,4,4,4,4], bins=4)         # histogram
+plt.title('Histogram')
+plt.show()
+
+# multiple lines + legend on one chart
+plt.plot(a, b, label='b')
+plt.plot(a, [x*1.5 for x in a], label='b*1.5')
+plt.legend()
+plt.xlabel('a')
+plt.ylabel('value')
+plt.title('Multiple Series')
+plt.show()
+
+# plotting directly from a pandas DataFrame
+# df.plot(x='Name', y='Age', kind='bar')
+# plt.show()</code></pre>
+</section>
+
+<div class="nav-footer">
+  <button id="prevBtn">&larr; Previous topic</button>
+  <button id="nextBtn">Next topic &rarr;</button>
+</div>
+
+</main>
+
+<script>
+hljs.registerLanguage('python', hljsPython => window.hljs.getLanguage('python'));
+document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+
+const order = ["basics","datatypes","operators","conditionals","loops","lists","tuples",
+"dictsets","functions","builtins","files","exceptions","json","api","numpy","pandas","matplotlib"];
+
+const titles = {
+  basics:["Print & Basics","Core syntax every Python program starts with."],
+  datatypes:["Data Types","int, float, str, bool, list, tuple, dict, set."],
+  operators:["Operators","Arithmetic, comparison, logical, assignment & special operators."],
+  conditionals:["If / Elif / Else","Decision making and branching logic."],
+  loops:["Loops","for and while loops, nested loops, break & continue."],
+  lists:["Lists","Ordered, mutable collections."],
+  tuples:["Tuples","Ordered, immutable collections."],
+  dictsets:["Dictionary & Set","Key-value pairs and unique collections."],
+  functions:["Functions & Lambda","Reusable blocks of code."],
+  builtins:["Built-in Functions","Always-available core functions."],
+  files:["File Handling","Reading and writing files."],
+  exceptions:["Exception Handling","try / except / finally."],
+  json:["JSON","Exchanging structured data."],
+  api:["Working with APIs","Talking to web services with requests."],
+  numpy:["NumPy","Fast numerical arrays."],
+  pandas:["Pandas","Tabular data analysis."],
+  matplotlib:["Matplotlib","Visualizing data with charts."]
+};
+
+let completed = new Set();
+
+function showTopic(id){
+  document.querySelectorAll('section.topic').forEach(s => s.classList.remove('active'));
+  document.querySelector(`section.topic[data-id="${id}"]`).classList.add('active');
+  document.querySelectorAll('nav.toc a').forEach(a => a.classList.remove('active'));
+  document.querySelector(`nav.toc a[data-target="${id}"]`).classList.add('active');
+  document.getElementById('pageTitle').textContent = titles[id][0];
+  document.getElementById('pageSub').textContent = titles[id][1];
+  window.scrollTo({top:0, behavior:'instant'});
+  document.getElementById('main').scrollTop = 0;
+}
+
+document.querySelectorAll('nav.toc a').forEach(a=>{
+  a.addEventListener('click', ()=> showTopic(a.dataset.target));
+});
+
+document.querySelectorAll('.mark-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const id = btn.dataset.mark;
+    if(completed.has(id)){
+      completed.delete(id); btn.classList.remove('done'); btn.textContent='Mark complete';
+      document.querySelector(`nav.toc a[data-target="${id}"]`).classList.remove('done');
+      document.querySelector(`nav.toc a[data-target="${id}"] .chk`).textContent = order.indexOf(id)+1;
+    } else {
+      completed.add(id); btn.classList.add('done'); btn.textContent='✓ Completed';
+      document.querySelector(`nav.toc a[data-target="${id}"]`).classList.add('done');
+      document.querySelector(`nav.toc a[data-target="${id}"] .chk`).textContent = '✓';
+    }
+    updateProgress();
+  });
+});
+
+function updateProgress(){
+  const pct = Math.round((completed.size/order.length)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = `${completed.size} / ${order.length} topics completed`;
+}
+
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  const current = document.querySelector('nav.toc a.active').dataset.target;
+  const idx = order.indexOf(current);
+  if(idx>0) showTopic(order[idx-1]);
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  const current = document.querySelector('nav.toc a.active').dataset.target;
+  const idx = order.indexOf(current);
+  if(idx<order.length-1) showTopic(order[idx+1]);
+});
+
+showTopic('basics');
+</script>
+</body>
+</html>

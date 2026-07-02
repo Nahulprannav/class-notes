@@ -1,0 +1,3038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Power BI — 28 Day Teaching Notes</title>
+<style>
+:root {
+  --bg:#060C18; --side:#0B1120; --card:#0F1928; --card2:#131E2E;
+  --bdr:#1A2740; --text:#DDE5F0; --muted:#6B7FA0; --hi:#8BABC8;
+  --acc:#F2C811; --acc2:#FFD740;
+  --g1:#10B981; --g2:#3B82F6; --g3:#8B5CF6; --g4:#EF4444;
+  --code:#0A1525;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{height:100%}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;height:100vh;overflow:hidden}
+/* SIDEBAR */
+#sb{width:270px;background:var(--side);border-right:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0}
+#sb-top{padding:18px 16px 12px;border-bottom:1px solid var(--bdr)}
+.sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sb-logo-icon{width:36px;height:36px;background:var(--acc);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#000;flex-shrink:0}
+.sb-logo h1{font-size:15px;font-weight:700;color:var(--text);line-height:1.2}
+.sb-logo p{font-size:11px;color:var(--muted);margin-top:2px}
+.pb{height:3px;background:var(--bdr);border-radius:2px;margin-bottom:10px}
+.pb-fill{height:100%;background:var(--acc);border-radius:2px;transition:width .4s}
+#sb-search{width:100%;padding:7px 10px;background:var(--bg);border:1px solid var(--bdr);border-radius:6px;color:var(--text);font-size:12px;outline:none;transition:border .2s}
+#sb-search:focus{border-color:var(--acc)}
+#sb-nav{flex:1;overflow-y:auto;padding:6px 0 16px}
+.wk-label{padding:10px 14px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;display:flex;align-items:center;gap:6px}
+.wk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.day-btn{display:block;width:100%;text-align:left;padding:7px 14px 7px 22px;font-size:12.5px;color:var(--muted);border:none;background:none;cursor:pointer;transition:all .15s;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.day-btn.act{color:var(--acc);border-left-color:var(--acc);background:rgba(242,200,17,.07);font-weight:600}
+/* MAIN */
+#main{flex:1;overflow-y:auto;padding:30px 36px}
+/* DAY HEADER */
+.d-head{margin-bottom:24px}
+.d-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+.d-num{font-size:36px;font-weight:900;letter-spacing:-1px;margin-bottom:4px;color:var(--text)}
+.d-title{font-size:22px;font-weight:700;margin-bottom:6px}
+.d-sub{font-size:14px;color:var(--muted);line-height:1.6}
+.d-divider{height:1px;background:var(--bdr);margin:20px 0}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:20px;margin-bottom:16px}
+.card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title span{font-size:16px}
+/* OBJECTIVES */
+.obj-list{list-style:none}
+.obj-list li{padding:5px 0;font-size:13.5px;color:var(--hi);display:flex;gap:8px;line-height:1.5}
+.obj-list li::before{content:"✓";color:var(--g1);font-weight:700;flex-shrink:0}
+/* CONCEPTS */
+.con{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--bdr)}
+.con:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.con h4{font-size:14px;font-weight:700;color:#79C8FF;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.con p{font-size:13.5px;color:var(--muted);line-height:1.75;white-space:pre-wrap}
+/* CODE */
+pre{background:var(--code);border:1px solid var(--bdr);border-radius:8px;padding:16px;font-family:'Consolas','Courier New',monospace;font-size:13px;line-height:1.7;overflow-x:auto;color:#CBD5E1}
+.kw{color:#FF7B72}.fn{color:#D2A8FF}.str{color:#A5D6FF}.cm{color:#474F5E}.nb{color:#79C0FF}.op{color:#FF7B72}
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}
+th{background:rgba(242,200,17,.08);padding:8px 12px;text-align:left;font-weight:700;color:var(--acc);border:1px solid var(--bdr)}
+td{padding:8px 12px;border:1px solid var(--bdr);color:var(--muted);line-height:1.5}
+tr:hover td{background:rgba(255,255,255,.02)}
+/* EXERCISES */
+.ex-item{background:var(--code);border:1px solid var(--bdr);border-radius:8px;padding:12px 14px;margin:8px 0;display:flex;gap:10px}
+.ex-num{color:var(--acc);font-weight:800;font-size:13px;flex-shrink:0;margin-top:1px}
+.ex-item p{font-size:13px;color:var(--hi);line-height:1.6}
+/* QUIZ */
+.quiz-item{background:var(--card2);border:1px solid var(--bdr);border-radius:8px;padding:14px;margin:8px 0}
+.quiz-q{font-size:13.5px;font-weight:600;margin-bottom:10px;color:var(--text)}
+.quiz-opts{list-style:none}
+.quiz-opts li{padding:3px 0;font-size:13px;color:var(--muted)}
+.quiz-opts li.cor{color:var(--g1);font-weight:600}
+.quiz-opts li.cor::after{content:" ✓";color:var(--g1)}
+/* TIP BOX */
+.tip{background:rgba(242,200,17,.05);border:1px solid rgba(242,200,17,.2);border-radius:8px;padding:11px 14px;margin:6px 0;font-size:13px;color:var(--hi);line-height:1.6}
+.tip b{color:var(--acc)}
+/* NAV BOTTOM */
+.nav-row{display:flex;gap:12px;margin-top:28px;padding-top:20px;border-top:1px solid var(--bdr)}
+.nav-b{padding:10px 20px;border:1px solid var(--bdr);border-radius:8px;background:var(--card);color:var(--text);cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;display:flex;align-items:center;gap:6px}
+.nav-b:hover{border-color:var(--acc);color:var(--acc)}
+.nav-b.pri{background:var(--acc);color:#000;border-color:var(--acc)}
+.nav-b.pri:hover{background:var(--acc2)}
+/* WEEK COLORS */
+.w1c{color:var(--g1)}.w2c{color:var(--g2)}.w3c{color:var(--g3)}.w4c{color:var(--g4)}
+.t1{background:rgba(16,185,129,.12);color:var(--g1);border:1px solid rgba(16,185,129,.3)}
+.t2{background:rgba(59,130,246,.12);color:var(--g2);border:1px solid rgba(59,130,246,.3)}
+.t3{background:rgba(139,92,246,.12);color:var(--g3);border:1px solid rgba(139,92,246,.3)}
+.t4{background:rgba(239,68,68,.12);color:var(--g4);border:1px solid rgba(239,68,68,.3)}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#2A3D5A}
+/* grid layout for tables */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+</style>
+</head>
+<body>
+
+<div id="sb">
+  <div id="sb-top">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">PBI</div>
+      <div>
+        <h1>Power BI Teaching Notes</h1>
+        <p>28-Day Complete Curriculum</p>
+      </div>
+    </div>
+    <div class="pb"><div class="pb-fill" id="pb" style="width:3.57%"></div></div>
+    <input id="sb-search" placeholder="🔍 Search day or topic…" oninput="filterNav(this.value)">
+  </div>
+  <div id="sb-nav"></div>
+</div>
+
+<div id="main">
+  <div id="day-content"></div>
+</div>
+
+<script>
+const DAYS = [
+
+// ═══════════════════════════════════════════
+// WEEK 1 — FOUNDATIONS
+// ═══════════════════════════════════════════
+
+{day:1,week:1,title:"Introduction to Power BI",sub:"What is BI, Power BI components, installation & complete interface tour",
+objectives:["Understand Business Intelligence (BI) and why organisations use it","Know all 5 Power BI ecosystem components and their roles","Navigate Report View, Data View and Model View confidently","Understand the end-to-end Power BI workflow: Connect → Transform → Model → Visualise → Publish"],
+concepts:[
+{h:"What is Business Intelligence (BI)?",p:`Business Intelligence is the process of collecting raw data, cleaning it, modelling it, and presenting it as meaningful visuals (charts, dashboards) so that managers and teams can make data-driven decisions.
+
+Without BI: You have 50,000 rows of sales data in Excel — no insights.
+With BI: You have a live dashboard showing which product is top-selling, in which region, this week vs last week.`},
+{h:"Power BI Ecosystem — 5 Components",p:`1. Power BI Desktop — FREE Windows application. Main tool for building reports, models & DAX.
+2. Power BI Service — Cloud browser portal (app.powerbi.com). Publish, share, schedule refresh.
+3. Power BI Mobile — iOS & Android app. View dashboards on the go (read-only).
+4. Power BI Gateway — Bridge between your on-premise database and the cloud service.
+5. Power BI Report Builder — Tool for creating Paginated Reports (pixel-perfect, printable).`},
+{h:"Power BI Desktop — 3 Views",p:`• Report View  — Design canvas where all visuals/charts are placed
+• Data View     — See raw data tables, rows and columns
+• Model View    — Create and manage relationships between tables
+
+Right Panels:
+• Visualisations Pane — All chart types (bar, line, pie, map, table, KPI…)
+• Fields Pane          — Your tables and columns listed here
+• Filters Pane         — Apply filters at visual / page / report level`},
+{h:"Power BI Workflow (5 Steps)",p:`Step 1 → CONNECT    : Get data from Excel, SQL, Web, SharePoint, APIs…
+Step 2 → TRANSFORM  : Clean & shape data using Power Query Editor
+Step 3 → MODEL      : Create relationships between tables
+Step 4 → VISUALISE  : Build charts, KPIs, tables, dashboards on the canvas
+Step 5 → PUBLISH    : Upload to Power BI Service and share with team`}
+],
+code:`// Day 1 — Interface Orientation
+
+// KEY SHORTCUT KEYS (Teach these to students)
+Ctrl + S         → Save the .pbix file
+Ctrl + Z         → Undo last action
+Ctrl + Enter     → Run query in Power Query Editor
+Ctrl + G         → Group selected visuals
+Alt + Click      → Select visual under another visual
+F5               → Preview data table in Power Query
+
+// FILE EXTENSIONS
+.pbix   → Power BI Desktop project file (most common)
+.pbit   → Power BI Template file (no data, only structure)
+.pbids  → Power BI Data Source file (connection info only)
+
+// DOWNLOAD LINK for Power BI Desktop
+https://www.microsoft.com/en-us/download/details.aspx?id=58494
+// Always install the latest version from Microsoft website (free)`,
+exercises:["Download and install Power BI Desktop. Open it and identify the three views — take a screenshot of each.","Click 'Get Data' from the ribbon. Count and write down how many categories of data sources are available.","Load the built-in sample: Go to Help → Sample Reports → Retail Analysis Sample. Explore the report for 5 minutes.","Write in your notebook: What is the difference between Power BI Desktop and Power BI Service?"],
+quiz:[
+{q:"Which component is used to BUILD and DESIGN Power BI reports?",opts:["A) Power BI Service","B) Power BI Gateway","C) Power BI Desktop ✓","D) Power BI Mobile"],cor:"C"},
+{q:"Power BI Service runs in a ___?",opts:["A) Installed Windows App","B) Cloud Web Browser ✓","C) Mobile Device","D) USB Stick"],cor:"B"},
+{q:"Which view shows TABLE RELATIONSHIPS in Power BI Desktop?",opts:["A) Report View","B) Data View","C) Model View ✓","D) Filter View"],cor:"C"}
+],
+tips:["💡 Power BI Desktop is completely FREE — no license required for building reports","📌 Power BI Service (cloud) requires a Microsoft work/school email. Personal Gmail will NOT work for Pro features","🎯 The .pbix file stores your data, model AND visuals — share this file to collaborate on the same report"]},
+
+// ─────────────────────────────────────
+{day:2,week:1,title:"Connecting to Data Sources",sub:"Excel, CSV, SQL, Web connectors — loading data into Power BI",
+objectives:["Connect Power BI to Excel, CSV and JSON files","Load data from SQL Server and Web pages","Use the Navigator to choose specific sheets/tables","Understand the difference between Import and DirectQuery mode"],
+concepts:[
+{h:"Types of Data Sources",p:`Power BI can connect to 100+ data sources, grouped as:
+
+FILE SOURCES:
+  • Excel (.xlsx, .xls)    — Most common for beginners
+  • CSV / Text files        — Simple tabular data
+  • JSON / XML              — Web API responses
+  • PDF                     — Tables inside PDF files
+
+DATABASE SOURCES:
+  • SQL Server (Microsoft)  — Most popular enterprise DB
+  • MySQL / PostgreSQL       — Open-source databases
+  • Oracle, SAP, Teradata    — Enterprise systems
+
+ONLINE SERVICES:
+  • SharePoint Online         — Company file storage
+  • Dynamics 365              — Microsoft CRM/ERP
+  • Google Analytics          — Website traffic data
+  • Salesforce                — Sales CRM data
+
+CLOUD & API:
+  • Azure SQL, Azure Blob     — Microsoft cloud
+  • REST APIs via Web connector`},
+{h:"Import vs DirectQuery vs Live Connection",p:`IMPORT MODE (Default — recommended for beginners):
+  • Data is copied INTO Power BI (.pbix file)
+  • Fast performance — data stored in memory
+  • Needs scheduled refresh to get new data
+  • Limit: 1 GB model size on Power BI Service (free/Pro)
+
+DIRECTQUERY MODE:
+  • Data stays in source database — NOT copied
+  • Every visual sends a live SQL query to database
+  • Always shows latest data (no refresh needed)
+  • Slower performance — depends on DB speed
+
+LIVE CONNECTION:
+  • Only for Analysis Services (SSAS) or Power BI Dataset
+  • No data copied — fully live from SSAS model`},
+{h:"Steps to Connect to Excel",p:`1. Open Power BI Desktop
+2. Click Home → Get Data → Excel Workbook
+3. Browse and select your .xlsx file
+4. Navigator window opens — check the sheets/tables you want
+5. Click LOAD (direct import) or TRANSFORM DATA (open Power Query first)
+
+BEST PRACTICE: Always click "Transform Data" first
+   → Check the data before loading
+   → Fix errors, change types, rename columns`},
+{h:"Navigator Window",p:`After selecting a data source, the Navigator shows:
+• LEFT SIDE  — List of all sheets/tables in the file
+• RIGHT SIDE — Preview of selected table's data
+
+Tick boxes for multiple tables if needed.
+"Select Related Tables" button auto-selects linked tables.`}
+],
+code:`// CONNECTING TO SQL SERVER (sample connection)
+// Home → Get Data → SQL Server
+
+Server:   LAPTOP-NAME\\SQLEXPRESS   (local)
+          192.168.1.100              (network IP)
+          myserver.database.windows.net (Azure)
+
+Database: SalesDB   (optional — can browse)
+
+// DATA CONNECTIVITY MODE
+○ Import         ← Select this for now (faster, easier)
+○ DirectQuery
+
+// ADVANCED OPTIONS — Custom SQL Query
+SELECT CustomerID, CustomerName, City, TotalSales
+FROM Customers
+WHERE TotalSales > 10000
+ORDER BY TotalSales DESC
+
+// WEB CONNECTOR EXAMPLE
+// Home → Get Data → Web
+// URL: https://en.wikipedia.org/wiki/List_of_countries_by_GDP
+// Power BI auto-detects tables on the webpage — choose the right one
+
+// EXCEL IMPORT — checking file path
+// Always store source files in a FIXED folder path
+// e.g., C:\\PowerBI_Data\\Sales_2024.xlsx
+// If you move the file, Power BI will show a connection error`,
+exercises:["Create an Excel file with 3 sheets: Sales, Products, Customers. Load all 3 into Power BI using Get Data → Excel.","Use the Web connector to load a Wikipedia table (e.g., List of states in India) into Power BI.","Load a CSV file. Try both 'Load' and 'Transform Data' options and note the difference.","In Navigator, explore what happens when you check 'Select Related Tables' for an Excel file with named ranges."],
+quiz:[
+{q:"In Import Mode, where is the data stored?",opts:["A) In the original Excel file","B) In Power BI Service cloud","C) Inside the .pbix file ✓","D) In a separate database"],cor:"C"},
+{q:"DirectQuery mode is best when:",opts:["A) You need fast performance","B) Data must always be real-time from DB ✓","C) You have large Excel files","D) You want to work offline"],cor:"B"},
+{q:"What does the Navigator window show after selecting an Excel file?",opts:["A) DAX formulas","B) Relationship diagram","C) List of sheets and a preview of data ✓","D) The filter pane"],cor:"C"}
+],
+tips:["⚠️ Never move or rename the source Excel/CSV file after loading — Power BI stores the exact file path","💡 Use 'Transform Data' (not just 'Load') when you want to clean data before it enters the model","📁 Keep all Power BI source files in one fixed folder like C:\\PBI_Data\\ for easy management"]},
+
+// ─────────────────────────────────────
+{day:3,week:1,title:"Power Query — Data Cleaning Basics",sub:"Removing errors, changing types, filtering, renaming — essential ETL skills",
+objectives:["Open and navigate the Power Query Editor interface","Remove duplicate rows, blank rows and errors","Change column data types correctly","Rename, reorder and remove columns","Promote first row as column headers"],
+concepts:[
+{h:"Power Query Editor — Interface",p:`Open Power Query: Home → Transform Data
+
+LEFT PANEL   — Queries list (all loaded tables)
+CENTER       — Data preview (first 1000 rows shown)
+RIGHT PANEL  — Applied Steps (every action recorded as a step)
+FORMULA BAR  — Shows M language code for current step
+
+The Applied Steps panel is powerful:
+  • Each cleaning action becomes a step
+  • You can click any step to see data at that point
+  • Delete or reorder steps to fix mistakes`},
+{h:"Common Data Cleaning Operations",p:`1. PROMOTE HEADERS
+   First row becomes column names
+   Home → Use First Row as Headers
+
+2. CHANGE DATA TYPE
+   Click column header icon (ABC = Text, 123 = Number, calendar = Date)
+   Always fix data types before loading!
+   Wrong types cause wrong calculations.
+
+3. REMOVE DUPLICATES
+   Right-click column → Remove Duplicates
+   Or select all columns → Remove Rows → Remove Duplicates
+
+4. REMOVE BLANK ROWS
+   Home → Remove Rows → Remove Blank Rows
+
+5. REMOVE ERRORS
+   Home → Remove Rows → Remove Errors
+
+6. FILTER ROWS
+   Click dropdown arrow on any column → Filter
+   Like Excel AutoFilter — remove unwanted values`},
+{h:"Column Operations",p:`RENAME: Double-click column header → type new name
+REORDER: Drag and drop column header
+REMOVE: Right-click → Remove Column
+KEEP:   Right-click → Remove Other Columns
+
+REPLACE VALUES: Right-click column → Replace Values
+  Example: Replace "N/A" with null, or "Male" with "M"
+
+TRIM & CLEAN (for text):
+  Transform tab → Format → Trim (removes spaces)
+  Transform tab → Format → Clean (removes non-printable chars)
+  Transform tab → Format → UPPER / lower / Capitalize Each Word`},
+{h:"Data Type Reference Table",p:`Type Name    | Icon | Use For
+-------------|------|--------
+Text         | ABC  | Names, codes, IDs (don't sum)
+Whole Number | 123  | Counts, quantities (integers)
+Decimal      | 1.2  | Prices, percentages, weights
+Currency     | $    | Money values
+Date         | 📅   | Date without time
+Date/Time    | 📅⏰ | Date with time
+Boolean      | T/F  | True/False flags
+Binary       | 01   | Files, images (rare)`}
+],
+code:`// POWER QUERY — M LANGUAGE (auto-generated, no need to write manually)
+
+// Step 1: Source
+let
+  Source = Excel.Workbook(File.Contents("C:\\PBI_Data\\Sales.xlsx"), null, true),
+
+// Step 2: Navigate to sheet
+  Sheet1 = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+
+// Step 3: Promote first row as headers
+  #"Promoted Headers" = Table.PromoteHeaders(Sheet1, [PromoteAllScalars=true]),
+
+// Step 4: Change data types
+  #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{
+    {"OrderDate", type date},
+    {"Sales", type number},
+    {"CustomerName", type text},
+    {"Quantity", Int64.Type}
+  }),
+
+// Step 5: Remove blank rows
+  #"Removed Blank Rows" = Table.SelectRows(#"Changed Type", 
+    each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+
+// Step 6: Rename column
+  #"Renamed Columns" = Table.RenameColumns(#"Removed Blank Rows", {{"Sales", "Total Sales"}}),
+
+// Step 7: Filter — keep only year 2024
+  #"Filtered Rows" = Table.SelectRows(#"Renamed Columns", each Date.Year([OrderDate]) = 2024)
+in
+  #"Filtered Rows"`,
+exercises:["Download a messy CSV (or create one with blank rows, wrong types, duplicates). Clean it completely using Power Query — show before and after.","Load a table where dates are stored as TEXT (e.g., '15-01-2024'). Convert them to proper Date type and explain what happens.","Use 'Replace Values' to clean a Gender column that has: 'M', 'Male', 'm', 'MALE' — standardise all to 'Male'.","Practice: Rename 5 columns to cleaner names. Remove columns that are not needed. Check Applied Steps panel."],
+quiz:[
+{q:"In Power Query, where can you see ALL the cleaning steps done so far?",opts:["A) Formula Bar","B) Applied Steps panel ✓","C) Queries list","D) Data View"],cor:"B"},
+{q:"Which operation makes the first row become column headers?",opts:["A) Change Type","B) Remove Duplicates","C) Promote Headers ✓","D) Filter Rows"],cor:"C"},
+{q:"If a 'Price' column shows 'ABC' icon instead of '1.2', what is the problem?",opts:["A) Column is empty","B) Values are negative","C) Column data type is set to Text, not Decimal ✓","D) Rows are duplicated"],cor:"C"}
+],
+tips:["🔑 ALWAYS check data types first — if Date is stored as Text, DAX time functions won't work!","💡 Power Query changes are NON-DESTRUCTIVE — original source file is never modified","📌 Each Applied Step shows M code in the formula bar — this is how you learn M language over time"]},
+
+// ─────────────────────────────────────
+{day:4,week:1,title:"Power Query — Advanced Transformations",sub:"Merge, Append, Group By, Pivot/Unpivot, Conditional Columns",
+objectives:["Merge two queries like a SQL JOIN","Append queries like a SQL UNION ALL","Use Group By to aggregate data","Pivot and Unpivot columns for reshaping data","Create Conditional Columns with if/else logic"],
+concepts:[
+{h:"Merge Queries (like SQL JOIN)",p:`Merge = Combine two tables based on a matching column (like JOIN in SQL)
+
+Steps:
+  1. Home → Merge Queries
+  2. Select first table (left)
+  3. Choose matching column in left table
+  4. Select second table (right)
+  5. Choose matching column in right table
+  6. Choose JOIN TYPE
+
+JOIN TYPES:
+  Left Outer   → All rows from left, matching from right (most common)
+  Inner        → Only rows where match exists in BOTH tables
+  Full Outer   → All rows from both tables
+  Left Anti    → Only rows from left that have NO match in right (find missing)
+  Right Anti   → Only rows from right that have NO match in left`},
+{h:"Append Queries (like SQL UNION)",p:`Append = Stack two tables on top of each other (same columns)
+
+Use Case: Sales_Jan + Sales_Feb + Sales_Mar → Sales_All
+
+Steps:
+  1. Home → Append Queries
+  2. Select Two tables (or Three or More)
+  3. Power Query stacks them vertically
+
+IMPORTANT: Column names must match exactly (case-sensitive)
+  If one table has "CustomerName" and other has "Customer Name" → creates 2 columns`},
+{h:"Group By (Aggregation)",p:`Group By = Summarise rows by category (like GROUP BY in SQL)
+
+Example: Summarise Sales by Region
+  Steps: Transform → Group By
+  Group by Column: Region
+  New Column: Total Sales
+  Operation: Sum
+  Values from: Sales
+
+Result: One row per Region with total Sales
+
+OPERATIONS AVAILABLE:
+  Sum, Average, Min, Max, Count Rows, Count Distinct Rows, All Rows`},
+{h:"Pivot & Unpivot",p:`UNPIVOT (Most useful):
+  Converts wide table (many columns) → tall table (key-value format)
+  Required when months are column headers instead of rows
+
+  BEFORE (wrong):          AFTER (correct):
+  Product | Jan | Feb      Product | Month | Sales
+  Apple   | 100 | 200  →  Apple   | Jan   | 100
+                          Apple   | Feb   | 200
+
+PIVOT:
+  Opposite — converts tall table → wide table
+  Select column with values → Transform → Pivot Column`},
+{h:"Conditional Columns",p:`Create a new column based on IF/ELSE conditions — no DAX needed!
+
+Steps: Add Column → Conditional Column
+
+Example:
+  IF [Sales] > 50000 THEN "High"
+  ELSE IF [Sales] > 20000 THEN "Medium"
+  ELSE "Low"
+
+Result: New column "Sales Category" added to the table.
+This is done in Power Query (load-time), not DAX (query-time).`}
+],
+code:`// ═══ MERGE QUERIES (M Language) ═══
+// Equivalent to SQL: SELECT * FROM Orders o LEFT JOIN Customers c ON o.CustID = c.CustID
+
+#"Merged Queries" = Table.NestedJoin(
+  Orders,                    // Left table
+  {"CustomerID"},            // Left key column
+  Customers,                 // Right table  
+  {"CustID"},               // Right key column
+  "Customers",               // New column name for joined table
+  JoinKind.LeftOuter         // JOIN TYPE
+)
+// Then: Expand the "Customers" column to get desired fields
+
+// ═══ GROUP BY (M Language) ═══
+#"Grouped Rows" = Table.Group(
+  Source,
+  {"Region"},                // Group by this column
+  {
+    {"Total Sales", each List.Sum([Sales]), type number},
+    {"Order Count", each Table.RowCount(_), type number},
+    {"Avg Sales", each List.Average([Sales]), type number}
+  }
+)
+
+// ═══ UNPIVOT (M Language) ═══
+// Select all month columns → Right-click → Unpivot Columns
+#"Unpivoted Columns" = Table.UnpivotOtherColumns(
+  Source,
+  {"Product"},               // Keep this column as-is
+  "Month",                   // Name for the old column headers
+  "Sales"                    // Name for the old values
+)
+
+// ═══ CONDITIONAL COLUMN (M Language) ═══
+#"Added Conditional Column" = Table.AddColumn(
+  Source, "Sales Category",
+  each if [Sales] > 50000 then "High"
+       else if [Sales] > 20000 then "Medium"
+       else "Low",
+  type text
+)`,
+exercises:["Create two tables: Orders (OrderID, CustomerID, Amount) and Customers (CustomerID, CustomerName, City). Merge them using Left Outer Join to get customer details for each order.","Create 4 monthly sales CSV files (Jan, Feb, Mar, Apr). Append all 4 into one combined table.","Use Group By to summarise: Total Sales, Order Count, Average Order Value by Customer Name.","Create a wide table with months as columns. Unpivot to convert it to a proper narrow format for analysis."],
+quiz:[
+{q:"Merge Queries in Power Query is equivalent to which SQL operation?",opts:["A) UNION","B) GROUP BY","C) JOIN ✓","D) PIVOT"],cor:"C"},
+{q:"You have Jan, Feb, Mar sales in separate sheets. To combine them into one table, you use:",opts:["A) Merge Queries","B) Group By","C) Append Queries ✓","D) Unpivot"],cor:"C"},
+{q:"Unpivot is used when:",opts:["A) Data has duplicate rows","B) Months are stored as column headers instead of row values ✓","C) You want to calculate totals","D) You need to join two tables"],cor:"B"}
+],
+tips:["💡 Left Anti Join is very useful in testing — find orders with NO matching customer (data quality check)","📌 Use Append when your monthly reports are in separate Excel sheets — auto-combine them","⚡ Unpivot is the most important transformation for fixing badly structured Excel reports from clients"]},
+
+// ─────────────────────────────────────
+{day:5,week:1,title:"Data Modeling — Relationships",sub:"Creating relationships, cardinality, cross-filter direction, active vs inactive",
+objectives:["Understand what a data model is and why it matters","Create relationships between tables in Model View","Explain cardinality: 1:1, One-to-Many, Many-to-Many","Set cross-filter direction correctly","Know when to use inactive relationships"],
+concepts:[
+{h:"What is a Data Model?",p:`A Data Model is a set of tables connected by RELATIONSHIPS so that DAX measures can work across multiple tables automatically.
+
+WITHOUT model: You must manually VLOOKUP and combine tables in Excel.
+WITH model:    Power BI handles all joins automatically — one measure works across all related tables.
+
+Example:
+  Sales table has CustomerID
+  Customers table has CustomerID, CustomerName, City
+  
+  Create relationship: Sales[CustomerID] → Customers[CustomerID]
+  Now any visual can show Sales filtered by Customer Name or City!`},
+{h:"Cardinality (Relationship Types)",p:`Cardinality = How many rows in one table match rows in the other table
+
+ONE-TO-MANY (1:*) — Most common, RECOMMENDED
+  • One row in Customers table matches MANY rows in Sales table
+  • Primary key (unique) side → Foreign key (repeated) side
+  • Example: One customer can have multiple orders
+
+ONE-TO-ONE (1:1) — Rare
+  • One row in table A matches exactly one row in table B
+  • Usually means the tables can be merged into one
+
+MANY-TO-MANY (*:*) — Avoid if possible, use a bridge table
+  • Multiple rows in A match multiple rows in B
+  • Complex, performance impact, can cause ambiguity`},
+{h:"Cross-Filter Direction",p:`Controls which direction filters flow through the relationship
+
+SINGLE (→):  Filter flows one way only (recommended)
+  • Customers → Sales: Filtering by City filters the Sales table ✓
+  
+BOTH (↔):    Filter flows both ways
+  • Use only when absolutely needed (e.g., Many-to-Many)
+  • Can cause unexpected results and slow performance
+
+RULE: Always start with Single direction.
+Only switch to Both if visuals are not filtering correctly.`},
+{h:"Active vs Inactive Relationships",p:`ACTIVE relationship:   Solid line — used automatically in all DAX
+INACTIVE relationship: Dashed line — ignored by default
+
+WHY have inactive relationships?
+  Example: Sales table has TWO date columns:
+    [OrderDate] and [ShipDate]
+  
+  You can only have ONE active relationship to the Date table.
+  Create 2nd relationship as INACTIVE.
+  Use USERELATIONSHIP() in DAX to activate it when needed.
+
+  CALCULATE([Sales], USERELATIONSHIP(Sales[ShipDate], Date[Date]))`}
+],
+code:`// MODEL VIEW — Creating Relationships
+
+// METHOD 1: Drag and drop
+//   In Model View, drag Sales[CustomerID] column
+//   and drop it onto Customers[CustomerID]
+//   → Relationship created automatically!
+
+// METHOD 2: Manage Relationships dialog
+//   Home → Manage Relationships → New
+//   Table 1: Sales    Column: CustomerID
+//   Table 2: Customers Column: CustomerID
+//   Cardinality: Many to One (*:1)  [Sales side is Many]
+//   Cross filter: Single
+
+// ═══ INACTIVE RELATIONSHIP USE CASE ═══
+// Scenario: Sales has OrderDate and ShipDate, both linking to Date table
+
+// In Model View:
+//   Sales[OrderDate] → Date[Date]     (Active — solid line)
+//   Sales[ShipDate]  → Date[Date]     (Inactive — dashed line)
+
+// Default measure — uses OrderDate automatically:
+Total Sales = SUM(Sales[Amount])
+
+// Special measure — uses ShipDate via USERELATIONSHIP:
+Shipped Sales = 
+  CALCULATE(
+    SUM(Sales[Amount]),
+    USERELATIONSHIP(Sales[ShipDate], Date[Date])
+  )
+
+// ═══ CHECKING RELATIONSHIPS ═══
+// In Model View:
+// • Solid line with 1 and * = Active One-to-Many ✓
+// • Dashed line = Inactive relationship
+// • Arrow direction shows cross-filter direction`,
+exercises:["Create a model with 3 tables: Sales, Products, Customers. Create proper One-to-Many relationships between them. Show the model diagram.","Identify the PRIMARY KEY column (unique values) vs FOREIGN KEY column (repeated values) in your tables before creating relationships.","Create an inactive relationship between Sales[ShipDate] and Date[Date]. Write a DAX measure using USERELATIONSHIP to calculate shipped revenue.","Check all relationships using Manage Relationships dialog. Verify cardinality is correct for each."],
+quiz:[
+{q:"In a Sales–Customers relationship, which side is 'Many'?",opts:["A) Customers (one customer can buy many times)","B) Sales (many orders can belong to one customer) ✓","C) Both are Many","D) Depends on the filter"],cor:"B"},
+{q:"An INACTIVE relationship is shown as:",opts:["A) Bold solid line","B) Red line","C) Dashed line ✓","D) Dotted arrow"],cor:"C"},
+{q:"What is the recommended cross-filter direction for most relationships?",opts:["A) Both","B) Single ✓","C) None","D) Automatic"],cor:"B"}
+],
+tips:["⭐ Rule: The '1' side (dimension table) must have UNIQUE values in the key column — verify with 'Remove Duplicates'","💡 If Power BI creates the wrong cardinality, delete and recreate the relationship manually","🚫 Avoid Many-to-Many relationships — always create a Bridge/Junction table between two Many tables"]},
+
+// ─────────────────────────────────────
+{day:6,week:1,title:"Schema Design — Star & Snowflake",sub:"Fact vs Dimension tables, Star Schema, Date table setup",
+objectives:["Distinguish between Fact tables and Dimension tables","Design a proper Star Schema data model","Understand why Star Schema is faster than Snowflake","Create and mark a Date/Calendar table in Power BI","Hide unnecessary columns from report view"],
+concepts:[
+{h:"Fact Table vs Dimension Table",p:`FACT TABLE:
+  • Contains quantitative, measurable data (numbers you want to analyse)
+  • Has foreign keys that link to dimension tables
+  • Usually has MANY rows (millions of transactions)
+  • Examples: Sales, Orders, Invoices, Events, Transactions
+
+DIMENSION TABLE:
+  • Contains descriptive/context data (who, what, where, when)
+  • Has a PRIMARY KEY column (unique values)
+  • Usually has FEW rows (hundreds or thousands)
+  • Examples: Customer, Product, Date, Location, Employee
+
+RULE: Facts are NUMBERS. Dimensions are DESCRIPTIONS.`},
+{h:"Star Schema",p:`Star Schema = One Fact table in the CENTER connected to multiple Dimension tables around it.
+
+Shape:       [Date]
+              ↓
+[Product] ← [Sales] → [Customer]
+              ↑
+           [Location]
+
+WHY USE STAR SCHEMA?
+  ✓ Fast query performance (VertiPaq optimised for it)
+  ✓ Simple to understand
+  ✓ Easy to write DAX measures
+  ✓ Best practice for Power BI and all BI tools`},
+{h:"Snowflake Schema",p:`Snowflake Schema = Dimension tables are further normalised (sub-dimensions)
+
+Example:
+  [Sales] → [Product] → [Category] → [Department]
+
+PROBLEMS in Power BI:
+  ✗ More relationships to manage
+  ✗ Slower performance
+  ✗ More complex DAX
+  
+RECOMMENDATION: FLATTEN snowflake into star.
+  Instead of Product → Category → Department as 3 tables,
+  Add Category and Department columns to the Product table.`},
+{h:"Date Table (Calendar Table) — Critical!",p:`Power BI Time Intelligence functions (YTD, MTD, SAMEPERIODLASTYEAR) REQUIRE a proper Date table.
+
+REQUIREMENTS for Date table:
+  ✓ One row per day with NO gaps
+  ✓ Must cover all dates in your fact table
+  ✓ Must be marked as "Date Table" in Power BI
+
+COLUMNS to include:
+  Date, Year, Quarter, QuarterName, Month, MonthName,
+  WeekNumber, DayName, IsWeekend, FinancialYear, IsHoliday`}
+],
+code:`// ═══ CREATE DATE TABLE IN DAX ═══
+// Modelling tab → New Table
+
+Date = 
+VAR StartDate = DATE(2020, 1, 1)
+VAR EndDate = DATE(2026, 12, 31)
+RETURN
+  ADDCOLUMNS(
+    CALENDAR(StartDate, EndDate),
+    "Year",          YEAR([Date]),
+    "Month Number",  MONTH([Date]),
+    "Month Name",    FORMAT([Date], "MMMM"),
+    "Month Short",   FORMAT([Date], "MMM"),
+    "Quarter",       "Q" & FORMAT([Date], "Q"),
+    "Week Number",   WEEKNUM([Date]),
+    "Day Name",      FORMAT([Date], "DDDD"),
+    "Day Number",    WEEKDAY([Date], 2),     -- 1=Mon, 7=Sun
+    "Is Weekend",    IF(WEEKDAY([Date], 2) >= 6, TRUE, FALSE),
+    "Year-Month",    FORMAT([Date], "YYYY-MM")
+  )
+
+// ═══ MARK AS DATE TABLE ═══
+// 1. Click the Date table in Data View
+// 2. Table Tools → Mark as Date Table
+// 3. Select the [Date] column
+// → Now Time Intelligence functions will work correctly!
+
+// ═══ STAR SCHEMA EXAMPLE ═══
+// Fact:       Sales (many rows — transactions)
+//   Columns:  OrderDate, CustomerID, ProductID, LocationID, Quantity, Amount
+//   Keys:     CustomerID → Customers
+//             ProductID  → Products
+//             LocationID → Locations
+//             OrderDate  → Date[Date]
+
+// Dim1:  Customers (CustomerID, Name, Segment, Email)
+// Dim2:  Products  (ProductID, Name, Category, Brand, Price)
+// Dim3:  Locations (LocationID, City, State, Region, Country)
+// Dim4:  Date      (Date, Year, Month, Quarter, DayName…)`,
+exercises:["Design a Star Schema on paper (or Notepad) for a Retail Sales scenario. List all fact and dimension tables with their columns.","Create the DAX Date table using the formula above. Add it to your model and mark it as Date Table.","Flatten a Snowflake: You have Product, Category, Department as 3 tables. Merge Category and Department into the Product table using Power Query Merge.","In Model View, hide all foreign key columns (like CustomerID in Sales) from Report View — they should only exist for relationship purposes."],
+quiz:[
+{q:"Which type of table contains TRANSACTION data like Sales and Orders?",opts:["A) Dimension Table","B) Calendar Table","C) Fact Table ✓","D) Bridge Table"],cor:"C"},
+{q:"Why is Star Schema preferred over Snowflake in Power BI?",opts:["A) Star Schema can store more data","B) Star Schema is better for normalization","C) Star Schema gives faster performance and simpler DAX ✓","D) Star Schema uses less disk space"],cor:"C"},
+{q:"A Date Table MUST be _____ in Power BI for Time Intelligence to work:",opts:["A) Named 'DateTable'","B) Marked as Date Table ✓","C) Have exactly 365 rows","D) Created using Power Query"],cor:"B"}
+],
+tips:["⭐ Date table is NOT optional — without it, TOTALYTD and SAMEPERIODLASTYEAR will give wrong results","💡 Use CALENDAR() in DAX or generate the date table in Power Query using List.Dates()","🔑 Hide foreign key columns and technical ID columns from the Fields pane — students/users don't need to see them"]},
+
+// ─────────────────────────────────────
+{day:7,week:1,title:"Basic Visualisations — Part 1",sub:"Bar, Column, Line, Area, Combo charts — formatting & first dashboard",
+objectives:["Add and configure Bar, Column, Line and Area charts","Use Combo chart to show two metrics on one visual","Format visuals: titles, colours, data labels, axis","Arrange visuals on canvas to create a basic dashboard","Export the report as PDF"],
+concepts:[
+{h:"Chart Types Overview",p:`BAR CHART (Horizontal):
+  • Best for: Category comparison when labels are long
+  • Example: Sales by Product Name (long names read better horizontally)
+
+COLUMN CHART (Vertical):
+  • Best for: Category comparison, time-based data
+  • Example: Monthly Sales, Sales by Region
+
+LINE CHART:
+  • Best for: Trends over TIME
+  • Example: Revenue growth over months, stock prices, temperature
+
+AREA CHART:
+  • Line chart + shaded area below
+  • Best for: Cumulative totals over time
+
+STACKED charts (Bar/Column):
+  • Shows composition within each bar
+  • Example: Sales by Region, broken down by Product Category`},
+{h:"Adding a Visual — Step by Step",p:`1. Click an empty area on canvas
+2. Click a chart type in Visualisations pane
+   → Empty chart placeholder appears
+3. Drag fields from Fields pane into well:
+   • AXIS (X-axis) → Category column (e.g., MonthName)
+   • VALUES       → Numeric measure (e.g., Sales)
+   • LEGEND       → Category to split by colour (e.g., Region)
+4. Power BI draws the chart automatically
+5. Resize by dragging corners of the visual`},
+{h:"Visual Formatting (Format Visual pane)",p:`Click visual → Click Format icon (paint roller 🎨)
+
+VISUAL tab:
+  • X-Axis / Y-Axis → Title, font, colour, show/hide labels
+  • Data Labels      → Show values on bars/lines
+  • Legend           → Position (top, right, bottom), font size
+  • Title            → Change chart title, font, alignment
+  • Background       → Add colour behind visual
+
+GENERAL tab:
+  • Position & Size  → Set exact X, Y, Width, Height
+  • Alt Text         → Accessibility description
+  • Tooltip          → What shows on hover`},
+{h:"Combo Chart",p:`Combo = Column chart + Line chart on same visual
+
+Use case: Show SALES (bars) and PROFIT MARGIN% (line) together
+
+Steps:
+  1. Add a Column Chart
+  2. Drag your metric to "Column Y Axis" (e.g., Sales Amount)
+  3. Drag another metric to "Line Y Axis" (e.g., Profit %)
+  → Second metric automatically becomes a line with its own Y-axis
+
+TIP: Use Combo when comparing a VOLUME metric with a RATE metric
+  Volume: Revenue, Units Sold, Orders
+  Rate: Growth %, Profit Margin %, Conversion Rate`}
+],
+code:`// DAX MEASURES FOR BASIC VISUALISATIONS
+// (Write these in the Report tab using New Measure)
+
+// Total Sales
+Total Sales = SUM(Sales[Amount])
+
+// Total Orders
+Total Orders = COUNTROWS(Sales)
+
+// Average Order Value
+Avg Order Value = DIVIDE([Total Sales], [Total Orders])
+
+// Sales Growth % vs Previous Month
+Sales Growth % = 
+  VAR CurrentSales = [Total Sales]
+  VAR PreviousSales = CALCULATE([Total Sales], PREVIOUSMONTH(Date[Date]))
+  RETURN
+    DIVIDE(CurrentSales - PreviousSales, PreviousSales)
+
+// Use FORMAT in a measure card for percentage display:
+Growth Display = FORMAT([Sales Growth %], "0.0%")
+
+// ═══ DASHBOARD LAYOUT TIPS ═══
+// Top row:    KPI Cards (3-4 key metrics side by side)
+// Middle row: Main chart (large, takes 60% of width)
+// Bottom row: Supporting detail charts (2 smaller charts)
+// Right side: Slicer for Date / Region / Category filter`,
+exercises:["Create a Column Chart showing Monthly Sales using your Sales table and Date table. Format: add data labels, change bar colour to blue, add a proper title.","Create a Line Chart showing Sales Trend over 24 months. Add a forecast line (Analytics pane → Forecast).","Create a Combo Chart: Column = Revenue, Line = Profit Margin %. Format both axes clearly.","Build a basic 1-page dashboard with: 3 KPI Cards on top, 1 large Line chart in middle, 1 Bar chart and 1 Pie chart at the bottom."],
+quiz:[
+{q:"Which chart type is BEST for showing trends over TIME?",opts:["A) Pie Chart","B) Bar Chart","C) Line Chart ✓","D) Treemap"],cor:"C"},
+{q:"To add a second metric as a LINE on a column chart, you need to use:",opts:["A) Scatter Chart","B) Combo Chart ✓","C) Area Chart","D) Waterfall Chart"],cor:"B"},
+{q:"Data Labels in a chart are configured under:",opts:["A) General tab → Tooltips","B) Visual tab → Data Labels ✓","C) Filter Pane","D) Model View"],cor:"B"}
+],
+tips:["🎨 Stick to 2-3 colours maximum per dashboard — avoid rainbow charts that confuse viewers","📊 Card visual is perfect for top KPIs: Total Revenue, Total Orders, New Customers","💡 Always add a title to every visual — users should know what they're looking at without asking"]},
+
+// ═══════════════════════════════════════════
+// WEEK 2 — MODELING & DAX BASICS
+// ═══════════════════════════════════════════
+
+{day:8,week:2,title:"Basic Visualisations — Part 2",sub:"Card, Matrix, Map, KPI, Scatter, Gauge visuals with formatting",
+objectives:["Use Card and Multi-row Card for KPI metrics","Build a Matrix visual with row and column hierarchies","Display geographic data using Map and Filled Map","Configure KPI and Gauge visuals for targets","Use Scatter chart to show correlation between two measures"],
+concepts:[
+{h:"Card Visual",p:`Use: Display a single, important KPI number prominently.
+  Example: Total Revenue, YTD Sales, Customer Count
+
+  Steps: Click Card visual → Drag measure into Fields
+  Format: Callout value font size, label, background colour
+
+MULTI-ROW CARD: Shows multiple KPIs in one compact box
+  Steps: Click Multi-row Card → Drag multiple measures`},
+{h:"Matrix Visual",p:`Matrix = Interactive pivot table (like Excel Pivot Table)
+
+Fields:
+  ROWS    → Category (e.g., Region → City)
+  COLUMNS → Time period (e.g., Year → Quarter → Month)
+  VALUES  → Measure (e.g., Sales, Units, Profit)
+
+FEATURES:
+  • Drill down: Click + icon to expand hierarchy
+  • Subtotals: Row and column totals (configurable)
+  • Conditional Formatting: Colour cells by value
+  • + / - expand/collapse buttons per row`},
+{h:"Map and Filled Map",p:`MAP VISUAL:
+  • Shows bubble dots on a map
+  • Fields: Location (City/Country/Lat-Long), Size (measure), Legend (category)
+  • Requires location data Power BI recognises
+
+FILLED MAP:
+  • Colours entire regions/countries by value
+  • Fields: Location (must be State/Country), Colour Saturation (measure)
+  • Better for country or state-level data
+
+SETUP: Go to File → Options → Security → Enable Map and Filled map visuals`},
+{h:"KPI and Gauge Visuals",p:`KPI VISUAL:
+  • Shows: Actual value, Target value, Time trend
+  • Fields: Indicator (actual), Trend Axis (time), Target Goals (target measure)
+  • Green = above target, Red = below target
+
+GAUGE VISUAL:
+  • Semi-circle meter showing progress toward a goal
+  • Fields: Value (actual), Minimum, Maximum, Target
+  • Use for: Achievement %, Completion rate, Budget utilisation`}
+],
+code:`// MATRIX VISUAL SETUP
+// Fields:
+//   Rows:    [Category] → [Sub-Category]   (hierarchy)
+//   Columns: [Year] → [Quarter]            (time hierarchy)
+//   Values:  [Total Sales], [Total Profit], [Profit Margin %]
+
+// CONDITIONAL FORMATTING on Matrix:
+// Select Matrix → Format → Cell Elements → Background Color
+//   Color Scale: Min (Red) → Mid (Yellow) → Max (Green)
+//   This creates a heat-map effect on the values
+
+// ═══ KPI MEASURE EXAMPLE ═══
+Sales Target = 500000    // Simple target measure or from data
+
+Variance vs Target = [Total Sales] - [Sales Target]
+
+Variance % = DIVIDE([Variance vs Target], [Sales Target])
+
+// ═══ SCATTER CHART SETUP ═══
+// Use case: Do higher-discount orders also have lower profit?
+// Fields:
+//   X Axis:    Average Discount %
+//   Y Axis:    Average Profit Margin %
+//   Details:   Product Category (one dot per category)
+//   Size:      Total Orders (bubble size = order volume)
+//   Play Axis: Year (animate over time — optional)
+
+// ═══ MAP WITH COORDINATES ═══
+// If city names are ambiguous, use Lat/Long:
+Sales Lat = RELATED(Locations[Latitude])
+Sales Long = RELATED(Locations[Longitude])
+// Then use Latitude and Longitude fields in Map visual`,
+exercises:["Build a Matrix showing Sales by Category (rows) and by Quarter (columns). Enable drill-down and subtotals. Apply conditional formatting.","Create a KPI visual for Monthly Sales vs Monthly Target. Ensure it shows green when above target.","Build a Scatter Chart: X=Discount%, Y=Profit%, Size=Orders, Details=Region. What correlation do you see?","Create a Filled Map showing Total Sales by State/Country. Interpret the colour gradient."],
+quiz:[
+{q:"Which visual shows a progress meter toward a goal?",opts:["A) Card","B) KPI","C) Gauge ✓","D) Scatter"],cor:"C"},
+{q:"In a Matrix visual, the 'Columns' field is best used for:",opts:["A) Geography","B) Product Names","C) Time hierarchy (Year, Quarter) ✓","D) Measure values"],cor:"C"},
+{q:"For Filled Map to colour entire countries, the location field must contain:",opts:["A) Latitude/Longitude","B) City names only","C) Country or State names ✓","D) ZIP codes"],cor:"C"}
+],
+tips:["🗺️ Bing Maps is used for Power BI maps — internet connection required when viewing","🎨 Conditional formatting on Matrix is very powerful — clients love heat-map style tables","💡 Scatter chart is excellent for executive presentations — shows correlation story clearly"]},
+
+// ─────────────────────────────────────
+{day:9,week:2,title:"Filters & Slicers",sub:"Visual, Page, Report filters — Slicer types, Sync Slicers, Edit Interactions",
+objectives:["Understand the three filter levels: Visual, Page, Report","Add and configure Slicer visuals for user-driven filtering","Use Relative Date Slicer for time-based filtering","Sync slicers across multiple report pages","Control how visuals interact using Edit Interactions"],
+concepts:[
+{h:"Filter Levels in Power BI",p:`VISUAL-LEVEL FILTER:
+  • Applies to ONE specific visual only
+  • Example: Show only Region = "North" in this one bar chart
+  • Set in Filters pane → 'Filters on this visual'
+
+PAGE-LEVEL FILTER:
+  • Applies to ALL visuals on the CURRENT page
+  • Example: Filter entire page to show 2024 data only
+  • Set in Filters pane → 'Filters on this page'
+
+REPORT-LEVEL FILTER:
+  • Applies to ALL visuals on ALL pages in the report
+  • Example: Remove test data, exclude a specific region
+  • Set in Filters pane → 'Filters on all pages'
+
+FILTER PANE:
+  • Can be hidden from end users (View → Filters pane toggle)
+  • Can lock/hide individual filters so users can't change them`},
+{h:"Slicer Visual",p:`Slicers are visible interactive filters on the canvas.
+Users click to filter — more user-friendly than the Filters pane.
+
+SLICER TYPES (Format → Visual → Slicer Settings → Style):
+  • List        — Vertical checkboxes (default, multi-select)
+  • Dropdown    — Compact dropdown (saves space)
+  • Between     — Numeric or Date range slider
+  • Before/After — Date filter
+  • Tile        — Horizontal button-style (visually appealing)
+
+CONFIGURATION:
+  • Single select vs Multi-select (Format → Selection)
+  • Show/hide Search box (Format → Slicer settings)
+  • Include vs Exclude filter mode`},
+{h:"Relative Date Slicer",p:`For date slicers, enable 'Relative Date' mode:
+  This Week, Last 7 Days, This Month, Last 30 Days,
+  This Quarter, Last N Days/Months/Years
+
+Steps:
+  1. Add slicer → drag Date column
+  2. Format → Slicer Settings → Style → Relative Date
+  3. Set: "is in the last 30 days" or "is this year"
+
+This updates automatically — no manual date change needed!`},
+{h:"Sync Slicers",p:`By default, a slicer on Page 1 does NOT filter Page 2.
+Sync Slicers solves this.
+
+Steps:
+  1. Select the Slicer
+  2. View → Sync Slicers
+  3. Check which pages should be SYNCED and VISIBLE
+
+• Synced page (✓ both columns): Slicer filters this page + slicer visible
+• Filtered but hidden (✓ left only): Slicer filters this page but not visible
+• Off (no check): Slicer has no effect on this page`}
+],
+code:`// ═══ EDIT INTERACTIONS ═══
+// Control how clicking one visual affects other visuals
+
+// Steps:
+// 1. Select the slicer or chart you want to control FROM
+// 2. Format tab → Edit Interactions
+// 3. Small icons appear on each OTHER visual:
+//    [Filter icon]   = This visual WILL be filtered (default)
+//    [Highlight icon] = Visual highlights but doesn't fully filter
+//    [None/X icon]   = This visual is NOT affected by this visual
+
+// Use case: You have a Map and a Table.
+// Clicking a bar in your bar chart filters the Table — but NOT the Map.
+// → Select bar chart → Edit Interactions → click None on Map
+
+// ═══ SLICER WITH ALL OPTION ═══
+// By default, slicer has an "All" option at top
+// Format → Slicer settings → Show "Select all" option → Toggle ON/OFF
+
+// ═══ CLEAR ALL SLICERS WITH A BUTTON ═══
+// Insert → Buttons → Reset
+// OR create a bookmark with no slicer selections applied
+// Assign the bookmark to a Button click
+
+// ═══ FILTER PANE — LOCK & HIDE ═══
+// Click the filter → Click lock icon → Users can see but NOT change
+// Click the eye icon → Users CANNOT see the filter at all
+// Use for: Permanent filters you don't want users to touch`,
+exercises:["Add 3 slicers to your dashboard: Year (dropdown), Region (list), Category (tile). Test that they filter all visuals correctly.","Create a Relative Date slicer: 'Show data from last 90 days'. Watch it auto-update.","On a 2-page report, add a Year slicer on Page 1. Use Sync Slicers to make it also filter Page 2 without showing the slicer there.","Use Edit Interactions to set: clicking the Region bar chart filters the table but HIGHLIGHTS (not filters) the pie chart."],
+quiz:[
+{q:"A PAGE-LEVEL filter applies to:",opts:["A) One specific visual","B) All visuals on the current page ✓","C) All pages in the report","D) Only slicers"],cor:"B"},
+{q:"Sync Slicers is used to:",opts:["A) Remove duplicate slicer values","B) Make one slicer filter multiple report pages ✓","C) Connect two slicers to filter each other","D) Format all slicers the same way"],cor:"B"},
+{q:"Edit Interactions is accessed from which tab?",opts:["A) Home","B) Insert","C) View","D) Format ✓"],cor:"D"}
+],
+tips:["💡 Use Tile slicer style for small number of options (5-8 items) — looks professional and saves space","📌 Always use Report-level filters to hide test/dummy data that should never appear to users","⚡ Sync Slicers is essential in multi-page reports — users expect consistent filtering across all pages"]},
+
+// ─────────────────────────────────────
+{day:10,week:2,title:"Introduction to DAX",sub:"What is DAX, Calculated Column vs Measure, Row Context vs Filter Context",
+objectives:["Understand what DAX is and where it is used","Create a Calculated Column in Data View","Create a Measure and understand it behaves differently","Explain Row Context vs Filter Context clearly","Use basic aggregations: SUM, COUNT, AVERAGE in measures"],
+concepts:[
+{h:"What is DAX?",p:`DAX = Data Analysis Expressions
+
+DAX is the formula language of Power BI (and Excel Power Pivot, SSAS Tabular).
+It is similar to Excel formulas but designed for TABLE calculations, not cell-by-cell.
+
+WHERE IS DAX USED?
+  1. Measures        — Calculated at query time, respond to filters
+  2. Calculated Columns — Calculated at data load time, stored in table
+  3. Calculated Tables  — Create new tables using DAX
+
+DAX SYNTAX:
+  Measure Name = FUNCTION(Table[Column], arguments)
+  
+  Examples:
+  Total Sales = SUM(Sales[Amount])
+  Customer Count = COUNTROWS(Customers)
+  Avg Price = AVERAGE(Products[Price])`},
+{h:"Calculated Column vs Measure",p:`CALCULATED COLUMN:
+  • Computed row by row (row context)
+  • Stored in the table — takes memory
+  • Visible as a column in Fields pane
+  • Results are static until data refreshes
+  • Used for: Categorisation, row-level logic, flags
+  Example: Profit = Sales[Revenue] - Sales[Cost]
+
+MEASURE:
+  • Computed based on current filter context (what's selected)
+  • NOT stored in table — computed on-demand
+  • Shows as calculator icon (∑) in Fields pane
+  • Changes with every slicer/filter selection
+  • Used for: Aggregations, percentages, comparisons
+  Example: Total Revenue = SUM(Sales[Revenue])
+
+KEY RULE: ALWAYS prefer Measures over Calculated Columns
+  for aggregations. Use Calculated Columns only for row-level logic.`},
+{h:"Row Context vs Filter Context",p:`ROW CONTEXT:
+  • Active when processing Calculated Columns
+  • Evaluates formula FOR EACH ROW one at a time
+  • Like: "For this specific row, calculate…"
+  
+  Example: Calculated Column = Sales[Price] * Sales[Qty]
+  (Multiplies Price and Quantity for each row)
+
+FILTER CONTEXT:
+  • Active when evaluating Measures
+  • Determined by slicers, filters, and visual fields
+  • Like: "Given the current filters, calculate…"
+  
+  Example: Total Sales = SUM(Sales[Amount])
+  → On Jan chart: sums only January rows
+  → On North region: sums only North rows
+  The same measure gives different answers in different contexts!`},
+{h:"WHERE to write DAX",p:`MEASURES:
+  1. Right-click a table in Fields pane → New Measure
+  2. OR: Modeling tab → New Measure
+  Write formula in the formula bar at top
+
+CALCULATED COLUMNS:
+  1. In Data View, right-click column header → New Column
+  2. OR: Table Tools → New Column
+
+BEST PRACTICE: Create a separate table called '_Measures' 
+  to store all your measures together (easy to find)
+  Create empty table: Modeling → New Table → _Measures = {}`}
+],
+code:`// ═══ YOUR FIRST DAX MEASURES ═══
+
+// Basic aggregations
+Total Revenue  = SUM(Sales[Amount])
+Total Quantity = SUM(Sales[Qty])
+Total Orders   = COUNTROWS(Sales)
+Unique Customers = DISTINCTCOUNT(Sales[CustomerID])
+Avg Order Value = AVERAGE(Sales[Amount])
+
+// DIVIDE — safe division (handles divide by zero)
+Profit Margin % = DIVIDE(SUM(Sales[Profit]), SUM(Sales[Revenue]))
+
+// ═══ CALCULATED COLUMNS (in Data View) ═══
+
+// Full Name column in Customers table:
+Full Name = Customers[FirstName] & " " & Customers[LastName]
+
+// Profit column in Sales table:
+Profit = Sales[Revenue] - Sales[Cost]
+
+// Age Group column in Customers table:
+Age Group = 
+  IF(Customers[Age] < 25, "Youth",
+    IF(Customers[Age] < 40, "Adult",
+      IF(Customers[Age] < 60, "Middle-Aged", "Senior")))
+
+// Sales Size column (to categorize order amounts):
+Order Size = 
+  IF(Sales[Amount] > 10000, "Large",
+    IF(Sales[Amount] > 5000, "Medium", "Small"))
+
+// ═══ MEASURE vs COLUMN COMPARISON ═══
+// WRONG (Calculated Column trying to aggregate):
+//   Total Sales (Column) = SUM(Sales[Amount])  ← ERROR! SUM needs row context
+
+// CORRECT (Measure):
+//   Total Sales = SUM(Sales[Amount])  ← Works perfectly as measure`,
+exercises:["Create 5 basic measures in a '_Measures' table: Total Revenue, Total Orders, Total Customers, Average Revenue, Max Order Amount.","In Customers table, create a Calculated Column: 'Full Name' = FirstName + \" \" + LastName.","Create an 'Order Category' Calculated Column: Large (>10000), Medium (5000-10000), Small (<5000). Use it in a bar chart.","Place the same measure [Total Revenue] in 3 different chart contexts: by Month, by Region, by Category. Observe how the result changes."],
+quiz:[
+{q:"A MEASURE in DAX is computed:",opts:["A) Row by row when data loads","B) Based on current filter context ✓","C) Only when report is published","D) Using Excel formulas"],cor:"B"},
+{q:"Which icon represents a MEASURE in the Fields pane?",opts:["A) Table icon","B) Column icon","C) Calculator (∑) icon ✓","D) Filter icon"],cor:"C"},
+{q:"DIVIDE(A, B) is preferred over A/B because:",opts:["A) It is faster","B) It handles divide by zero errors ✓","C) It works without measures","D) It rounds the result"],cor:"B"}
+],
+tips:["⭐ Most important DAX rule: ALWAYS use Measures for aggregations, not Calculated Columns","🔑 Put all measures in a dedicated _Measures table — right-click Fields → New Table → _Measures = {}","💡 The same measure gives different numbers on different visuals — that's the POWER of filter context!"]},
+
+// ─────────────────────────────────────
+{day:11,week:2,title:"DAX Aggregation Functions",sub:"SUM, COUNT, AVERAGE, SUMX, COUNTX, MINX, MAXX — iterator vs non-iterator",
+objectives:["Use all basic aggregation functions confidently","Understand the difference between SUM and SUMX","Know when to use DISTINCTCOUNT vs COUNT vs COUNTROWS","Master AVERAGEX for weighted averages","Use MINX and MAXX for row-by-row comparisons"],
+concepts:[
+{h:"Non-Iterator Aggregation Functions",p:`These work on an ENTIRE COLUMN directly.
+
+SUM(Table[Column])        → Adds all values in a column
+AVERAGE(Table[Column])    → Mean of all values
+MIN(Table[Column])        → Smallest value
+MAX(Table[Column])        → Largest value
+COUNT(Table[Column])      → Count of numeric (non-blank) values
+COUNTA(Table[Column])     → Count of non-blank values (any type)
+COUNTROWS(Table)          → Count total rows in a table
+DISTINCTCOUNT(Table[Col]) → Count of unique values
+
+USE CASE:
+  SUM(Sales[Amount])        → Total of all sales
+  MAX(Sales[OrderDate])     → Date of most recent order
+  DISTINCTCOUNT(Sales[CID]) → How many unique customers bought`},
+{h:"Iterator Functions (X Functions)",p:`X functions go ROW BY ROW, evaluate an expression, then aggregate.
+
+SUMX(Table, Expression)    → Evaluate expression per row, then SUM
+AVERAGEX(Table, Expression) → Evaluate per row, then AVERAGE
+MINX(Table, Expression)    → Evaluate per row, then MIN
+MAXX(Table, Expression)    → Evaluate per row, then MAX
+COUNTX(Table, Expression)  → Count rows where expression is not blank
+
+WHY USE X FUNCTIONS?
+  If your table stores Qty and Price separately (no Amount column):
+
+  WRONG:   SUM(Sales[Qty]) * AVERAGE(Sales[Price])  ← INCORRECT!
+  CORRECT: SUMX(Sales, Sales[Qty] * Sales[Price])   ← Correct!
+  
+  SUMX multiplies Qty × Price for EACH ROW, then sums all results.`},
+{h:"COUNT vs COUNTA vs COUNTROWS vs DISTINCTCOUNT",p:`COUNT(Table[Column])
+  → Counts only NUMERIC values (ignores text and blanks)
+
+COUNTA(Table[Column])
+  → Counts ALL non-blank values (text + numbers)
+  
+COUNTROWS(Table or Filter Expression)
+  → Counts TOTAL ROWS in a table (with or without a column)
+  
+DISTINCTCOUNT(Table[Column])
+  → Counts only UNIQUE values (ignores duplicates)
+
+EXAMPLE:
+  CustomerID column: [101, 102, 101, 103, 102, 101]
+  COUNT       = 6
+  COUNTA      = 6
+  COUNTROWS   = 6
+  DISTINCTCOUNT = 3  ← Only 3 unique customers!`}
+],
+code:`// ═══ AGGREGATION MEASURES ═══
+
+Total Revenue      = SUM(Sales[Amount])
+Total Quantity     = SUM(Sales[Qty])
+Total Orders       = COUNTROWS(Sales)
+Unique Customers   = DISTINCTCOUNT(Sales[CustomerID])
+Unique Products    = DISTINCTCOUNT(Sales[ProductID])
+Average Sale       = AVERAGE(Sales[Amount])
+Highest Order      = MAX(Sales[Amount])
+Lowest Order       = MIN(Sales[Amount])
+First Order Date   = MIN(Sales[OrderDate])
+Last Order Date    = MAX(Sales[OrderDate])
+
+// ═══ X (ITERATOR) FUNCTIONS ═══
+
+// SUMX — when Amount is not stored, only Qty and Price exist
+Revenue from QtyPrice = SUMX(Sales, Sales[Qty] * Sales[Price])
+
+// SUMX with discount applied:
+Discounted Revenue = SUMX(Sales, Sales[Qty] * Sales[Price] * (1 - Sales[Discount]))
+
+// AVERAGEX — weighted average margin (not simple average):
+Weighted Margin % = DIVIDE(
+  SUMX(Sales, Sales[Revenue] * Sales[Margin%]),
+  SUM(Sales[Revenue])
+)
+
+// COUNTX — count rows where profit is positive:
+Profitable Orders = COUNTX(Sales, IF(Sales[Profit] > 0, 1, BLANK()))
+
+// MAXX — find the largest single order revenue (qty × price):
+Biggest Single Order = MAXX(Sales, Sales[Qty] * Sales[Price])
+
+// MINX — find cheapest order's total value:
+Smallest Order Value = MINX(Sales, Sales[Qty] * Sales[Price])`,
+exercises:["Create measures: Total Revenue (SUM), Total Orders (COUNTROWS), Unique Customers (DISTINCTCOUNT), Avg Order (AVERAGE). Show all in cards.","Your Sales table has Qty and UnitPrice but no Amount. Use SUMX to calculate total revenue.","Calculate 'Weighted Average Discount' using AVERAGEX: weighted by revenue, not simple average of discount column.","Show the difference: put DISTINCTCOUNT(CustomerID) and COUNTROWS on two separate cards — explain why they're different to students."],
+quiz:[
+{q:"SUMX(Sales, Sales[Qty] * Sales[Price]) does what?",opts:["A) Sums Qty column then multiplies by Price total","B) Multiplies Qty×Price for each row, then sums all results ✓","C) Calculates average price per quantity","D) Counts rows where Qty > Price"],cor:"B"},
+{q:"How many UNIQUE customers in: [A, B, A, C, B, A]?",opts:["A) 6","B) 5","C) 3 ✓","D) 2"],cor:"C"},
+{q:"COUNTROWS(Sales) vs COUNT(Sales[Amount]) — what is different?",opts:["A) Same result always","B) COUNTROWS counts all rows; COUNT only counts non-blank numbers ✓","C) COUNT is faster","D) COUNTROWS needs a filter"],cor:"B"}
+],
+tips:["⭐ SUMX is one of the most used DAX functions — master it early","💡 DISTINCTCOUNT for customers/products gives 'how many unique X?' — very common business question","⚡ AVERAGEX is essential for WEIGHTED averages — simple AVERAGE can give wrong business insights"]},
+
+// ─────────────────────────────────────
+{day:12,week:2,title:"DAX Logical & Text Functions",sub:"IF, SWITCH, AND, OR, IFERROR, text manipulation functions",
+objectives:["Use IF and nested IF for conditional logic","Use SWITCH for cleaner multi-condition logic","Combine AND, OR, NOT in conditions","Handle errors with IFERROR and ISBLANK","Manipulate text: CONCATENATE, LEFT, RIGHT, MID, LEN, FORMAT"],
+concepts:[
+{h:"Logical Functions",p:`IF(Condition, Value_if_True, Value_if_False)
+  Simple conditional — returns one of two values
+
+Nested IF (like IF-ELSE IF chain):
+  = IF(Cond1, Val1, IF(Cond2, Val2, IF(Cond3, Val3, DefaultVal)))
+
+SWITCH — cleaner alternative to nested IF:
+  SWITCH(Expression, Value1, Result1, Value2, Result2, ..., Default)
+  SWITCH(TRUE(), Condition1, Result1, Condition2, Result2, ..., Default)
+
+AND(Condition1, Condition2) → Both must be TRUE
+OR(Condition1, Condition2)  → At least one must be TRUE
+NOT(Condition)              → Reverses TRUE/FALSE
+&&  operator = AND
+||  operator = OR`},
+{h:"Error Handling Functions",p:`IFERROR(Expression, ValueIfError)
+  → Returns ValueIfError if the main expression causes any error
+  
+  Example: IFERROR(DIVIDE(A,B), 0)    → Returns 0 if B is zero
+  
+ISBLANK(Value)
+  → Returns TRUE if value is blank/null
+  
+ISNUMBER(Value), ISTEXT(Value), ISDATE(Value)
+  → Returns TRUE if value is that data type
+
+BLANK() function
+  → Returns a blank (null) value — use instead of 0 or "" for proper Power BI blank handling
+
+COALESCE(Value1, Value2, ...)
+  → Returns first non-blank value (DAX 2020+)`}
+],
+code:`// ═══ IF / NESTED IF ═══
+
+// Calculated column — Grade category
+Sales Grade = 
+  IF(Sales[Amount] >= 50000, "Platinum",
+    IF(Sales[Amount] >= 20000, "Gold",
+      IF(Sales[Amount] >= 10000, "Silver", "Bronze")))
+
+// Measure — Show label based on growth
+Performance = 
+  IF([Sales Growth %] > 0.1, "Excellent",
+     IF([Sales Growth %] > 0, "Good",
+        IF([Sales Growth %] = 0, "Flat", "Declining")))
+
+// ═══ SWITCH — Cleaner version ═══
+
+// SWITCH with fixed values:
+Quarter Name = 
+  SWITCH(MONTH(Sales[OrderDate]),
+    1, "Q1",  2, "Q1",  3, "Q1",
+    4, "Q2",  5, "Q2",  6, "Q2",
+    7, "Q3",  8, "Q3",  9, "Q3",
+    "Q4"   -- default for 10, 11, 12
+  )
+
+// SWITCH(TRUE()) — condition-based:
+Sales Category = 
+  SWITCH(TRUE(),
+    Sales[Amount] > 50000, "Large Deal",
+    Sales[Amount] > 10000, "Medium Deal",
+    Sales[Amount] > 0,     "Small Deal",
+    "No Sale"
+  )
+
+// ═══ AND / OR ═══
+Premium Customer = 
+  IF(AND(Customers[YearsActive] > 3, Customers[TotalSpend] > 100000),
+     "Premium", "Standard")
+
+Flagged Order = 
+  IF(OR(Sales[Discount] > 0.3, Sales[Qty] > 1000),
+     "Review Needed", "OK")
+
+// ═══ TEXT FUNCTIONS ═══
+Full Name        = CONCATENATE(Customers[First], " " & Customers[Last])
+First3Letters    = LEFT(Products[SKU], 3)
+LastChar         = RIGHT(Products[Code], 1)
+Middle           = MID(Products[Code], 3, 2)   // Start pos=3, Length=2
+NameLength       = LEN(Customers[Name])
+UpperName        = UPPER(Customers[City])
+FormattedDate    = FORMAT(Sales[OrderDate], "DD-MMM-YYYY")
+FormattedAmount  = FORMAT(Sales[Amount], "₹#,##0.00")
+
+// IFERROR usage
+Safe Ratio = IFERROR(DIVIDE([Returns], [Sales]), 0)`,
+exercises:["Create 'Customer Tier' calculated column: Platinum (spend>100K), Gold (>50K), Silver (>20K), Bronze (rest). Use SWITCH(TRUE()).","Write a measure 'Performance Label' that returns Excellent/Good/Flat/Declining based on Sales Growth%.","Clean a messy Name column: TRIM+UPPER to standardise. Extract first 3 characters as 'Customer Code'.","Create a 'Full Product Label' by combining: ProductName + ' (' + Category + ')' using CONCATENATE or &."],
+quiz:[
+{q:"SWITCH(TRUE(), ...) is best used when:",opts:["A) Switching between table names","B) Checking a fixed list of exact values","C) Testing multiple conditions (ranges, comparisons) ✓","D) Formatting numbers as text"],cor:"C"},
+{q:"IFERROR(DIVIDE(Sales, Orders), 0) — what happens when Orders = 0?",opts:["A) Shows error","B) Returns blank","C) Returns 0 ✓","D) Returns null"],cor:"C"},
+{q:"FORMAT(Sales[Amount], '₹#,##0') converts:",opts:["A) Text to number","B) Number to formatted text string ✓","C) Date to number","D) Column to measure"],cor:"B"}
+],
+tips:["💡 SWITCH(TRUE()) is the cleanest way to write multi-tier categorisation logic — avoid deeply nested IF","⚠️ FORMAT() returns TEXT — you cannot use it in further calculations. Keep it as display-only measure","🔑 BLANK() is not the same as 0 or '' — Power BI handles blank specially: blank values are excluded from averages"]},
+
+// ─────────────────────────────────────
+{day:13,week:2,title:"DAX Date & Time Functions",sub:"TODAY, DATE, YEAR, MONTH, DATEDIFF, EOMONTH — date calculations",
+objectives:["Extract Year, Month, Day, Hour from date columns","Calculate difference between dates using DATEDIFF","Find end of month or start of quarter","Create dynamic date comparisons using TODAY()","Convert text dates to proper date format"],
+concepts:[
+{h:"Basic Date Functions",p:`TODAY()          → Today's date (updates automatically every day)
+NOW()            → Current date AND time
+DATE(Y, M, D)    → Create a date: DATE(2024, 12, 31)
+TIME(H, M, S)    → Create a time value
+
+EXTRACTION:
+YEAR([Date])     → Returns year number: 2024
+MONTH([Date])    → Returns month number: 1 to 12
+DAY([Date])      → Returns day number: 1 to 31
+HOUR([DateTime]) → Returns hour: 0 to 23
+MINUTE([DateTime]) → Returns minute: 0 to 59
+
+NAMING:
+FORMAT([Date], "MMMM")  → "January", "February"…
+FORMAT([Date], "MMM")   → "Jan", "Feb"…
+FORMAT([Date], "DDD")   → "Mon", "Tue"…
+FORMAT([Date], "DDDD")  → "Monday", "Tuesday"…`},
+{h:"Date Difference & Offset Functions",p:`DATEDIFF(StartDate, EndDate, Interval)
+  Intervals: DAY, WEEK, MONTH, QUARTER, YEAR
+
+  Customer Age (years) = DATEDIFF(Customers[BirthDate], TODAY(), YEAR)
+  Days Since Order = DATEDIFF(Sales[OrderDate], TODAY(), DAY)
+  Months Between = DATEDIFF(Sales[Start], Sales[End], MONTH)
+
+EDATE(Date, Months)    → Add N months to a date
+  Example: 3 months from OrderDate = EDATE(Sales[OrderDate], 3)
+
+EOMONTH(Date, Offset)  → End of month
+  EOMONTH(TODAY(), 0)  → Last day of current month
+  EOMONTH(TODAY(), -1) → Last day of previous month
+  EOMONTH(TODAY(), 1)  → Last day of next month
+
+DATEVALUE("01/01/2024") → Convert text to date`}
+],
+code:`// ═══ DATE EXTRACTION ═══
+
+Order Year    = YEAR(Sales[OrderDate])
+Order Month   = MONTH(Sales[OrderDate])
+Order Day     = DAY(Sales[OrderDate])
+Month Name    = FORMAT(Sales[OrderDate], "MMMM")
+Short Month   = FORMAT(Sales[OrderDate], "MMM YYYY")
+Day of Week   = FORMAT(Sales[OrderDate], "DDDD")
+Quarter       = "Q" & FORMAT(Sales[OrderDate], "Q")
+Week Number   = WEEKNUM(Sales[OrderDate])
+
+// ═══ DATE DIFFERENCE ═══
+
+// Customer age
+Customer Age = DATEDIFF(Customers[DateOfBirth], TODAY(), YEAR)
+
+// Days since last order (calculated column)
+Days Since Order = DATEDIFF(Sales[OrderDate], TODAY(), DAY)
+
+// Order processing time (in days)
+Processing Days = DATEDIFF(Sales[OrderDate], Sales[ShipDate], DAY)
+
+// ═══ DYNAMIC DATE MEASURES ═══
+
+// Current year filter
+Current Year Sales = 
+  CALCULATE(
+    [Total Sales],
+    YEAR(Sales[OrderDate]) = YEAR(TODAY())
+  )
+
+// This month sales
+This Month Sales = 
+  CALCULATE(
+    [Total Sales],
+    MONTH(Sales[OrderDate]) = MONTH(TODAY()),
+    YEAR(Sales[OrderDate]) = YEAR(TODAY())
+  )
+
+// Days remaining in current month
+Days Remaining in Month = 
+  DAY(EOMONTH(TODAY(), 0)) - DAY(TODAY())
+
+// Age group from date of birth
+Age Group = 
+  VAR Age = DATEDIFF(Customers[DOB], TODAY(), YEAR)
+  RETURN
+    SWITCH(TRUE(),
+      Age < 18,  "Under 18",
+      Age < 30,  "18-29",
+      Age < 45,  "30-44",
+      Age < 60,  "45-59",
+      "60+"
+    )`,
+exercises:["Calculate 'Customer Age' in years from a Date of Birth column. Create an Age Group column using SWITCH.","Calculate 'Order Processing Days' = ShipDate - OrderDate. Find average processing time by Region.","Create a measure 'Days Until Expiry' using DATEDIFF. Flag items expiring in <30 days.","Write measures for: This Month Sales, This Year Sales, Days Remaining This Month — use TODAY() dynamically."],
+quiz:[
+{q:"DATEDIFF(OrderDate, TODAY(), MONTH) returns:",opts:["A) Today's month number","B) The month of the order date","C) Number of months between order date and today ✓","D) Month name as text"],cor:"C"},
+{q:"EOMONTH(TODAY(), -1) returns:",opts:["A) Start of last month","B) Last day of last month ✓","C) Last day of this month","D) Start of this month"],cor:"B"},
+{q:"FORMAT([Date], 'MMMM') returns:",opts:["A) Month number like '01'","B) Short month like 'Jan'","C) Full month name like 'January' ✓","D) Year number like '2024'"],cor:"C"}
+],
+tips:["💡 Always store dates as DATE type, never as TEXT — extract year/month from the date, don't store them as numbers","📌 TODAY() is dynamic — any measure using TODAY() changes automatically every day","⭐ DATEDIFF is used in almost every business scenario: customer age, order delay, contract expiry, employee tenure"]},
+
+// ─────────────────────────────────────
+{day:14,week:2,title:"DAX Filter Functions — CALCULATE & FILTER",sub:"CALCULATE, FILTER, ALL, ALLEXCEPT, RELATED, VALUES",
+objectives:["Understand CALCULATE as the most important DAX function","Modify filter context using CALCULATE","Use FILTER to apply complex conditions","Use ALL and ALLEXCEPT to remove filters","Use RELATED to access columns from related tables in measures"],
+concepts:[
+{h:"CALCULATE — The Heart of DAX",p:`CALCULATE(Expression, Filter1, Filter2, ...)
+
+CALCULATE does two things:
+  1. Evaluates the Expression
+  2. MODIFIES the filter context using the specified Filters
+
+Without CALCULATE, every measure is limited to the current context.
+With CALCULATE, you can add, remove or change filters.
+
+EXAMPLES:
+  // Sales only for Region = "North"
+  North Sales = CALCULATE([Total Sales], Sales[Region] = "North")
+  
+  // Sales for Category = "Electronics"
+  Electronics Sales = CALCULATE([Total Sales], Products[Category] = "Electronics")
+  
+  // Sales for Year 2024 only
+  2024 Sales = CALCULATE([Total Sales], YEAR(Sales[OrderDate]) = 2024)`},
+{h:"FILTER Function",p:`FILTER(Table, Condition) — returns a filtered TABLE (not a value)
+  Used INSIDE CALCULATE for complex conditions
+
+  Simple string filter (preferred):
+    CALCULATE([Sales], Region[Country] = "India")
+
+  Complex filter (use FILTER):
+    CALCULATE([Sales], FILTER(Sales, Sales[Amount] > 5000 && Sales[Qty] > 10))
+
+  FILTER with multiple conditions:
+    CALCULATE([Sales],
+      FILTER(Customers, Customers[Segment] = "Premium" && Customers[City] = "Chennai")
+    )`},
+{h:"ALL, ALLEXCEPT, ALLSELECTED",p:`ALL(Table or Column) — REMOVES all filters
+  Use: Calculate % of total (denominator ignores filters)
+  
+  Sales % of Total = 
+    DIVIDE([Total Sales], CALCULATE([Total Sales], ALL(Sales)))
+
+ALLEXCEPT(Table, Column1, Column2...)
+  Removes all filters EXCEPT the specified columns
+  
+  Sales % within Category = 
+    DIVIDE([Total Sales], CALCULATE([Total Sales], ALLEXCEPT(Sales, Products[Category])))
+
+ALLSELECTED()
+  Removes filters except those from slicers
+  Useful for % calculations that respect slicer but ignore visual filters`}
+],
+code:`// ═══ CALCULATE EXAMPLES ═══
+
+// Hardcoded region filter
+North Sales = CALCULATE([Total Sales], Sales[Region] = "North")
+
+// Multiple conditions
+Premium North = 
+  CALCULATE([Total Sales], 
+    Sales[Region] = "North", 
+    Customers[Segment] = "Premium")
+
+// Clear page filter, apply own filter
+All Years Revenue = CALCULATE([Total Sales], ALL(Date))
+
+// ═══ % OF TOTAL PATTERN ═══
+Sales % of Grand Total = 
+  DIVIDE(
+    [Total Sales],
+    CALCULATE([Total Sales], ALL(Sales))
+  )
+
+// % of total within current Category context:
+Sales % of Category = 
+  DIVIDE(
+    [Total Sales],
+    CALCULATE([Total Sales], ALLEXCEPT(Products, Products[Category]))
+  )
+
+// ═══ RELATED (access columns from related tables) ═══
+
+// In Sales table, get Product Category from Products table:
+Product Category (Column) = RELATED(Products[Category])
+
+// In a measure, RELATED works inside iterators:
+Electronics Revenue = 
+  CALCULATE(
+    [Total Sales],
+    FILTER(Sales, RELATED(Products[Category]) = "Electronics")
+  )
+
+// ═══ VALUES & HASONEVALUE ═══
+
+// Get list of selected values (for dynamic titles):
+Selected Region = 
+  IF(HASONEVALUE(Customers[Region]),
+     VALUES(Customers[Region]),
+     "All Regions")
+
+Dynamic Title = "Sales Report — " & [Selected Region]`,
+exercises:["Create 5 fixed-region measures: North Sales, South Sales, East Sales, West Sales, Online Sales. Add to a table visual.","Create '% of Grand Total' measure for each category. Show in a Matrix visual alongside raw sales.","Use CALCULATE with FILTER to show only large orders (>10000) contribution to total revenue.","Create a dynamic title measure using HASONEVALUE and VALUES — show it in a card on your report."],
+quiz:[
+{q:"CALCULATE([Total Sales], ALL(Sales)) does what?",opts:["A) Filters Sales to all rows","B) Removes all filters from Sales table — returns grand total ✓","C) Calculates sales for all products","D) Applies ALL filters at once"],cor:"B"},
+{q:"RELATED() is used to:",opts:["A) Create a relationship between two tables","B) Access a column from a RELATED (joined) table in a calculated column or iterator ✓","C) Remove filter context","D) Return all values in a column"],cor:"B"},
+{q:"CALCULATE(Expression, FILTER(Table, Condition)) is needed when:",opts:["A) The condition is simple (column = value)","B) The condition involves complex expressions or multiple columns ✓","C) You want to remove all filters","D) You want to count rows"],cor:"B"}
+],
+tips:["⭐ CALCULATE is the single most important DAX function — it powers almost every advanced measure","💡 Simple column filters in CALCULATE (e.g., Region='North') are faster than FILTER() — use FILTER only for complex conditions","🔑 RELATED() only works inside row context (Calculated Columns or X iterators) — not directly in measures"]},
+
+// ═══════════════════════════════════════════
+// WEEK 3 — ADVANCED DAX & FEATURES
+// ═══════════════════════════════════════════
+
+{day:15,week:3,title:"DAX Time Intelligence",sub:"TOTALYTD, TOTALQTD, SAMEPERIODLASTYEAR, DATEADD, MTD/QTD/YTD",
+objectives:["Set up a proper Date table for Time Intelligence","Use TOTALYTD, TOTALQTD, TOTALMTD correctly","Calculate Year-over-Year (YoY) and Month-over-Month (MoM) comparisons","Use DATEADD for flexible period shifts","Build a Sales dashboard with time comparison cards"],
+concepts:[
+{h:"Date Table Requirements (CRITICAL)",p:`Time Intelligence functions ONLY work correctly when:
+  1. ✓ Date table has ONE ROW PER DAY (no gaps)
+  2. ✓ Date table is MARKED as Date Table in Power BI
+  3. ✓ Date table covers ALL dates in your fact table
+  4. ✓ Relationship: Fact[Date] → Date[Date] is ACTIVE
+
+If any of these are wrong, YTD/MTD/SAMEPERIODLASTYEAR gives WRONG results!`},
+{h:"Cumulative Functions (YTD / QTD / MTD)",p:`TOTALYTD(Measure, Date[Date])
+  → Year-To-Date: Sum from Jan 1 of current year up to current date
+
+TOTALQTD(Measure, Date[Date])
+  → Quarter-To-Date: Sum from start of current quarter up to now
+
+TOTALMTD(Measure, Date[Date])
+  → Month-To-Date: Sum from start of current month up to now
+
+For Financial Year (not calendar year), add year-end date:
+  TOTALYTD([Total Sales], Date[Date], "31-03")
+  → FY ending March 31 (Indian Financial Year)`},
+{h:"Year-over-Year Comparison",p:`SAMEPERIODLASTYEAR(Date[Date])
+  → Exact same period last year (same days, same months)
+  
+PREVIOUSMONTH(Date[Date])
+  → Previous complete month
+
+PREVIOUSQUARTER(Date[Date])
+  → Previous complete quarter
+
+DATEADD(Date[Date], -1, YEAR)   → 1 year ago
+DATEADD(Date[Date], -1, MONTH)  → 1 month ago
+DATEADD(Date[Date], -7, DAY)    → 7 days ago`}
+],
+code:`// ═══ PREREQUISITE: Mark Date Table ═══
+// Modeling → Mark as Date Table → Date[Date]
+
+// ═══ MTD / QTD / YTD ═══
+
+Sales MTD = TOTALMTD([Total Sales], Date[Date])
+Sales QTD = TOTALQTD([Total Sales], Date[Date])
+Sales YTD = TOTALYTD([Total Sales], Date[Date])
+
+// Financial Year (India: April 1 to March 31)
+Sales FYTD = TOTALYTD([Total Sales], Date[Date], "31-03")
+
+// ═══ SAME PERIOD LAST YEAR ═══
+
+LY Sales = 
+  CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Date[Date]))
+
+YoY Growth = [Total Sales] - [LY Sales]
+
+YoY Growth % = DIVIDE([YoY Growth], [LY Sales])
+
+YoY % Display = 
+  IF(ISBLANK([LY Sales]), "N/A",
+     FORMAT([YoY Growth %], "+0.0%;-0.0%;0.0%"))
+
+// ═══ DATEADD — Flexible Shifts ═══
+
+// Previous Month Sales
+PM Sales = CALCULATE([Total Sales], DATEADD(Date[Date], -1, MONTH))
+
+// Previous Year Sales (same as SAMEPERIODLASTYEAR)
+PY Sales = CALCULATE([Total Sales], DATEADD(Date[Date], -1, YEAR))
+
+// Previous Quarter
+PQ Sales = CALCULATE([Total Sales], DATEADD(Date[Date], -1, QUARTER))
+
+// Month-over-Month % change
+MoM Growth % = 
+  DIVIDE([Total Sales] - [PM Sales], [PM Sales])
+
+// ═══ COMPLETE KPI CARD TEMPLATE ═══
+// Card shows: Current, vs Last Year, Growth %
+
+// 3-line KPI using CONCATENATE for display:
+YTD Summary = 
+  "YTD: " & FORMAT([Sales YTD], "₹#,##0") &
+  " | LY: " & FORMAT(CALCULATE([Sales YTD], SAMEPERIODLASTYEAR(Date[Date])), "₹#,##0") &
+  " | Growth: " & FORMAT([YoY Growth %], "+0.0%")`,
+exercises:["Build a 'Time Intelligence Dashboard' page with 6 cards: Sales MTD, QTD, YTD, Same Period LY, YoY Growth Amount, YoY Growth %.","Create a Line Chart: X=Month, Lines=[Total Sales, LY Sales] — show current vs last year visually.","Write a measure 'Running Total' that accumulates sales from the beginning of the year.","Create measures for Indian FY: FY starts April, ends March. Use TOTALYTD with '31-03' argument."],
+quiz:[
+{q:"SAMEPERIODLASTYEAR(Date[Date]) inside CALCULATE returns sales for:",opts:["A) Same quarter of last year","B) The full previous year","C) The exact same days/months of the previous year ✓","D) Last 12 months rolling"],cor:"C"},
+{q:"For Indian Financial Year (Apr-Mar), TOTALYTD needs:",opts:["A) No change — works automatically","B) A custom year-end date parameter: '31-03' ✓","C) A separate FY Date table","D) DATEADD with YEAR,-1"],cor:"B"},
+{q:"If your Date table has gaps (missing days), Time Intelligence will:",opts:["A) Still work correctly","B) Show an error","C) Give incorrect/unexpected results ✓","D) Skip the missing dates"],cor:"C"}
+],
+tips:["⭐ The most common mistake: using Time Intelligence WITHOUT marking the Date table — always mark it first","💡 YoY Growth % = DIVIDE([This Year] - [Last Year], [Last Year]) — simple and clean","📌 Use DATEADD(-1, MONTH) for MoM comparison — it's more flexible than PREVIOUSMONTH which needs full months"]},
+
+// ─────────────────────────────────────
+{day:16,week:3,title:"Advanced DAX Functions",sub:"RANKX, TOPN, DIVIDE, SELECTEDVALUE, SUMMARIZE, ADDCOLUMNS",
+objectives:["Rank products or customers using RANKX","Show Top N results with TOPN","Use SELECTEDVALUE for dynamic measure titles","Create virtual tables with SUMMARIZE and ADDCOLUMNS","Master DIVIDE for safe division with custom alternate"],
+concepts:[
+{h:"RANKX — Dynamic Ranking",p:`RANKX(Table, Expression, Value, Order, Ties)
+
+  Table      — The table to rank across
+  Expression — What you're ranking by
+  Value      — The value to rank (optional, defaults to current context)
+  Order      — ASC (1=smallest) or DESC (1=largest, default)
+  Ties       — SKIP (leaves gaps) or DENSE (no gaps)
+
+Sales Rank = RANKX(ALL(Products), [Total Sales])
+→ For each product, rank it against ALL products by Sales
+
+Category Rank = RANKX(ALLSELECTED(Products), [Total Sales],,, DENSE)
+→ Rank within slicer selection, no rank gaps`},
+{h:"TOPN & Dynamic Top N",p:`TOPN(N, Table, Expression, Order)
+  Returns top N rows from a table
+
+  Use case: Visual filter to show only Top 5 products
+  
+  Top 5 Revenue = 
+    CALCULATE([Total Sales], 
+      TOPN(5, Products, [Total Sales]))
+  
+  DYNAMIC Top N (with What-If Parameter):
+  // Create What-If parameter called 'Top N' (1 to 20)
+  Top N Products = 
+    CALCULATE([Total Sales], 
+      TOPN([Top N Value], Products, [Total Sales]))`},
+{h:"SELECTEDVALUE & Dynamic Titles",p:`SELECTEDVALUE(Column, DefaultValue)
+  Returns the single selected value in current context.
+  If multiple values → returns DefaultValue
+
+  // Dynamic visual title based on slicer:
+  Report Title = 
+    "Sales Report — " & SELECTEDVALUE(Date[Year], "All Years")
+  
+  // Conditional measure switching:
+  Dynamic Metric = 
+    SWITCH(
+      SELECTEDVALUE(MetricSelector[Metric]),
+      "Revenue",  [Total Sales],
+      "Profit",   [Total Profit],
+      "Orders",   [Total Orders],
+      [Total Sales]  -- default
+    )`}
+],
+code:`// ═══ RANKX ═══
+
+// Rank all products by revenue (1=highest)
+Product Rank = RANKX(ALL(Products[ProductName]), [Total Sales],, DESC, DENSE)
+
+// Show Top 10 only (use as visual filter):
+Is Top 10 = IF([Product Rank] <= 10, 1, 0)
+// Then in visual, filter where Is Top 10 = 1
+
+// Rank within Category:
+Rank in Category = 
+  RANKX(
+    ALLEXCEPT(Products, Products[Category]),
+    [Total Sales],, DESC, DENSE
+  )
+
+// ═══ TOPN ═══
+
+Top 5 Customers Revenue = 
+  CALCULATE(
+    [Total Sales],
+    TOPN(5, Customers, [Total Sales], DESC)
+  )
+
+// ═══ SUMMARIZE / ADDCOLUMNS ═══
+
+// Create a virtual summary table in a measure:
+Customer Summary = 
+  ADDCOLUMNS(
+    SUMMARIZE(Sales, Customers[CustomerName]),
+    "Revenue", [Total Sales],
+    "Orders",  [Total Orders],
+    "Rank",    RANKX(ALL(Customers), [Total Sales],, DESC, DENSE)
+  )
+
+// Use SUMMARIZE to count customers per segment:
+Customers Per Segment = 
+  COUNTROWS(SUMMARIZE(Customers, Customers[Segment]))
+
+// ═══ SELECTEDVALUE ═══
+
+// Dynamic report subtitle:
+Dynamic Subtitle = 
+  "Showing: " & SELECTEDVALUE(Products[Category], "All Categories") & 
+  " | " & SELECTEDVALUE(Date[Year], "All Years") &
+  " | " & SELECTEDVALUE(Customers[Region], "All Regions")
+
+// Dynamic measure selector (using disconnected table):
+Selected KPI = 
+  SWITCH(
+    SELECTEDVALUE(KPITable[KPI Name]),
+    "Revenue", [Total Sales],
+    "Orders",  [Total Orders],
+    "Profit",  [Total Profit],
+    "Margin",  [Profit Margin %],
+    [Total Sales]
+  )`,
+exercises:["Create a 'Customer Rank by Revenue' measure using RANKX. Show in a table: Customer Name, Revenue, Rank.","Build a Top 10 Products table. Add a What-If parameter for dynamic Top N (1-20).","Create a 'Rank within Category' measure — rank products but reset rank for each category.","Build a dynamic metric selector: create a disconnected table with Revenue/Profit/Orders, let user pick metric via slicer."],
+quiz:[
+{q:"RANKX(ALL(Products), [Sales]) ranks products:",opts:["A) Only within current filter context","B) Against ALL products ignoring any visual filters ✓","C) In alphabetical order","D) Based on product count"],cor:"B"},
+{q:"SELECTEDVALUE(Column, 'All') returns 'All' when:",opts:["A) The column has blank values","B) Multiple values are in current context ✓","C) The slicer is empty","D) The column has one row"],cor:"B"},
+{q:"DENSE tie-breaking in RANKX means:",opts:["A) Tied items get same rank with no gaps (1,1,2) ✓","B) Tied items skip ranks (1,1,3)","C) Items are sorted alphabetically on ties","D) RANKX calculates density of values"],cor:"A"}
+],
+tips:["💡 RANKX with ALL() is the standard pattern — without ALL, ranking would only work within current filter","⭐ SELECTEDVALUE is the key to building dynamic, professional dashboards","📌 What-If Parameter + TOPN = excellent interactive dashboard feature for executives to explore data"]},
+
+// ─────────────────────────────────────
+{day:17,week:3,title:"Iterator (X) Functions Deep Dive",sub:"SUMX, AVERAGEX, COUNTX, CONCATENATEX — row-by-row evaluation",
+objectives:["Understand how X functions iterate row by row","Use SUMX for revenue calculations from components","Use AVERAGEX for weighted averages","Use CONCATENATEX to build text lists","Know when to use X functions vs non-X aggregations"],
+concepts:[
+{h:"How X Functions Work (Internally)",p:`X functions have TWO phases:
+
+PHASE 1 — ITERATE: Go through each row of the table
+  For each row, evaluate the Expression in ROW CONTEXT.
+  This creates a temporary list of values (one per row).
+
+PHASE 2 — AGGREGATE: Combine all those values
+  SUMX  → Sum the list
+  AVGX  → Average the list
+  MAXX  → Maximum of the list
+  MINX  → Minimum of the list
+  COUNTX → Count non-blank values in list
+
+MENTAL MODEL:
+  SUMX(Sales, Sales[Qty] * Sales[Price])
+  
+  Row 1: 5  × ₹200 = ₹1000
+  Row 2: 3  × ₹500 = ₹1500
+  Row 3: 10 × ₹100 = ₹1000
+  ──────────────────────────
+  TOTAL:            = ₹3500  ← SUMX result`},
+{h:"CONCATENATEX",p:`CONCATENATEX(Table, Expression, Delimiter, OrderBy, Order)
+
+  → Combine text from multiple rows into one string
+
+  Use cases:
+    • List all products a customer bought
+    • Show all tags associated with a category
+    • Create comma-separated lists for display
+
+  Customer Products = 
+    CONCATENATEX(
+      RELATEDTABLE(Sales),
+      RELATED(Products[ProductName]),
+      ", ",
+      Products[ProductName], ASC
+    )
+
+  Top Cities = 
+    CONCATENATEX(
+      TOPN(5, Locations, [Total Sales], DESC),
+      Locations[City],
+      " | "
+    )`}
+],
+code:`// ═══ SUMX USE CASES ═══
+
+// Revenue from Qty × Price (most common use):
+Revenue (SUMX) = SUMX(Sales, Sales[Quantity] * Sales[UnitPrice])
+
+// Revenue after discount:
+Net Revenue = SUMX(Sales, Sales[Qty] * Sales[Price] * (1 - Sales[Discount]))
+
+// Freight cost + item cost = total cost per order, then sum:
+Total Cost = SUMX(Sales, Sales[ProductCost] * Sales[Qty] + Sales[Freight])
+
+// ═══ AVERAGEX USE CASES ═══
+
+// Simple average of Amount (same as AVERAGE):
+Simple Avg = AVERAGEX(Sales, Sales[Amount])
+
+// Weighted average discount (weighted by order value):
+Weighted Avg Discount = 
+  DIVIDE(
+    SUMX(Sales, Sales[Discount] * Sales[Amount]),
+    SUM(Sales[Amount])
+  )
+
+// Average revenue per customer (not per order):
+Avg Revenue per Customer = 
+  AVERAGEX(
+    SUMMARIZE(Sales, Sales[CustomerID]),  -- one row per customer
+    CALCULATE([Total Sales])              -- total for that customer
+  )
+
+// ═══ COUNTX USE CASES ═══
+
+// Count orders where profit is positive:
+Profitable Orders = COUNTX(Sales, IF(Sales[Profit] > 0, 1, BLANK()))
+
+// Count customers who bought more than 5 times:
+Loyal Customers = 
+  COUNTX(
+    FILTER(
+      SUMMARIZE(Sales, Sales[CustomerID], "cnt", COUNTROWS(Sales)),
+      [cnt] > 5
+    ),
+    Sales[CustomerID]
+  )
+
+// ═══ CONCATENATEX ═══
+
+// Products bought by selected customer:
+Customer Product List = 
+  CONCATENATEX(
+    Sales,
+    RELATED(Products[ProductName]),
+    ", ",
+    Products[ProductName], ASC
+  )
+
+// Top 3 cities by sales as a label:
+Top 3 Cities = 
+  CONCATENATEX(
+    TOPN(3, ALL(Locations[City]), [Total Sales], DESC),
+    Locations[City],
+    " → "
+  )`,
+exercises:["Your Sales table only has Qty and UnitPrice (no Amount column). Use SUMX to calculate correct revenue.","Calculate 'Weighted Average Profit Margin %' — weight by revenue, not simple average.","Use AVERAGEX + SUMMARIZE to find 'Average Revenue per Customer' (not average per order).","Use CONCATENATEX to create a measure showing the names of the top 5 products in current filter."],
+quiz:[
+{q:"SUMX(Sales, Sales[Qty] * Sales[Price]) vs SUM(Sales[Qty]) * AVERAGE(Sales[Price]) — which is correct for total revenue?",opts:["A) Both give the same result","B) SUMX is correct — it multiplies per row before summing ✓","C) The second one is correct","D) Both give wrong results"],cor:"B"},
+{q:"AVERAGEX + SUMMARIZE combination is used for:",opts:["A) Formatting numbers as averages","B) Calculating average per entity (per customer, per product) rather than per row ✓","C) Sorting averages in descending order","D) Replacing CALCULATE in measures"],cor:"B"},
+{q:"CONCATENATEX with delimiter ', ' creates:",opts:["A) A number","B) A comma-separated text string from multiple rows ✓","C) A calculated table","D) A filtered list"],cor:"B"}
+],
+tips:["⭐ SUMX is not just for multiplication — any expression that Power BI can evaluate per row works inside it","💡 When you need 'average per customer' not 'average per order', use AVERAGEX+SUMMARIZE — huge difference in result","📌 CONCATENATEX is perfect for tooltip pages and detail visuals — show text lists without extra tables"]},
+
+// ─────────────────────────────────────
+{day:18,week:3,title:"Row-Level Security (RLS)",sub:"Static RLS, Dynamic RLS, testing, USERNAME(), USERPRINCIPALNAME()",
+objectives:["Understand what Row-Level Security (RLS) is and why businesses need it","Set up Static RLS to restrict by fixed filter","Set up Dynamic RLS using USERNAME() function","Test RLS roles in Power BI Desktop","Publish reports with RLS to Power BI Service and assign users"],
+concepts:[
+{h:"What is Row-Level Security?",p:`RLS = A way to restrict DATA ACCESS based on who is logged in.
+
+BUSINESS SCENARIO:
+  Your Sales report has data for all 5 regions.
+  North Region Manager should ONLY see North data.
+  South Region Manager should ONLY see South data.
+  CEO should see ALL data.
+
+WITHOUT RLS: Share the report → everyone sees everything.
+WITH RLS:    Share the same report → each person sees only their data.
+
+RLS is configured in Power BI Desktop, published to Service.`},
+{h:"Static RLS",p:`Static = Fixed filter per role (hardcoded in the role definition)
+
+Steps:
+  1. Modeling tab → Manage Roles → Create Role
+  2. Click a Table
+  3. Write a DAX filter: [Region] = "North"
+  4. Save the role
+  
+Create separate roles for each region:
+  Role: North_Manager  → [Region] = "North"
+  Role: South_Manager  → [Region] = "South"
+  Role: East_Manager   → [Region] = "East"
+  Role: All_Access     → (no filter = sees everything)`},
+{h:"Dynamic RLS",p:`Dynamic = Filter changes based on WHO is logged in.
+  Only ONE role needed for all users!
+
+HOW IT WORKS:
+  1. Create a mapping table: UserEmail | Region
+  2. Load it into Power BI model
+  3. Create ONE RLS role with DAX:
+     [UserEmail] = USERPRINCIPALNAME()
+  4. Relationship: UserMap[UserEmail] → (used by RLS filter)
+
+FUNCTIONS:
+  USERNAME()            → Returns "DOMAIN\\username" (Windows)
+  USERPRINCIPALNAME()   → Returns user's email (recommended for Power BI Service)
+
+When Ravi (ravi@company.com) opens the report:
+  USERPRINCIPALNAME() = "ravi@company.com"
+  → RLS automatically finds his region and filters`}
+],
+code:`// ═══ STATIC RLS SETUP ═══
+// Modeling → Manage Roles → Create Role
+
+// Role Name: "North Manager"
+// Table: Sales
+// DAX Filter: [Region] = "North"
+
+// Role Name: "South Manager"
+// Table: Sales  
+// DAX Filter: [Region] = "South"
+
+// Role Name: "Admin" (no filter — sees all)
+// (Leave DAX filter box empty)
+
+// ═══ DYNAMIC RLS SETUP ═══
+
+// Step 1: Create user mapping table in Power Query or Excel:
+//   UserTable:
+//   | UserEmail              | Region  |
+//   |------------------------|---------|
+//   | ravi@company.com       | North   |
+//   | priya@company.com      | South   |
+//   | kumar@company.com      | East    |
+//   | admin@company.com      | (leave blank = see all) |
+
+// Step 2: Create relationship
+//   UserTable[Region] → Sales[Region]  (or through Region dimension)
+
+// Step 3: Create ONE role: "All Users"
+//   Table: UserTable
+//   DAX Filter:
+[UserEmail] = USERPRINCIPALNAME()
+
+// Step 4: In Power BI Service → Dataset Settings → Security
+//   Assign role "All Users" to ALL users (everyone uses same role)
+//   Power BI automatically applies their own email as the filter!
+
+// ═══ TEST RLS IN DESKTOP ═══
+// Modeling → View As → select a role
+// Optionally enter an email to test Dynamic RLS:
+//   "Other User" → enter ravi@company.com
+// The report will show as Ravi would see it
+
+// ═══ BYPASS RLS FOR CERTAIN USERS ═══
+// In Power BI Service, you can assign users as Dataset Admin
+// Dataset Admins BYPASS RLS — they always see all data
+// Use this for CEO / senior leadership`,
+exercises:["Create a 5-region Sales dataset. Set up Static RLS with 5 roles (one per region). Test each role in 'View As' mode.","Convert Static RLS to Dynamic RLS: create a UserEmail-Region mapping table. Write the DAX role filter using USERPRINCIPALNAME().","Test Dynamic RLS: View As → 'Other User' → enter each mapped email. Verify correct data shows.","Demonstrate: Add an RLS-bypassing 'Admin' role (no filter). Explain when to use this in real companies."],
+quiz:[
+{q:"USERPRINCIPALNAME() returns:",opts:["A) The Windows domain username","B) The logged-in user's email address ✓","C) The report owner's name","D) The server hostname"],cor:"B"},
+{q:"Dynamic RLS requires how many roles?",opts:["A) One role per user","B) One role per region","C) One role for all users ✓","D) No roles — it's automatic"],cor:"C"},
+{q:"To TEST RLS in Power BI Desktop, use:",opts:["A) File → Publish → Test","B) View → As Roles","C) Modeling → View As (or View as Role) ✓","D) Home → Refresh"],cor:"C"}
+],
+tips:["⭐ Dynamic RLS is the industry standard — one role, zero maintenance when new users join","💡 Always test RLS with 'View As' before publishing — wrong RLS can expose confidential data!","⚠️ RLS only applies to report VIEWERS — report EDITORS bypass RLS by default in Power BI Service"]},
+
+// ─────────────────────────────────────
+{day:19,week:3,title:"Advanced Visualisations",sub:"Decomposition Tree, Key Influencers, Waterfall, Treemap, Ribbon, Funnel",
+objectives:["Use Decomposition Tree for drill-down analysis","Use Key Influencers to find factors driving a metric","Build a Waterfall chart to show contribution/loss","Create a Treemap for hierarchical proportion view","Use Ribbon chart for rank-over-time view"],
+concepts:[
+{h:"Decomposition Tree",p:`Decomposition Tree = Interactive drill-down visual to explore WHAT DRIVES a metric.
+
+Use: "Why is Total Sales high/low? Break it down by…"
+
+Fields:
+  Analyse:  The metric to explore (e.g., Total Sales)
+  Explain By: Dimensions to drill into (Region, Category, Sub-Category, City…)
+
+USAGE:
+  1. Click the + icon on the visual to add a breakdown level
+  2. Choose: Manual (you pick dimension) or AI Split (Power BI picks best)
+  3. Drill from Region → Category → Sub-Category automatically
+  4. Each level shows contribution to the parent
+
+BEST FOR: Root cause analysis, exploring why a number changed`},
+{h:"Key Influencers Visual",p:`Key Influencers = AI-powered visual. Analyses which factors MOST influence a target metric.
+
+Analyse tab (metric): Target variable
+Explain By (factors): Potential influencing columns
+
+EXAMPLE:
+  Analyse: Customer Satisfaction Rating
+  Explain By: Product Category, Region, Delivery Days, Price Range
+  
+  Output: "Satisfaction is HIGHER when Delivery Days < 3" 
+          "Satisfaction is LOWER when Product Category = Electronics"
+
+Shows influencer bars with how much each factor shifts the target.`},
+{h:"Waterfall Chart",p:`Waterfall = Shows how a value moves UP (green) or DOWN (red) through components.
+
+PERFECT FOR:
+  • Revenue bridge: Start Revenue + New Sales - Returns - Discounts = Final Revenue
+  • Budget variance: Budget + Favourable - Unfavourable = Actual
+  • P&L walkthrough: Revenue - COGS - Opex = Net Profit
+
+Fields: Category (what each bar represents), Y Axis (the +/- values)
+Waterfall automatically shows cumulative running total!`},
+{h:"Ribbon Chart vs Treemap vs Funnel",p:`RIBBON CHART:
+  Like a line chart, but shows RANK CHANGES over time
+  Each colour = one category, ribbons cross when rankings change
+  Best for: "How has the ranking of our products changed each quarter?"
+
+TREEMAP:
+  Hierarchical rectangles — size = value
+  Best for: "What % does each category contribute to total?"
+  Use sparingly — many rectangles are hard to compare
+
+FUNNEL CHART:
+  Shows stages in a process — bars decrease top to bottom
+  Best for: Sales pipeline, conversion funnel, hiring process
+  E.g.: Leads (1000) → Qualified (500) → Demo (200) → Closed (50)`}
+],
+code:`// ═══ WATERFALL CHART MEASURES ═══
+
+// Waterfall breakdown of Revenue to Profit:
+Revenue (Start) = [Total Revenue]
+Less: COGS = -SUMX(Sales, Sales[Qty] * Sales[UnitCost])
+Less: Discounts Given = -SUMX(Sales, Sales[Amount] * Sales[Discount%])
+Less: Returns = -CALCULATE([Total Revenue], Sales[OrderType] = "Return")
+Gross Profit = [Revenue (Start)] + [Less: COGS] + [Less: Discounts Given] + [Less: Returns]
+
+// Set these measures as the VALUES in waterfall
+// Mark "Revenue (Start)" as the starting point in Format → Breakdown
+
+// ═══ FUNNEL PIPELINE EXAMPLE ═══
+// Create a simple table:
+// | Stage      | Count |
+// | Leads      | 1000  |
+// | Qualified  | 600   |
+// | Demo       | 300   |
+// | Proposal   | 150   |
+// | Closed Won | 60    |
+
+Conversion Rate = 
+  DIVIDE(
+    CALCULATE(COUNTROWS(Leads), Leads[Stage] = "Closed Won"),
+    CALCULATE(COUNTROWS(Leads), Leads[Stage] = "Leads")
+  )
+
+// ═══ DECOMPOSITION TREE TIPS ═══
+// Add all dimensions to 'Explain By' field
+// Click 'High Value' → AI selects the dimension that best explains HIGH values
+// Click 'Low Value' → AI explains LOW values
+// Cross-highlight other visuals by clicking nodes!`,
+exercises:["Create a Waterfall chart showing: Total Revenue → Minus COGS → Minus Returns → Minus Discounts → Net Revenue.","Build a Decomposition Tree for Total Sales. Add: Region, Category, Sub-Category, City as Explain By. Practice the AI Split feature.","Create a Key Influencers visual: What factors drive Customer Order Amount being 'High'?","Create a Sales Pipeline Funnel with 5 stages. Calculate stage-by-stage conversion % using card visuals."],
+quiz:[
+{q:"Decomposition Tree is best used for:",opts:["A) Showing trends over time","B) Breaking down a metric to find what drives it ✓","C) Comparing two measures","D) Displaying geographic data"],cor:"B"},
+{q:"Key Influencers visual uses what type of analysis?",opts:["A) Time Series analysis","B) AI/ML to find factors that drive a target metric ✓","C) Filter context evaluation","D) RANKX function"],cor:"B"},
+{q:"Waterfall chart is perfect for showing:",opts:["A) Trend lines","B) Contributions that build up or reduce a total ✓","C) Proportional areas","D) Geographic patterns"],cor:"B"}
+],
+tips:["💡 Decomposition Tree + AI Split is the most impressive feature to show clients — impresses everyone","⭐ Key Influencers works best with at least 50+ rows of data with varied values","📌 Waterfall chart is essential for Finance dashboards — CFOs love seeing the revenue-to-profit bridge"]},
+
+// ─────────────────────────────────────
+{day:20,week:3,title:"Interactivity — Bookmarks, Buttons & Navigation",sub:"Bookmarks, Page navigation buttons, Drill Through, Tooltips, Edit Interactions",
+objectives:["Create bookmarks and assign them to buttons","Build a multi-page navigation menu using buttons","Set up Drill Through for detail-page navigation","Create custom page tooltips","Use Selection Pane to manage visual layers"],
+concepts:[
+{h:"Bookmarks",p:`Bookmarks = Snapshots of the current state of your report page.
+  Captures: Which visuals are visible, slicer selections, filter state, scroll position
+
+USES:
+  1. Show/Hide visuals — toggle between two chart types
+  2. Reset all filters button
+  3. Annotated story — guide users through insights
+  4. Navigation (combined with Buttons)
+
+CREATE: View → Bookmarks → Add Bookmark
+UPDATE: Right-click bookmark → Update (captures current state)
+APPLY:  Click bookmark in Bookmarks panel or assign to a button`},
+{h:"Buttons & Navigation",p:`INSERT → BUTTONS:
+
+  Back Button      → Returns to previous page
+  Bookmark Button  → Triggers a bookmark when clicked
+  Page Navigation  → Jumps to a specific page
+  Q&A Button       → Opens Natural Language Q&A
+  Web URL Button   → Opens external URL on click
+  Blank Button     → Custom button with icon + action
+
+BUILD A NAVIGATION MENU:
+  1. Insert → Buttons → Blank
+  2. Format → Style → set text, icon, fill, border
+  3. Action → Type: Page Navigation → Destination: Page 2
+  4. Duplicate and configure for each page
+  5. Group all buttons (Ctrl+G) → Copy to every page`},
+{h:"Drill Through",p:`Drill Through = Right-click a data point → jump to a detail page filtered to that item
+
+SETUP:
+  1. Create a new report page (e.g., "Customer Detail")
+  2. Add fields to the Drill Through section in Filters pane
+     (e.g., drag Customer Name to Drill Through)
+  3. Build detail visuals on this page
+  4. Power BI automatically adds a Back button!
+
+USAGE:
+  On main page → right-click a Customer bar → Drill Through → Customer Detail
+  → Customer Detail page opens filtered to that customer!`},
+{h:"Custom Page Tooltip",p:`Tooltip pages = Show a rich visual popup when hovering over a data point (instead of default tooltip)
+
+SETUP:
+  1. Create a new page → Page Information → Tooltip ON
+  2. Set page size: Format → Canvas Settings → Type = Tooltip
+  3. Add visuals to this tooltip page (mini chart, KPIs, table)
+  4. In your main visual → Format → General → Tooltips → Type = Report Page
+     → Page = your tooltip page name
+
+RESULT: Hovering over a bar shows your custom rich tooltip with charts!`}
+],
+code:`// ═══ BOOKMARK USE CASE: Show/Hide Toggle ═══
+
+// GOAL: Button that toggles between Bar Chart and Table view
+
+// Step 1: Place Bar Chart and Table on SAME position (overlap)
+// Step 2: Show Bar Chart, hide Table in Selection Pane
+//   → Create Bookmark "Bar View" (hide Table, show Bar)
+// Step 3: Show Table, hide Bar Chart in Selection Pane
+//   → Create Bookmark "Table View" (show Table, hide Bar)
+// Step 4: Add a Button → Action: Bookmark → "Table View"
+// Step 5: Add another Button → Action: Bookmark → "Bar View"
+// Now toggling between views!
+
+// ═══ RESET ALL FILTERS BUTTON ═══
+// Step 1: Clear all slicers/filters manually
+// Step 2: Create Bookmark → name it "Reset State"
+//   → In Bookmark pane, uncheck 'Data' (only captures visual state, not filter state)
+//   → Actually: Keep Data checked to also reset filters
+// Step 3: Insert → Button → Assign Action: Bookmark → "Reset State"
+
+// ═══ SELECTION PANE ORDER ═══
+// View → Selection → shows all visuals in layer order (like Photoshop layers)
+// Items at TOP are in FRONT (visible)
+// Items at BOTTOM are BEHIND
+// Click eye icon → Show/Hide individual visuals
+// Alt + Click → Select a visual hidden behind another
+
+// ═══ DRILL THROUGH BACK BUTTON ═══
+// Auto-created when you set up Drill Through
+// Appears in top-left of detail page
+// Users right-click data point → Drill Through → see detail page → click Back`,
+exercises:["Build a 5-page report with a navigation menu sidebar using Blank Buttons. Each button navigates to a different page.","Create a 'Toggle View' feature: button switches between Bar Chart and Table showing the same data.","Set up Drill Through: Main page has Sales by Customer bar chart. Drill Through to Customer Detail page showing that customer's order history.","Create a custom Tooltip page for the Sales chart: on hover show a mini line chart + 3 KPI cards for that data point."],
+quiz:[
+{q:"Drill Through allows users to:",opts:["A) Download the report as Excel","B) Right-click a data point to navigate to a detail page for that item ✓","C) Filter the entire report by clicking","D) Open a web URL from the report"],cor:"B"},
+{q:"To make a visual INVISIBLE in the report (but still present), use:",opts:["A) Delete the visual","B) Selection Pane → Click eye icon to hide ✓","C) Set visual size to 0","D) Filter to show blank values"],cor:"B"},
+{q:"A Bookmark captures:",opts:["A) Only the slicer selections","B) Only the visual positions","C) The entire page state: visible visuals, filters, scroll position ✓","D) Only chart types selected"],cor:"C"}
+],
+tips:["⭐ Navigation buttons + bookmarks = professional app-like experience in Power BI reports","💡 Always add a 'Reset Filters' bookmark button — users love being able to clear everything in one click","📌 Custom tooltips elevate your dashboard quality significantly — only 5% of Power BI reports use them"]},
+
+// ─────────────────────────────────────
+{day:21,week:3,title:"Power BI Service — Basics",sub:"Publishing, Workspaces, Dashboards vs Reports, Sharing, Pinning, Q&A",
+objectives:["Publish a Power BI Desktop report to Power BI Service","Understand the difference between a Dashboard and a Report in Service","Pin visuals from reports to a Dashboard","Share reports and dashboards with colleagues","Use the Q&A feature for natural language queries"],
+concepts:[
+{h:"Publishing to Power BI Service",p:`PUBLISH:
+  Power BI Desktop → Home → Publish
+  Sign in → Select workspace → Publish
+  
+  WHAT GETS UPLOADED:
+    • The Report (all pages and visuals)
+    • The Dataset (data model + data)
+  
+  After publishing:
+    • Report URL: app.powerbi.com/…/reports/…
+    • Anyone with the URL and permission can view it
+  
+  UPDATE: Publish again to the SAME workspace → overwrites the old version`},
+{h:"Workspaces",p:`MY WORKSPACE:
+  Personal space — only you can see
+  Use for: Personal reports, testing, drafts
+  Cannot share with others directly
+
+SHARED WORKSPACES (Teams / App Workspaces):
+  Team space — multiple people can collaborate
+  Roles:
+    Admin    → Full control (add members, delete workspace)
+    Member   → Create, edit, delete content
+    Contributor → Create and edit content
+    Viewer   → View only (needs Pro license or Premium capacity)`},
+{h:"Dashboard vs Report (in Service)",p:`REPORT (from Desktop):
+  • Multi-page, interactive
+  • Has slicers, filters, drill through
+  • Created in Power BI Desktop
+  • Can be edited in Service too
+
+DASHBOARD:
+  • Single canvas (no pages)
+  • Made of TILES pinned from reports
+  • NO slicers — static display
+  • Updates automatically with data refresh
+  • Can set ALERTS on numeric tiles (email when value crosses threshold)
+  • Best for: Executive view, TV displays, monitoring
+
+PIN TILES:
+  In Report → hover over visual → Pin icon → select Dashboard`}
+],
+code:`// ═══ PUBLISHING CHECKLIST ═══
+// Before publishing, verify:
+// ✓ All visuals load without errors
+// ✓ RLS is set up if required
+// ✓ Date table is marked correctly
+// ✓ Report title and page names are meaningful
+// ✓ Mobile layout is configured (optional)
+
+// ═══ SCHEDULED REFRESH (in Service) ═══
+// Workspace → Dataset → Settings → Scheduled Refresh
+// Set time: e.g., every day at 7:00 AM and 12:00 PM
+// Maximum refresh times:
+//   Pro Plan:     8 times per day
+//   Premium:      48 times per day (every 30 min)
+
+// ═══ Q&A EXAMPLES ═══
+// In Dashboard/Report → Q&A feature
+// Type natural language questions:
+// "Show total sales by region as a bar chart"
+// "What is the top 5 products by revenue?"
+// "Sales this year vs last year"
+// "Average order value by customer segment pie chart"
+
+// ═══ DASHBOARD ALERTS ═══
+// Click a card tile on Dashboard → More Options (…) → Manage Alerts
+// Set: Alert me when "Total Sales" drops below 500000
+// → Sends email notification automatically!
+
+// ═══ SHARING OPTIONS ═══
+// Share Report:
+//   Report → Share → Enter email addresses
+//   Options: Can reshare? Can build content from dataset?
+// 
+// Publish to Web (PUBLIC — not for sensitive data!):
+//   Report → File → Publish to Web → Get embed code
+//   Creates a public URL anyone can view (no login)
+//
+// Export options:
+//   PDF, PowerPoint, CSV (per visual)`,
+exercises:["Publish your Sales dashboard to Power BI Service. Verify all visuals display correctly in the browser.","Create a Dashboard by pinning 6 tiles from your published report. Set up a data alert on the Total Revenue card.","Share your report with a colleague (or test with a second account). Try different permission settings.","Use the Q&A feature: ask 5 different natural language questions and pin the resulting visual to your dashboard."],
+quiz:[
+{q:"In Power BI Service, DASHBOARDS are different from REPORTS because:",opts:["A) Dashboards can have multiple pages","B) Dashboards have slicers","C) Dashboards are made of pinned tiles and have no slicers or filters ✓","D) Dashboards are made in Power BI Desktop"],cor:"C"},
+{q:"A Workspace VIEWER role needs:",opts:["A) No license — it's free","B) Power BI Pro license or Premium capacity ✓","C) Admin rights on the dataset","D) A gateway connection"],cor:"B"},
+{q:"Scheduled refresh in Power BI Service requires:",opts:["A) The .pbix file to be open on your computer","B) Power BI Gateway for on-premise data, or no gateway for cloud data ✓","C) The report to be published to My Workspace only","D) DirectQuery mode enabled"],cor:"B"}
+],
+tips:["📌 My Workspace is only for personal use — use Shared Workspaces for anything you want to share with others","💡 Pinned Dashboard tiles update automatically with refreshed data — great for TV screens or executive monitors","⚡ Q&A requires properly named columns — rename columns like 'Amt' to 'Total Amount' for better natural language understanding"]},
+
+// ═══════════════════════════════════════════
+// WEEK 4 — EXPERT & DEPLOYMENT
+// ═══════════════════════════════════════════
+
+{day:22,week:4,title:"Power BI Service — Advanced",sub:"Apps, Workspace Governance, Subscriptions, Lineage View, Endorsement",
+objectives:["Create and publish Power BI Apps for organised content delivery","Set up email subscriptions for automatic report delivery","Use Lineage View to understand data flow dependencies","Endorse datasets and reports (Certified/Promoted)","Understand Premium Per User (PPU) vs Pro license differences"],
+concepts:[
+{h:"Power BI Apps",p:`Apps = A packaged bundle of dashboards + reports published from a Workspace.
+
+WHY APPS?
+  • Workspace content can change (developers editing)
+  • App provides a STABLE published version that viewers see
+  • App version is updated only when you explicitly republish it
+  • Viewers get the App link — they don't directly access the workspace
+
+FLOW:
+  Workspace (developers edit) → Publish App → Viewers use App (stable)
+
+CREATE APP:
+  Workspace → Create App
+  → Add content (select reports & dashboards)
+  → Configure audience (who can see which content)
+  → Publish App`},
+{h:"Subscriptions",p:`Subscriptions = Power BI emails you a report screenshot automatically.
+
+SETUP:
+  Open a Report → Subscribe to Report
+  Set: Frequency (Daily/Weekly), Time, Specific Page
+  
+  Subscribers receive: Email with PNG screenshot of report + link
+
+USE CASE: Every Monday 8 AM, send weekly sales summary to sales team.
+
+LIMITATIONS:
+  • Sends screenshot (static) not live interactive report
+  • Maximum 24 subscribers per subscription
+  • Only the report at the TIME of email is captured`},
+{h:"Lineage View & Endorsement",p:`LINEAGE VIEW:
+  Workspace → Lineage View
+  Shows: Data Source → Dataset → Reports → Dashboards → Apps
+  Visual map of how data flows through your Power BI content.
+  Useful for impact analysis: "If I change this dataset, which reports break?"
+
+ENDORSEMENT:
+  Promoted  → Dataset/Report recommended by content creator
+  Certified → Officially verified by organisation (requires admin approval)
+  
+  Certified datasets appear with ✓ badge in Power BI
+  Other report builders should use Certified datasets — trusted, governed data`}
+],
+code:`// ═══ CREATE APP NAVIGATION ═══
+// When publishing an app, you can organise content:
+//
+// App Navigation:
+//   Section 1: "Sales Overview"     → Sales Summary Report (Page 1)
+//   Section 2: "Regional Analysis"  → Regional Report (all pages)
+//   Section 3: "Product Details"    → Product Report
+//
+// Audience groups:
+//   Group A: "All Staff"       → See Sections 1, 2, 3
+//   Group B: "Management Only" → See all sections + Executive Summary
+//   Group C: "Region Managers" → See only Section 2
+
+// ═══ POWER BI LICENSE COMPARISON ═══
+// FREE:        View in My Workspace only. Cannot share.
+// PRO:         Share reports, collaborate. ₹~700/user/month
+// PREMIUM PER USER (PPU): Advanced features per user. ₹~1400/user/month
+// PREMIUM CAPACITY (P1+): Shared infrastructure. ₹~80,000+/month
+//   • Paginated reports (P1+)
+//   • AI features
+//   • Deployment pipelines
+//   • No per-user viewer license needed for consumers
+
+// ═══ DEPLOYMENT PIPELINES (Premium) ═══
+// Developer → Test → Production stages
+// Workspace: Sales_Dev → Sales_Test → Sales_Prod
+// Deploy from one stage to next with one click
+// Keeps parameters and data sources configurable per stage`,
+exercises:["Create a Power BI App from your Sales workspace. Configure 2 audience groups with different content access.","Set up a weekly subscription for your sales report. Set it to send every Monday at 9 AM.","Open Lineage View in your workspace and trace: Source File → Dataset → Reports → Dashboard.","Endorse a dataset as 'Promoted'. Describe what a 'Certified' badge means in your company context."],
+quiz:[
+{q:"Power BI Apps provide a STABLE version because:",opts:["A) Apps are stored in the cloud","B) App content only updates when the app is explicitly republished ✓","C) Apps refresh every hour","D) Apps bypass RLS"],cor:"B"},
+{q:"Subscriptions in Power BI send:",opts:["A) Live interactive reports","B) The raw data as CSV","C) A static screenshot/email of the report at the scheduled time ✓","D) An alert when data changes"],cor:"C"},
+{q:"Lineage View helps you understand:",opts:["A) The DAX logic in measures","B) Which users have access to which reports","C) How data flows from source → dataset → reports → dashboards ✓","D) The number of rows in each table"],cor:"C"}
+],
+tips:["⭐ Apps are the recommended delivery mechanism for production Power BI content — never give viewers direct workspace access","💡 Lineage View is essential before modifying datasets — always check impact on downstream reports first","📌 Certifying datasets creates a trusted data layer — a single source of truth for the whole organisation"]},
+
+// ─────────────────────────────────────
+{day:23,week:4,title:"Data Refresh & Gateway",sub:"Import vs DirectQuery, On-Premises Gateway setup, Incremental Refresh",
+objectives:["Compare Import, DirectQuery and Live Connection modes in depth","Install and configure On-Premises Data Gateway","Set up scheduled refresh for Excel and SQL data","Understand Incremental Refresh for large datasets","Troubleshoot common refresh failure scenarios"],
+concepts:[
+{h:"Connectivity Mode Deep Dive",p:`IMPORT MODE:
+  ✓ Fastest query performance (in-memory VertiPaq)
+  ✓ Works offline after loading
+  ✓ Full DAX Time Intelligence support
+  ✗ Data is as fresh as last refresh (up to 48/day with Premium)
+  ✗ Model size limit (1GB Service free/Pro, 10GB+ Premium)
+
+DIRECTQUERY MODE:
+  ✓ Always real-time data (no refresh needed)
+  ✓ No size limits — data stays in database
+  ✗ Slower visuals (every click = SQL query to DB)
+  ✗ Limited DAX functions
+  ✗ Requires stable database connection
+
+LIVE CONNECTION:
+  ✓ Connects to SSAS, Azure AS, Power BI Dataset
+  ✗ Cannot add custom tables or measures in Desktop
+  ✗ No data model changes — read-only
+
+COMPOSITE MODEL (Best of both):
+  Some tables = DirectQuery (real-time fact data)
+  Some tables = Import (slow-changing dimension data)`},
+{h:"On-Premises Data Gateway",p:`PROBLEM: Power BI Service is in the CLOUD.
+  Your SQL Server is on your LOCAL network / company server.
+  Cloud cannot directly reach local network!
+
+SOLUTION: Install the Gateway on a local PC/server.
+  Gateway acts as a SECURE BRIDGE between cloud and local.
+
+GATEWAY TYPES:
+  Personal Mode       → One user only. For Excel/CSV files on your PC.
+  Enterprise Mode     → Shared by multiple users/datasets. For SQL Server etc.
+
+INSTALLATION:
+  1. Download gateway from powerbi.microsoft.com
+  2. Install on a machine that is ALWAYS ON (not a laptop you shut down)
+  3. Sign in with Power BI account
+  4. In Power BI Service: Settings → Manage Gateways → Add data source`},
+{h:"Incremental Refresh",p:`Problem: Large datasets (10M+ rows) take too long to fully refresh every day.
+Solution: Only refresh NEW and CHANGED rows.
+
+SETUP (requires parameters named RangeStart and RangeEnd):
+  1. In Power Query: create parameters RangeStart (Date/Time) and RangeEnd (Date/Time)
+  2. Filter your data: OrderDate >= RangeStart AND OrderDate < RangeEnd
+  3. In Power BI Desktop: right-click table → Incremental Refresh Policy
+  4. Set: Store N years of data, Refresh last N days
+  5. Publish to Premium workspace
+
+Power BI automatically partitions and only refreshes recent data!`}
+],
+code:`// ═══ GATEWAY TROUBLESHOOTING ═══
+// Common refresh errors and fixes:
+
+// ERROR: "Data source credentials expired"
+// FIX: Go to Dataset Settings → Data Source Credentials → Edit → Re-enter password
+
+// ERROR: "Gateway offline"
+// FIX: Open gateway machine, ensure service is running:
+//   Windows Services → "On-premises data gateway service" → Start
+
+// ERROR: "Unable to connect to SQL Server"
+// FIX: Verify:
+//   1. SQL Server name in connection string matches gateway data source
+//   2. Firewall allows port 1433 (SQL Server default)
+//   3. SQL Server Browser service is running
+
+// ═══ INCREMENTAL REFRESH PARAMETERS ═══
+// Must be EXACTLY named: RangeStart and RangeEnd
+// Type: Date/Time (not Date)
+
+// Power Query filter step:
+#"Filtered Date Range" = Table.SelectRows(
+  Source,
+  each [OrderDate] >= RangeStart and [OrderDate] < RangeEnd
+)
+
+// ═══ REFRESH SCHEDULE (Power BI Service) ═══
+// Dataset → Settings → Scheduled Refresh
+// Timezone: Set your local timezone!
+// Refresh frequency:
+//   Pro license:     Up to 8 refreshes per day
+//   Premium/PPU:     Up to 48 refreshes per day (every 30 min)
+// 
+// Refresh failure notifications:
+//   Settings → Send refresh failure notifications → Email to dataset owner`,
+exercises:["Install Power BI Gateway (Personal mode). Connect your local Excel file. Set up scheduled refresh at 8 AM daily.","Compare Import vs DirectQuery: load same SQL table in both modes. Measure visual loading speed difference.","Simulate a gateway failure: stop the gateway service, trigger a refresh, see the error. Then fix it.","Research: List 5 DAX functions that DO NOT work in DirectQuery mode."],
+quiz:[
+{q:"On-Premises Gateway is required when:",opts:["A) Your data is in Azure SQL Database","B) Your data is in Excel files on SharePoint Online","C) Your data is in a SQL Server on your company's local network ✓","D) Your data is in Power BI Service dataset"],cor:"C"},
+{q:"Incremental Refresh requires Power Query parameters named:",opts:["A) StartDate and EndDate","B) RangeStart and RangeEnd ✓","C) MinDate and MaxDate","D) DateFrom and DateTo"],cor:"B"},
+{q:"DirectQuery mode always shows real-time data because:",opts:["A) It refreshes every minute in the background","B) Data is cached in the cloud","C) Every visual renders by sending a live query to the database ✓","D) The gateway pushes updates in real-time"],cor:"C"}
+],
+tips:["⚠️ Install the gateway on a DEDICATED machine that is always on — never on a laptop!","💡 Use DirectQuery only when real-time data is truly required — Import mode is faster and supports more DAX","📌 Incremental Refresh can reduce a 2-hour full refresh to a 5-minute refresh for large datasets"]},
+
+// ─────────────────────────────────────
+{day:24,week:4,title:"Parameters & What-If Analysis",sub:"Query Parameters, What-If Parameters, Dynamic M Parameters, scenario analysis",
+objectives:["Create Query Parameters to make connections flexible","Build a What-If Parameter for scenario sliders","Use Dynamic M Parameters for slicer-driven table filtering","Create a Scenario Analysis dashboard","Use parameters for environment switching (Dev/Test/Prod)"],
+concepts:[
+{h:"Query Parameters",p:`Query Parameters = Variables you define in Power Query that control connection strings, file paths, or filter values.
+
+USE CASES:
+  1. Change server name without editing queries:
+     Parameter: ServerName → "PROD-SQL-01" or "TEST-SQL-01"
+  2. Change file path:
+     Parameter: FilePath → "C:\\Data\\" or "D:\\Reports\\"
+  3. Environment switching:
+     Parameter: Environment → "DEV" or "PROD"
+
+CREATE:
+  Power Query → Home → Manage Parameters → New Parameter
+  Set: Name, Type (Text/Number/Date), Current Value`},
+{h:"What-If Parameters",p:`What-If Parameter = A numeric slicer that creates a MEASURE representing the selected value.
+Use it in DAX measures for interactive scenario modelling.
+
+CREATE:
+  Modeling → New Parameter → Numeric Range
+  Set: Name, Data Type, Minimum, Maximum, Increment, Default
+
+WHAT IT CREATES AUTOMATICALLY:
+  1. A table with the range values
+  2. A measure: [Parameter Name Value] that returns current slider selection
+  3. A slicer automatically added to the page
+
+EXAMPLE: "What if we give an extra 5% discount — what's the impact on revenue?"
+  Create What-If: Discount% — from 0 to 20%, increment 1%
+  Write measure: Adjusted Revenue = SUMX(Sales, Sales[Amount] * (1 - [Discount% Value] / 100))`}
+],
+code:`// ═══ QUERY PARAMETER — FILE PATH ═══
+// Step 1: Manage Parameters → New
+//   Name: DataFolder
+//   Type: Text
+//   Current Value: C:\\PBI_Data\\
+
+// Step 2: In Power Query, use parameter in file path:
+Source = Excel.Workbook(File.Contents(DataFolder & "Sales.xlsx"))
+
+// Now change DataFolder to switch between local and server paths!
+
+// ═══ WHAT-IF PARAMETER — SCENARIO ANALYSIS ═══
+// Modeling → New Parameter
+// Name: "Growth Rate", Min: -20, Max: 50, Increment: 1, Default: 10
+
+// Auto-created measure:
+// Growth Rate Value = SELECTEDVALUE('Growth Rate'[Growth Rate], 10)
+
+// Write your scenario measure:
+Projected Revenue = [Total Sales] * (1 + [Growth Rate Value] / 100)
+
+Revenue Impact = [Projected Revenue] - [Total Sales]
+
+// Show on a line chart: Actual vs Projected side by side
+// As user moves the slider, Projected Revenue updates in real time!
+
+// ═══ MULTI-SCENARIO DASHBOARD ═══
+Optimistic Revenue = [Total Sales] * 1.20   // +20%
+Base Revenue       = [Total Sales] * 1.10   // +10%
+Pessimistic Revenue = [Total Sales] * 0.95  // -5%
+
+// Place all 3 on a line chart with Actual
+// Executives can visually compare scenarios
+
+// ═══ DYNAMIC M PARAMETER ═══
+// Allows a slicer selection to filter data at SOURCE (not just visual)
+// Available for DirectQuery sources
+
+// Step 1: Create a What-If or disconnected table with your filter options
+// Step 2: In Power Query → Home → Manage Parameters → create parameter
+// Step 3: Enable "Bind to field" in parameter → link to your slicer measure
+// Step 4: Use parameter in the query filter
+
+// Example: Select a year from slicer → Power Query only loads that year's data
+#"Filtered Year" = Table.SelectRows(Source, each Date.Year([OrderDate]) = YearParam)`,
+exercises:["Create a 'Price Increase' What-If parameter (0-30%, step 1%). Build a measure showing adjusted revenue as price changes.","Create a 'Target Achievement' scenario: What-If for target multiplier. Show actual vs target dynamically.","Use Query Parameter for file path — switch between Sales_2024.xlsx and Sales_2025.xlsx by changing one parameter.","Build a complete Scenario Dashboard: 3 revenue projections (optimistic/base/pessimistic) + a What-If slider for growth rate."],
+quiz:[
+{q:"What-If Parameters create a slicer that controls a:",opts:["A) Page filter","B) Measure value that responds to the slider ✓","C) Row-level security filter","D) Data source connection"],cor:"B"},
+{q:"Query Parameters are most useful for:",opts:["A) Creating dynamic DAX measures","B) Making file paths and server names configurable ✓","C) Setting RLS filters","D) Formatting visuals"],cor:"B"},
+{q:"Dynamic M Parameters allow slicers to filter data:",opts:["A) Only at the visual level","B) At the source/query level (in Power Query) ✓","C) Using RLS logic","D) Through bookmarks only"],cor:"B"}
+],
+tips:["⭐ What-If Parameters are a game-changer for finance and sales reporting — interactive scenario modelling in seconds","💡 Always add a 'Reset to Default' button when using What-If parameters — executives forget to reset the slider","📌 Query Parameters are essential for deploying to Dev/Test/Prod environments — never hardcode server names!"]},
+
+// ─────────────────────────────────────
+{day:25,week:4,title:"Performance Optimisation",sub:"VertiPaq engine, query folding, DAX best practices, Performance Analyzer",
+objectives:["Understand how VertiPaq in-memory engine works","Use Performance Analyzer to identify slow visuals","Optimise DAX measures for faster calculation","Apply Power Query best practices for query folding","Reduce model size with column management techniques"],
+concepts:[
+{h:"How VertiPaq Works",p:`VertiPaq = Power BI's in-memory columnar database engine.
+
+KEY CONCEPTS:
+  COLUMNAR STORAGE: Data stored by column, not by row.
+    Faster for aggregating one column (SUM, COUNT) across millions of rows.
+  
+  COMPRESSION: Repetitive values compress heavily.
+    "North", "North", "North", "South", "North" → stored as [N3, S1, N1]
+    Low cardinality (few unique values) = better compression.
+  
+  DICTIONARY ENCODING: Each unique value stored once; rows store index numbers.
+    Products[Category] = 5 unique values → stored as numbers 1-5, not text.
+
+IMPLICATION:
+  → Remove unnecessary columns (they use memory even if not in visuals)
+  → Reduce cardinality where possible (e.g., round timestamps to day level)
+  → Avoid high-cardinality text columns in relationships`},
+{h:"Query Folding (Power Query)",p:`Query Folding = Power Query pushes transformation steps back to the DATABASE as SQL.
+  Instead of loading all data then filtering in Power Query,
+  the filter becomes a WHERE clause in SQL — far faster!
+
+CHECK: Right-click a step in Applied Steps → "View Native Query"
+  → If you see SQL = Query folding is happening ✓
+  → If option is greyed out = No query folding ✗
+
+BEST PRACTICES:
+  ✓ Apply filters (date range, rows) as EARLY as possible in steps
+  ✓ Remove columns you don't need at SOURCE
+  ✓ Avoid custom M functions that break folding
+  ✗ Adding Index Column breaks query folding
+  ✗ Using unpivot can break folding on some connectors`},
+{h:"DAX Performance Best Practices",p:`SLOW (avoid):
+  ✗ FILTER(ALL(Table), complex conditions) — scans entire table
+  ✗ Using CALCULATE inside SUMX unnecessarily
+  ✗ Many calculated columns that can be measures
+  ✗ High-cardinality calculated columns (like formatted date text)
+  ✗ Overusing RELATED inside iterators (causes many lookups)
+
+FAST (prefer):
+  ✓ Simple column filters in CALCULATE: [Region] = "North"
+  ✓ Variables (VAR) to compute intermediate values once
+  ✓ SUMX only when needed — use SUM for simple aggregation
+  ✓ DIVIDE instead of / to avoid error handling overhead
+  ✓ Remove unused measures from the model`}
+],
+code:`// ═══ PERFORMANCE ANALYZER ═══
+// View → Performance Analyzer → Start Recording
+// Then click on a visual to force it to reload
+// See: DAX Query time, Visual Display time, Other time
+
+// If DAX Query > 500ms → Optimise your DAX measure
+// If Visual Display > 300ms → Simplify the visual (fewer data points)
+
+// ═══ DAX OPTIMIZATION — USE VAR ═══
+
+// SLOW (calculates [Total Sales] twice):
+Growth % = 
+  DIVIDE(
+    [Total Sales] - CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Date[Date])),
+    CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Date[Date]))
+  )
+
+// FAST (uses VAR — calculates last year only once):
+Growth % = 
+  VAR CurrentSales = [Total Sales]
+  VAR LastYearSales = CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Date[Date]))
+  RETURN
+    DIVIDE(CurrentSales - LastYearSales, LastYearSales)
+
+// ═══ REDUCE MODEL SIZE ═══
+// In Power Query, before loading:
+// 1. Remove columns you never use
+// 2. Change Decimal to Whole Number if no decimals needed
+// 3. Round DateTime to Date only (remove time part):
+//    Date Only = DATEVALUE(DateTime column)
+// 4. Remove high-cardinality free-text columns (notes, comments)
+
+// ═══ MODEL ANALYSER ═══
+// External tools: DAX Studio or Tabular Editor (free download)
+// Connect to Power BI model → analyse column sizes, measure performance
+// DAX Studio: File → Connect → Power BI Desktop
+// Run: SELECT * FROM $System.DISCOVER_STORAGE_TABLE_COLUMNS
+// See which column takes most memory!`,
+exercises:["Use Performance Analyzer: find your slowest visual. Optimise the DAX measure using VAR. Measure improvement.","In Power Query, filter date range as the FIRST step. Check 'View Native Query' to confirm query folding is active.","Audit your model: remove 5+ unnecessary columns. Check if model file size reduces significantly.","Rewrite a complex nested IF measure using SWITCH(TRUE()) and VAR. Compare execution time."],
+quiz:[
+{q:"VertiPaq performs BEST when columns have:",opts:["A) Many unique values (high cardinality)","B) Few unique values (low cardinality) ✓","C) Decimal numbers","D) Null values"],cor:"B"},
+{q:"Query Folding means:",opts:["A) Collapsing Power Query steps","B) Power Query pushes transformations to the source database as SQL ✓","C) Folding the model into a smaller size","D) Reducing the number of visuals"],cor:"B"},
+{q:"Using VAR in DAX measures helps performance because:",opts:["A) VAR reduces model size","B) VAR allows the expression to be evaluated once and reused ✓","C) VAR bypasses RLS","D) VAR enables query folding"],cor:"B"}
+],
+tips:["⭐ VAR is the single best DAX optimisation trick — always use it when calculating the same sub-expression twice","💡 Most performance issues come from too many visuals on one page — split into multiple pages","📌 Download DAX Studio (free) — it's the professional tool for DAX query analysis and optimisation"]},
+
+// ─────────────────────────────────────
+{day:26,week:4,title:"Custom Visuals, Themes & Branding",sub:"AppSource marketplace, JSON themes, corporate branding, popular custom visuals",
+objectives:["Find and install custom visuals from AppSource","Use popular certified custom visuals effectively","Create a JSON theme file for consistent corporate branding","Apply custom themes to reports","Build a branded report template for reuse"],
+concepts:[
+{h:"AppSource Custom Visuals",p:`Power BI has 200+ community and certified visuals beyond built-in ones.
+
+ACCESS:
+  Visualisations pane → Click the three dots (…) → Get more visuals
+  Opens Microsoft AppSource → Filter by category/certification
+
+CERTIFIED VISUALS (recommended):
+  → Tested by Microsoft. Meet security and performance standards.
+  → Safe for company/client use.
+
+POPULAR CERTIFIED CUSTOM VISUALS:
+  • Chiclet Slicer       — Button-style slicers with images
+  • Drill Down Donut     — Interactive donut with hierarchy drill
+  • Bullet Chart         — KPI with target comparison
+  • Gantt Chart          — Project timeline
+  • Tornado Chart        — Two-sided comparison
+  • Deneb               — Custom D3/Vega-Lite visualisations
+  • HTML Content         — Display formatted HTML in Power BI
+  • Image Grid           — Display product/person images`},
+{h:"JSON Theme Files",p:`Power BI themes let you set:
+  • Colour palette (your brand colours)
+  • Font family and sizes
+  • Background colours
+  • Default visual formatting
+
+APPLY THEME:
+  View → Themes → Browse for Themes → Select JSON file
+
+CREATE THEME:
+  View → Themes → Customise Current Theme → Save as JSON
+
+THEME JSON STRUCTURE (simplified):
+  {
+    "name": "Fironix Brand Theme",
+    "dataColors": ["#F2C811", "#1A73E8", "#34A853", ...],
+    "background": "#0d1117",
+    "foreground": "#ffffff",
+    "textClasses": {
+      "title": { "fontFace": "Segoe UI", "fontSize": 16 }
+    }
+  }`}
+],
+code:`// ═══ FULL POWER BI THEME JSON (Company Branding) ═══
+{
+  "name": "Company Brand Theme",
+  "dataColors": [
+    "#1A6FBF",   // Primary Blue
+    "#F2A900",   // Accent Gold
+    "#2E7D32",   // Success Green
+    "#C62828",   // Alert Red
+    "#6A1B9A",   // Purple
+    "#00838F",   // Teal
+    "#37474F",   // Dark Grey
+    "#FF8F00"    // Amber
+  ],
+  "background":  "#FFFFFF",
+  "foreground":  "#1A1A1A",
+  "tableAccent": "#1A6FBF",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "fontFamily": [{"value": "Segoe UI"}],
+        "fontSize": [{"value": 11}]
+      }
+    },
+    "title": {
+      "*": {
+        "fontColor": [{"solid": {"color": "#1A1A1A"}}],
+        "fontSize": [{"value": 14}],
+        "fontFamily": [{"value": "Segoe UI Semibold"}]
+      }
+    },
+    "card": {
+      "*": {
+        "calloutValue": {
+          "fontSize": [{"value": 36}],
+          "fontColor": [{"solid": {"color": "#1A6FBF"}}]
+        }
+      }
+    }
+  }
+}
+
+// ═══ SAVE AND APPLY ═══
+// 1. Save as: company_theme.json
+// 2. In Power BI: View → Themes → Browse for Themes → Select file
+// 3. All visuals update instantly to match brand colours!
+
+// ═══ CHICLET SLICER (Most popular custom visual) ═══
+// Install from AppSource: "Chiclet Slicer"
+// Add as slicer — supports:
+//   - Button-style layout
+//   - Add images to each button
+//   - Custom colours per selection
+//   - Horizontal / Grid layout`,
+exercises:["Install 3 custom visuals from AppSource: Chiclet Slicer, Bullet Chart, and one of your choice. Use each in a report.","Create a JSON theme file for a company with brand colours. Apply to your report and show the before/after.","Build a 'Branded Report Template' (.pbit file) with your theme, placeholder visuals, logo, and consistent layout.","Use Deneb visual to create a custom chart that doesn't exist in Power BI's built-in library."],
+quiz:[
+{q:"CERTIFIED custom visuals are:",opts:["A) Created by Microsoft only","B) Free visuals with no restrictions","C) Verified by Microsoft for security and performance standards ✓","D) Only available with Premium license"],cor:"C"},
+{q:"A Power BI Theme JSON file primarily controls:",opts:["A) Data model relationships","B) DAX measure calculations","C) Colour palette, fonts, and default visual formatting ✓","D) Refresh schedule"],cor:"C"},
+{q:"A .pbit file is:",opts:["A) A Power BI data file","B) A Power BI Template (structure without data) ✓","C) A Power BI Theme file","D) A Power BI Export format"],cor:"B"}
+],
+tips:["💡 Build a branded .pbit template file for your company — every new report starts with correct colours and fonts instantly","⭐ Chiclet Slicer is the most impactful custom visual for dashboards — upgrade button slicers with images","📌 Keep custom visuals minimal — too many different visual types makes a dashboard look unpolished"]},
+
+// ─────────────────────────────────────
+{day:27,week:4,title:"Power BI + Python & R Integration",sub:"Python visuals, Python in Power Query, matplotlib, pandas, R visuals",
+objectives:["Enable Python and R in Power BI Desktop settings","Create Python-powered visuals using matplotlib/seaborn","Use Python scripts in Power Query for advanced data transformations","Run R visuals for statistical plots","Understand when to use Python/R vs native Power BI"],
+concepts:[
+{h:"Python in Power BI — Overview",p:`WHERE PYTHON IS USED:
+  1. PYTHON VISUAL      → Create charts using matplotlib/seaborn
+  2. PYTHON DATA SOURCE → Load data using Python scripts (e.g., web scraping, APIs)
+  3. PYTHON IN POWER QUERY → Transform data with pandas (merge, reshape, ML prediction)
+
+SETUP:
+  1. Install Python (3.7+) with: pandas, matplotlib, seaborn, scikit-learn
+     pip install pandas matplotlib seaborn scikit-learn
+
+  2. In Power BI Desktop:
+     File → Options → Python scripting → Set Python installation path
+
+  3. Enable Python visuals:
+     Visualisations pane → Python Visual icon → Enable script visuals`},
+{h:"Python Visual",p:`When you add a Python Visual:
+  1. Drag fields from Fields pane into Python Visual
+  2. Power BI creates a 'dataset' DataFrame with those columns
+  3. Write Python code in the script editor
+  4. The last plot (plt.show()) renders as the visual!
+
+AVAILABLE DATAFRAME:
+  The field data is automatically available as 'dataset'
+  dataset columns = the field names you dragged
+
+COMMON LIBRARIES:
+  matplotlib → Bar, line, scatter, histogram
+  seaborn    → Statistical plots (heatmap, violin, pairplot)
+  plotly     → Interactive charts (in Python Visual, static only)`}
+],
+code:`// ═══ PYTHON VISUAL — MATPLOTLIB BAR CHART ═══
+// Fields dragged: Region, Total Sales
+
+import matplotlib
+matplotlib.use('Agg')  // Required for Power BI rendering
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# dataset is auto-created from Power BI fields
+df = dataset.groupby('Region')['Total Sales'].sum().reset_index()
+df = df.sort_values('Total Sales', ascending=True)
+
+fig, ax = plt.subplots(figsize=(8, 5))
+colors = ['#1A6FBF', '#F2A900', '#2E7D32', '#C62828', '#6A1B9A']
+bars = ax.barh(df['Region'], df['Total Sales'], color=colors[:len(df)])
+
+ax.set_xlabel('Total Sales (₹)', fontsize=12)
+ax.set_title('Sales by Region', fontsize=14, fontweight='bold')
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+# Add value labels
+for bar in bars:
+    width = bar.get_width()
+    ax.text(width * 1.01, bar.get_y() + bar.get_height()/2,
+            f'₹{width/100000:.1f}L', va='center', fontsize=10)
+
+plt.tight_layout()
+plt.show()  // This line renders the chart in Power BI
+
+// ═══ SEABORN HEATMAP ═══
+// Fields: Month, Category, Revenue
+
+import seaborn as sns
+pivot = dataset.pivot_table(values='Revenue', index='Category',
+                             columns='Month', aggfunc='sum')
+fig, ax = plt.subplots(figsize=(12, 6))
+sns.heatmap(pivot, annot=True, fmt='.0f', cmap='YlOrRd', ax=ax,
+            linewidths=0.5, cbar_kws={'label': 'Revenue'})
+ax.set_title('Revenue Heatmap: Category × Month', fontsize=14)
+plt.tight_layout()
+plt.show()
+
+// ═══ PYTHON IN POWER QUERY ═══
+// Home → Get Data → More → Other → Python Script
+
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# Load data and add ML prediction column
+df = pd.read_excel("C:\\PBI_Data\\Sales.xlsx")
+df['Month_Num'] = pd.to_datetime(df['Date']).dt.month
+
+model = LinearRegression()
+model.fit(df[['Month_Num']], df['Sales'])
+df['Predicted_Sales'] = model.predict(df[['Month_Num']])
+
+# Return to Power BI
+dataset = df`,
+exercises:["Enable Python in Power BI. Create a Python Visual: seaborn heatmap showing Sales by Category (rows) vs Month (columns).","Use Python in Power Query to load data from a web API (use requests library) into Power BI.","Create a matplotlib scatter plot comparing two measures. Add a regression trend line using numpy.polyfit.","Install R in Power BI Desktop. Create an R visual: ggplot2 box plot of Sales distribution by Region."],
+quiz:[
+{q:"In Python Visual, the data from dragged Power BI fields is available as:",opts:["A) A list variable named 'fields'","B) A pandas DataFrame named 'dataset' ✓","C) A dictionary named 'data'","D) Individual variables per column"],cor:"B"},
+{q:"Python in Power Query is used for:",opts:["A) Creating visualisations","B) Advanced data loading and transformation (using pandas/ML) ✓","C) Defining DAX measures","D) Publishing to Power BI Service"],cor:"B"},
+{q:"matplotlib.use('Agg') in Python Visual is required because:",opts:["A) Agg is faster than other backends","B) Power BI doesn't support interactive display mode — Agg renders to image ✓","C) It enables dark mode for charts","D) It imports seaborn automatically"],cor:"B"}
+],
+tips:["💡 Python visuals refresh SLOWLY — use them only for charts that truly can't be built with native visuals","⭐ Python in Power Query is extremely powerful: clean messy data, call APIs, run ML models — all before loading","📌 Keep Python scripts short and efficient in Power BI — complex scripts cause long refresh times"]},
+
+// ─────────────────────────────────────
+{day:28,week:4,title:"Capstone Project & Career Guide",sub:"End-to-end project, best practices, PL-300 exam tips, interview Q&A, career paths",
+objectives:["Build a complete end-to-end Power BI project independently","Apply all 27 days of concepts in one integrated report","Review Power BI best practices for professional work","Prepare for PL-300 Microsoft Certification exam","Answer common Power BI interview questions confidently"],
+concepts:[
+{h:"Capstone Project — Sales Analytics Dashboard",p:`BUILD A COMPLETE REPORT WITH:
+
+DATA SOURCES (3+ tables):
+  • Sales.xlsx        — fact table (OrderID, Date, CustomerID, ProductID, Qty, Amount, Discount)
+  • Customers.xlsx    — CustomerID, Name, City, State, Segment
+  • Products.xlsx     — ProductID, Name, Category, Sub-Category, Price
+  • Date Table        — Created in DAX using CALENDAR()
+
+POWER QUERY STEPS:
+  → Clean all tables (types, duplicates, blanks)
+  → Create Full Name column
+  → Add Product Label (Name + Category)
+  → Append current + previous year data if available
+
+MODEL:
+  → Star Schema: Sales (fact) connected to Date, Customers, Products
+  → Mark Date table
+  → Create _Measures table
+
+DAX MEASURES (minimum 15):
+  Total Revenue, Total Orders, Unique Customers, Avg Order,
+  Sales YTD, Sales MTD, LY Sales, YoY Growth %, YoY Growth Amount,
+  Profit Margin %, Product Rank, Customer Rank, Top 10 Revenue,
+  Sales % of Total, Dynamic Title
+
+REPORT PAGES (4+ pages):
+  Page 1: Executive Overview (KPIs, YoY trend, Regional map)
+  Page 2: Product Analysis (Top 10, Category breakdown, Treemap)
+  Page 3: Customer Analysis (Segments, RFM buckets, Drill through)
+  Page 4: Customer Detail (Drill through target page)`},
+{h:"Power BI Best Practices Summary",p:`MODELLING:
+  ✓ Use Star Schema always
+  ✓ Always have a marked Date Table
+  ✓ Hide FK columns from Fields pane
+  ✓ Use _Measures table for all measures
+
+DAX:
+  ✓ Prefer measures over calculated columns
+  ✓ Use VAR for intermediate calculations
+  ✓ Use DIVIDE() not /
+  ✓ Comment complex measures with // notes
+
+DESIGN:
+  ✓ Max 5-7 visuals per page
+  ✓ 2-3 colours maximum per report
+  ✓ Every visual has a clear title
+  ✓ Add slicers for Region, Date, Category
+  ✓ Use consistent fonts throughout
+
+PERFORMANCE:
+  ✓ Remove unused columns before loading
+  ✓ Apply date filters early in Power Query
+  ✓ Measure performance with Performance Analyzer`},
+{h:"PL-300 Exam Tips",p:`Microsoft PL-300: Power BI Data Analyst Associate
+
+EXAM TOPICS (% weight):
+  30% — Prepare the Data (Power Query, cleaning)
+  25% — Model the Data (relationships, DAX, Date tables)
+  25% — Visualise and Analyse Data (visuals, filters, RLS)
+  20% — Deploy and Maintain (Service, refresh, workspaces)
+
+EXAM FORMAT:
+  40-60 questions | Multiple choice | Case studies | Lab tasks
+  Duration: 120 minutes | Passing score: 700/1000
+
+STUDY RESOURCES:
+  Microsoft Learn: learn.microsoft.com/power-bi (FREE)
+  Practice tests: MeasureUp, Whizlabs
+  YouTube: Guy in a Cube, SQLBI, Chandoo
+  Official docs: docs.microsoft.com/power-bi`}
+],
+code:`// ═══ 28-DAY REVIEW — KEY DAX PATTERNS ═══
+
+// 1. Basic Aggregation
+Total Sales = SUM(Sales[Amount])
+
+// 2. Safe Division
+Margin % = DIVIDE(SUM(Sales[Profit]), SUM(Sales[Revenue]))
+
+// 3. Year over Year
+YoY Growth = DIVIDE([Total Sales] - [LY Sales], [LY Sales])
+LY Sales = CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Date[Date]))
+
+// 4. YTD
+Sales YTD = TOTALYTD([Total Sales], Date[Date])
+
+// 5. % of Total
+Sales % = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL(Sales)))
+
+// 6. Ranking
+Product Rank = RANKX(ALL(Products), [Total Sales],, DESC, DENSE)
+
+// 7. Top N
+Top 5 Sales = CALCULATE([Total Sales], TOPN(5, Products, [Total Sales]))
+
+// 8. Dynamic Title
+Title = "Sales: " & SELECTEDVALUE(Date[Year], "All Years")
+
+// 9. SWITCH Multi-Category
+Tier = SWITCH(TRUE(),
+  [Total Sales] > 100000, "Platinum",
+  [Total Sales] > 50000,  "Gold",
+  [Total Sales] > 10000,  "Silver",
+  "Bronze")
+
+// 10. SUMX Revenue from components
+Revenue = SUMX(Sales, Sales[Qty] * Sales[UnitPrice] * (1-Sales[Discount]))
+
+// 11. Conditional formatting measure (for matrix)
+Heat Color = 
+  IF([Sales % of Category] > 0.5, 3,
+     IF([Sales % of Category] > 0.25, 2, 1))
+
+// 12. RLS Dynamic Filter
+[UserEmail] = USERPRINCIPALNAME()
+
+// 13. Time comparison
+MoM Growth % = DIVIDE([Total Sales] - [PM Sales], [PM Sales])
+PM Sales = CALCULATE([Total Sales], DATEADD(Date[Date], -1, MONTH))
+
+// 14. Error handling
+Safe Calc = IFERROR([Complex Measure], BLANK())
+
+// 15. VAR optimisation
+Optimised Measure = 
+  VAR Sales = [Total Sales]
+  VAR Target = [Sales Target]
+  VAR Diff = Sales - Target
+  RETURN IF(ISBLANK(Target), "No Target", FORMAT(Diff/Target, "+0.0%;-0.0%"))`,
+exercises:["Complete the full Capstone Project — 4-page Sales Analytics Dashboard. Present it to the class.","Self-review against the best practices checklist — score yourself and note areas for improvement.","Take a PL-300 practice test (free on Microsoft Learn) — aim for 70%+ before your real exam.","Prepare answers for all 20 interview questions listed below and practice presenting verbally."],
+quiz:[
+{q:"PL-300 exam requires a passing score of:",opts:["A) 600/1000","B) 650/1000","C) 700/1000 ✓","D) 750/1000"],cor:"C"},
+{q:"Which resource is the official FREE study material for PL-300?",opts:["A) YouTube only","B) Udemy","C) Microsoft Learn (learn.microsoft.com) ✓","D) LinkedIn Learning"],cor:"C"},
+{q:"The most important daily-use DAX function is:",opts:["A) SUM","B) IF","C) CALCULATE ✓","D) TOTALYTD"],cor:"C"}
+],
+tips:[
+"⭐ PL-300 STUDY PLAN: Week 1 = Microsoft Learn modules | Week 2 = Practice reports | Week 3 = Mock tests | Week 4 = Lab practice",
+"💼 INTERVIEW TIP: Always mention Star Schema, Date Tables, and CALCULATE in interviews — these show deep knowledge",
+"🚀 CAREER PATHS: Power BI Developer → BI Analyst → Data Analyst → BI Architect → Power Platform Developer"
+]}
+
+];  // end DAYS array
+
+// ─────────────────────────────────────
+// RENDER ENGINE
+// ─────────────────────────────────────
+let current = 1;
+
+const WEEK_META = [
+  {label:"Week 1 — Foundations",        cls:"t1", dot:"#10B981"},
+  {label:"Week 2 — Modelling & DAX",    cls:"t2", dot:"#3B82F6"},
+  {label:"Week 3 — Advanced Features",  cls:"t3", dot:"#8B5CF6"},
+  {label:"Week 4 — Expert & Deploy",    cls:"t4", dot:"#EF4444"},
+];
+
+function buildNav(){
+  const nav = document.getElementById('sb-nav');
+  nav.innerHTML='';
+  WEEK_META.forEach((wm,wi)=>{
+    const wdays = DAYS.filter(d=>d.week===wi+1);
+    const grp = document.createElement('div');
+    grp.innerHTML=`<div class="wk-label"><span class="wk-dot" style="background:${wm.dot}"></span><span style="color:${wm.dot}">${wm.label}</span></div>`;
+    wdays.forEach(d=>{
+      const btn = document.createElement('button');
+      btn.className='day-btn'+(d.day===current?' act':'');
+      btn.id='nav-d'+d.day;
+      btn.textContent=`Day ${d.day} — ${d.title}`;
+      btn.onclick=()=>goDay(d.day);
+      grp.appendChild(btn);
+    });
+    nav.appendChild(grp);
+  });
+}
+
+function goDay(n){
+  current=n;
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('act'));
+  const btn=document.getElementById('nav-d'+n);
+  if(btn){btn.classList.add('act'); btn.scrollIntoView({block:'nearest'});}
+  const d=DAYS.find(x=>x.day===n);
+  const pct=Math.round((n/28)*100);
+  document.getElementById('pb').style.width=pct+'%';
+  render(d);
+  document.getElementById('main').scrollTop=0;
+}
+
+function render(d){
+  const wm=WEEK_META[d.week-1];
+  let html=`
+  <div class="d-head">
+    <div class="d-tag ${wm.cls}">📅 Week ${d.week} · Day ${d.day} of 28</div>
+    <div class="d-num">Day ${d.day}</div>
+    <div class="d-title">${d.title}</div>
+    <div class="d-sub">${d.sub}</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🎯</span> Learning Objectives</div>
+    <ul class="obj-list">
+      ${d.objectives.map(o=>`<li>${o}</li>`).join('')}
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>📖</span> Concepts & Theory</div>
+    ${d.concepts.map(c=>`
+      <div class="con">
+        <h4>▶ ${c.h}</h4>
+        <p>${c.p}</p>
+      </div>
+    `).join('')}
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>💻</span> Code Examples & Syntax</div>
+    <pre>${escHtml(d.code)}</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🔬</span> Hands-On Exercises</div>
+    ${d.exercises.map((e,i)=>`
+      <div class="ex-item">
+        <span class="ex-num">Ex ${i+1}</span>
+        <p>${e}</p>
+      </div>
+    `).join('')}
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>📝</span> Quick Quiz (MCQ)</div>
+    ${d.quiz.map((q,i)=>`
+      <div class="quiz-item">
+        <div class="quiz-q">Q${i+1}. ${q.q}</div>
+        <ul class="quiz-opts">
+          ${q.opts.map(o=>`<li class="${o.includes('✓')?'cor':''}">${o.replace(' ✓','')}</li>`).join('')}
+        </ul>
+        <div style="font-size:12px;color:#3fb950;margin-top:6px">✓ Answer: Option ${q.cor}</div>
+      </div>
+    `).join('')}
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>💡</span> Teacher Tips & Notes</div>
+    ${d.tips.map(t=>`<div class="tip">${t}</div>`).join('')}
+  </div>
+
+  <div class="nav-row">
+    ${d.day>1 ? `<button class="nav-b" onclick="goDay(${d.day-1})">← Day ${d.day-1}</button>` : ''}
+    <button class="nav-b" onclick="window.print()">🖨️ Print This Day</button>
+    ${d.day<28 ? `<button class="nav-b pri" onclick="goDay(${d.day+1})">Day ${d.day+1} →</button>` : '<span style="color:var(--acc);font-weight:700;padding:10px 0">🏆 Congratulations! All 28 Days Complete!</span>'}
+  </div>
+  `;
+  document.getElementById('day-content').innerHTML=html;
+}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function filterNav(q){
+  const v=q.toLowerCase();
+  document.querySelectorAll('.day-btn').forEach(b=>{
+    b.style.display=b.textContent.toLowerCase().includes(v)?'':'none';
+  });
+}
+
+// INIT
+buildNav();
+goDay(1);
+</script>
+</body>
+</html>

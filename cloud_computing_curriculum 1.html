@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cloud Computing — Deployment Plan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #0a0e14;
+    --panel: #10151f;
+    --panel-raised: #161c29;
+    --line: #232b3a;
+    --text: #c9d1d9;
+    --muted: #6b7280;
+    --cyan: #00d9ff;
+    --amber: #ffb454;
+    --green: #3fb950;
+    --violet: #a371f7;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(0,217,255,0.06), transparent 40%),
+      radial-gradient(circle at 85% 100%, rgba(255,180,84,0.05), transparent 40%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    padding:24px 16px 60px;
+  }
+
+  .wrap{max-width:1140px; margin:0 auto;}
+
+  .console-bar{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .console-id{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:0.5px;
+  }
+  .console-id .dot{
+    display:inline-block; width:7px; height:7px; border-radius:50%;
+    background:var(--green); margin-right:8px;
+    box-shadow:0 0 8px var(--green);
+  }
+  h1{
+    font-family:var(--mono);
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:-0.3px;
+    color:#fff;
+    margin-top:4px;
+  }
+  h1 span{color:var(--cyan);}
+
+  .plan-toggle{
+    display:flex;
+    background:var(--panel-raised);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:4px;
+    gap:4px;
+  }
+  .plan-toggle button{
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:600;
+    padding:9px 18px;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .plan-toggle button.active{
+    background:var(--cyan);
+    color:#001018;
+  }
+  .plan-toggle button:not(.active):hover{color:var(--text);}
+
+  .progress-row{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 20px;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .progress-label{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .progress-track{
+    flex:1;
+    height:8px;
+    background:var(--panel-raised);
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--cyan), var(--green));
+    width:0%;
+    transition:width .3s ease;
+  }
+  .progress-pct{
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:700;
+    color:var(--cyan);
+    min-width:42px;
+    text-align:right;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    gap:20px;
+  }
+  @media (max-width:760px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .day-list{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px;
+    max-height:720px;
+    overflow-y:auto;
+  }
+  .week-label{
+    font-family:var(--mono);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--muted);
+    padding:10px 10px 4px;
+  }
+  .day-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:9px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    color:var(--muted);
+    transition:background .12s ease;
+  }
+  .day-item:hover{background:var(--panel-raised);}
+  .day-item.active{
+    background:rgba(0,217,255,0.1);
+    color:#fff;
+    box-shadow:inset 2px 0 0 var(--cyan);
+  }
+  .day-num{
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:700;
+    color:var(--amber);
+    min-width:26px;
+  }
+  .day-item.active .day-num{color:var(--cyan);}
+  .check{
+    width:14px; height:14px;
+    border-radius:3px;
+    border:1.5px solid var(--line);
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .check.done{background:var(--green); border-color:var(--green);}
+  .check.done::after{content:"✓"; font-size:10px; color:#001018; font-weight:700;}
+  .day-title-mini{flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+  .content{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:30px 34px;
+    min-height:500px;
+  }
+  .content-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:18px;
+    margin-bottom:20px;
+  }
+  .content-eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--amber);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .content-title{
+    font-size:25px;
+    font-weight:700;
+    color:#fff;
+    letter-spacing:-0.3px;
+  }
+  .mark-btn{
+    font-family:var(--mono);
+    font-size:12px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:7px;
+    border:1px solid var(--line);
+    background:var(--panel-raised);
+    color:var(--text);
+    cursor:pointer;
+    white-space:nowrap;
+    transition:all .15s ease;
+  }
+  .mark-btn:hover{border-color:var(--cyan); color:var(--cyan);}
+  .mark-btn.is-done{background:rgba(63,185,80,0.12); border-color:var(--green); color:var(--green);}
+
+  .overview{
+    font-size:14.5px;
+    line-height:1.7;
+    color:var(--text);
+    background:var(--panel-raised);
+    border-radius:8px;
+    padding:14px 16px;
+    border:1px solid var(--line);
+  }
+
+  .section-label{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--cyan);
+    margin:24px 0 12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .section-label::before{content:"//"; color:var(--muted);}
+
+  .topic-block{
+    margin-bottom:14px;
+    padding-left:18px;
+    border-left:2px solid var(--line);
+  }
+  .topic-block .t-title{
+    font-size:14.5px;
+    font-weight:600;
+    color:#fff;
+    margin-bottom:4px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .topic-block .t-title::before{
+    content:"▸";
+    color:var(--amber);
+  }
+  .topic-block .t-detail{
+    font-size:13.5px;
+    line-height:1.65;
+    color:var(--text);
+    opacity:0.9;
+  }
+
+  .terms-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  @media (max-width:600px){.terms-grid{grid-template-columns:1fr;}}
+  .term-card{
+    background:var(--panel-raised);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:12px 14px;
+  }
+  .term-card .term{
+    font-family:var(--mono);
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--violet);
+    margin-bottom:4px;
+  }
+  .term-card .def{
+    font-size:13px;
+    line-height:1.55;
+    color:var(--text);
+    opacity:0.9;
+  }
+
+  .lab-box{
+    background:var(--panel-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--green);
+    border-radius:8px;
+    padding:16px 18px;
+  }
+  .lab-box b{color:var(--green); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.5px;}
+  .lab-steps{
+    list-style:none;
+    counter-reset:step;
+    margin-top:10px;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+  }
+  .lab-steps li{
+    counter-increment:step;
+    padding-left:28px;
+    position:relative;
+    font-size:13.5px;
+    line-height:1.6;
+    color:var(--text);
+  }
+  .lab-steps li::before{
+    content:counter(step);
+    position:absolute;
+    left:0; top:0;
+    width:19px; height:19px;
+    background:rgba(63,185,80,0.15);
+    border:1px solid var(--green);
+    color:var(--green);
+    border-radius:5px;
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    margin-top:28px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+  }
+  .nav-btn{
+    font-family:var(--mono);
+    font-size:12px;
+    padding:8px 14px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--muted);
+    cursor:pointer;
+  }
+  .nav-btn:hover:not(:disabled){color:var(--cyan); border-color:var(--cyan);}
+  .nav-btn:disabled{opacity:0.3; cursor:not-allowed;}
+
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-track{background:var(--panel);}
+  ::-webkit-scrollbar-thumb{background:var(--line); border-radius:4px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="console-bar">
+    <div>
+      <div class="console-id"><span class="dot"></span>fironix-training / cloud-computing-track</div>
+      <h1>Cloud Computing <span>Study Plan</span></h1>
+    </div>
+    <div class="plan-toggle">
+      <button id="btn15" class="active" onclick="setPlan(15)">15-DAY</button>
+      <button id="btn30" onclick="setPlan(30)">30-DAY</button>
+    </div>
+  </div>
+
+  <div class="progress-row">
+    <div class="progress-label" id="progressLabel">DAYS COMPLETE</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-pct" id="progressPct">0%</div>
+  </div>
+
+  <div class="grid">
+    <div class="day-list" id="dayList"></div>
+    <div class="content" id="content"></div>
+  </div>
+
+</div>
+
+<script>
+const DATA = {
+15:[
+{week:"Week 1 · Foundations", eyebrow:"Day 01", title:"Introduction to Cloud Computing",
+overview:"Cloud computing means renting IT resources — servers, storage, databases, networking — over the internet instead of owning and running physical hardware. Today builds the mental model for everything that follows: why cloud exists, and what problem it actually solves for businesses.",
+topics:[
+ {t:"From mainframes to cloud", d:"IT evolved from expensive centralized mainframes, to client-server setups, to virtualized data centers, to today's cloud model where compute is delivered as a metered utility, similar to electricity."},
+ {t:"On-premise vs cloud", d:"On-prem means buying servers, racking them, cooling them, and staffing people to maintain them — high upfront cost, slow to scale. Cloud replaces that with rented infrastructure billed by usage, with scaling in minutes instead of months."},
+ {t:"Core characteristics", d:"NIST defines 5 traits: on-demand self-service, broad network access, resource pooling (multi-tenancy), rapid elasticity, and measured service (pay only for what you use)."},
+ {t:"Where cloud shows up daily", d:"Netflix streams video from AWS. Zoom's call infrastructure runs on cloud servers. Swiggy's order-matching algorithm scales up during lunch rush using auto-scaling cloud compute."}
+],
+terms:[
+ {term:"Elasticity", def:"The ability to automatically scale resources up or down based on real-time demand."},
+ {term:"Multi-tenancy", def:"Multiple customers sharing the same physical hardware, isolated from each other logically."},
+ {term:"CapEx vs OpEx", def:"Capital Expenditure (buying hardware upfront) vs Operational Expenditure (paying-as-you-go for cloud usage)."},
+ {term:"Utility computing", def:"IT resources billed like electricity or water — pay for what you consume, nothing more."}
+],
+lab:["Sign up for an AWS Free Tier account (requires a card, but free-tier limits won't charge you if you stay within them).","Sign up for an Azure Free Trial account separately.","Log in to both consoles and spend 15 minutes clicking through the service catalog on each — just look, don't launch anything yet.","Write down 3 differences you noticed between the two consoles' layout and navigation."]},
+
+{week:"Week 1 · Foundations", eyebrow:"Day 02", title:"Cloud Service Models",
+overview:"Cloud services aren't one-size-fits-all — they come in layers of abstraction. Understanding IaaS, PaaS, and SaaS tells you exactly how much control you have versus how much the provider manages for you, which is the first decision in any cloud project.",
+topics:[
+ {t:"IaaS — Infrastructure as a Service", d:"You rent raw compute, storage, and networking (e.g. AWS EC2, Azure VMs) and manage the OS, runtime, and app yourself. Maximum control, maximum responsibility."},
+ {t:"PaaS — Platform as a Service", d:"The provider manages the OS and runtime; you just deploy code (e.g. AWS Elastic Beanstalk, Heroku, Azure App Service). Faster to ship, less control over the underlying environment."},
+ {t:"SaaS — Software as a Service", d:"Fully finished software delivered over the browser — Gmail, Office 365, Zoom. You configure settings; the provider handles literally everything else."},
+ {t:"The responsibility ladder", d:"As you move IaaS → PaaS → SaaS, your operational burden decreases but so does your flexibility. Picking the right layer is a tradeoff between speed and control."}
+],
+terms:[
+ {term:"IaaS", def:"Infrastructure as a Service — rented virtual hardware (compute, storage, network)."},
+ {term:"PaaS", def:"Platform as a Service — a managed environment for deploying code without managing servers."},
+ {term:"SaaS", def:"Software as a Service — a complete application accessed via the browser."},
+ {term:"Shared Responsibility Model", def:"The split between what the cloud provider secures/manages and what the customer is responsible for."}
+],
+lab:["List 5 apps you personally use daily — e.g. Gmail, Netflix, WhatsApp, a college portal, a coding tool.","For each, decide if it's IaaS, PaaS, or SaaS from the user's perspective.","Justify each choice in 1 sentence.","Bonus: identify one app that mixes models internally (e.g. a SaaS product built on top of the provider's own IaaS)."]},
+
+{week:"Week 1 · Foundations", eyebrow:"Day 03", title:"Cloud Deployment Models",
+overview:"Beyond service models, cloud comes in different deployment flavors depending on who owns and who can access the infrastructure. This decision affects cost, control, compliance, and security posture for an organization.",
+topics:[
+ {t:"Public cloud", d:"Infrastructure owned by a third party (AWS, Azure, GCP) and shared across many customers over the internet — lowest cost, fastest to start, least control over physical infrastructure."},
+ {t:"Private cloud", d:"Infrastructure dedicated to a single organization, either on-premise or hosted — higher cost and management overhead, but maximum control and compliance flexibility."},
+ {t:"Hybrid cloud", d:"A mix of private and public — e.g. sensitive data stays on a private cloud while burst workloads run on public cloud. Common in banking and healthcare."},
+ {t:"Multi-cloud", d:"Using more than one public cloud provider simultaneously (e.g. AWS for compute, GCP for AI/ML) to avoid vendor lock-in or use best-of-breed services."}
+],
+terms:[
+ {term:"Vendor lock-in", def:"Difficulty switching providers because of deep dependency on one provider's proprietary services."},
+ {term:"Community cloud", def:"Infrastructure shared by several organizations with common concerns (e.g. government agencies)."},
+ {term:"Data residency", def:"Legal requirement that certain data must physically stay within a specific country's borders."},
+ {term:"Burst workload", def:"A temporary spike in demand handled by scaling into public cloud rather than over-provisioning private infrastructure."}
+],
+lab:["Pick two scenarios: a bank handling customer financial data, and a college-project startup building an app.","Write a half-page recommendation for each: which deployment model fits, and why.","Include at least one risk of getting the deployment model choice wrong (cost overrun, compliance violation, etc.).","Compare your answers with what real banks (e.g. hybrid setups) actually do — search online for one example."]},
+
+{week:"Week 1 · Foundations", eyebrow:"Day 04", title:"Virtualization & Hypervisors",
+overview:"Virtualization is the technology that makes cloud computing physically possible — it's how one physical server becomes dozens of independent virtual machines that different customers can rent without ever touching each other's data.",
+topics:[
+ {t:"What virtualization does", d:"A hypervisor sits between physical hardware and virtual machines, splitting one physical server's CPU, RAM, and storage into multiple isolated virtual environments."},
+ {t:"Type 1 hypervisors (bare-metal)", d:"Run directly on hardware with no host OS underneath — e.g. VMware ESXi, Microsoft Hyper-V, KVM. This is what cloud providers use internally for performance and isolation."},
+ {t:"Type 2 hypervisors (hosted)", d:"Run as an application on top of an existing OS — e.g. VirtualBox, VMware Workstation. Good for learning and local testing, not for production cloud infrastructure."},
+ {t:"VMs vs containers, a first look", d:"A VM virtualizes an entire OS (heavy, minutes to boot); a container shares the host OS kernel and just isolates the application (light, seconds to boot). We'll go deeper on Day 12."}
+],
+terms:[
+ {term:"Hypervisor", def:"Software layer that creates and manages virtual machines on physical hardware."},
+ {term:"Host vs Guest", def:"The Host is the physical machine; the Guest is the virtual machine running on top of it."},
+ {term:"Live migration", def:"Moving a running VM from one physical host to another with zero downtime."},
+ {term:"Snapshot", def:"A saved state of a VM at a point in time, used for backup or quick rollback."}
+],
+lab:["Download and install VirtualBox (free) on your laptop.","Create one Ubuntu Server VM — allocate 2GB RAM and 20GB disk.","Boot it and note how long startup takes.","Check Task Manager/Activity Monitor on your host machine to see how much RAM and CPU the VM is consuming while idle."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 05", title:"AWS Fundamentals & IAM",
+overview:"Before touching any AWS service, you need to understand the account structure and identity system — this is the single most important security topic in cloud computing, and the one beginners get wrong most often.",
+topics:[
+ {t:"AWS global infrastructure", d:"AWS operates in Regions (geographic areas like ap-south-1 Mumbai), each containing multiple Availability Zones (physically separate data centers), plus Edge Locations for content delivery."},
+ {t:"Root account vs IAM users vs IAM roles", d:"The root account has unlimited power and should never be used day-to-day. IAM users are individual identities with specific permissions. IAM roles are temporary identities assumed by services or users for a task."},
+ {t:"Anatomy of an IAM policy", d:"A policy is JSON with an Effect (Allow/Deny), Action (which API calls), and Resource (which specific AWS resource it applies to) — this is how fine-grained permission control works."},
+ {t:"Console tour", d:"Billing dashboard for cost tracking, the top search bar for jumping to any service, and resource groups for organizing related resources by project or environment."}
+],
+terms:[
+ {term:"IAM", def:"Identity and Access Management — AWS's system for controlling who can do what."},
+ {term:"MFA", def:"Multi-Factor Authentication — a second verification step beyond password, critical for root account security."},
+ {term:"Availability Zone (AZ)", def:"An isolated physical data center within a region, used for fault tolerance."},
+ {term:"Least privilege", def:"The security principle of granting only the minimum permissions needed to do a job."}
+],
+lab:["Enable MFA on your AWS root account immediately.","Create an IAM user named 'training-user' with programmatic + console access.","Attach a custom policy that allows only EC2 actions (deny everything else).","Log out, log back in as that IAM user, and confirm you cannot open S3 or any other service — only EC2."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 06", title:"AWS Compute — EC2",
+overview:"EC2 (Elastic Compute Cloud) is AWS's flagship IaaS product — virtual servers you can launch in minutes. Nearly every AWS architecture touches EC2 somewhere, so getting comfortable launching, configuring, and connecting to instances is foundational.",
+topics:[
+ {t:"Instance types and sizing", d:"Families like t2/t3 (burstable, general purpose), m5 (balanced), c5 (compute-optimized) let you match hardware to workload — picking the wrong type wastes money or starves your app."},
+ {t:"AMIs — Amazon Machine Images", d:"An AMI is a template containing the OS and pre-installed software used to launch an instance. AWS provides public AMIs; you can also create your own custom AMIs."},
+ {t:"Key pairs, security groups, elastic IPs", d:"Key pairs are SSH credentials for secure login. Security groups act as a virtual firewall. Elastic IPs are static public IPs you can reassign between instances."},
+ {t:"Connecting via SSH", d:"After launch, you connect using the private key file and the instance's public IP or DNS name — the standard way admins manage Linux cloud servers."}
+],
+terms:[
+ {term:"EC2", def:"Elastic Compute Cloud — AWS's virtual server service."},
+ {term:"AMI", def:"Amazon Machine Image — a template used to launch EC2 instances."},
+ {term:"Security Group", def:"A virtual firewall controlling inbound/outbound traffic to an instance."},
+ {term:"Elastic IP", def:"A static, reassignable public IP address for an EC2 instance."}
+],
+lab:["Launch a t2.micro Ubuntu 22.04 instance from the free tier.","Create and download a new key pair, and open port 22 (SSH) and 80 (HTTP) in the security group.","SSH into the instance from your terminal using the .pem key file.","Install nginx (sudo apt update && sudo apt install nginx -y) and confirm you can see the default page via the instance's public IP in a browser."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 07", title:"AWS Storage",
+overview:"Cloud storage isn't a single product — AWS offers different storage types optimized for different access patterns. Picking the wrong one is one of the most common (and expensive) beginner mistakes.",
+topics:[
+ {t:"S3 — Simple Storage Service", d:"Object storage for files of any size — used for backups, static websites, data lakes. Storage classes (Standard, Infrequent Access, Glacier) let you trade retrieval speed for cost."},
+ {t:"EBS — Elastic Block Store", d:"Block-level storage attached to a single EC2 instance, like a virtual hard drive — used for OS disks and databases that need low-latency access."},
+ {t:"EFS — Elastic File System", d:"A shared, network-attached file system that multiple EC2 instances can mount simultaneously — used when several servers need access to the same files."},
+ {t:"Choosing the right storage", d:"S3 for durable object storage and static content; EBS for a single instance's persistent disk; EFS when multiple instances need shared access to the same files."}
+],
+terms:[
+ {term:"Object storage", def:"Storage that treats data as discrete objects with metadata, accessed via API — not a traditional file system."},
+ {term:"Block storage", def:"Storage split into fixed-size blocks, mounted like a physical disk — required for OS boot volumes."},
+ {term:"Storage class", def:"A pricing/performance tier within S3, e.g. Standard, Infrequent Access, Glacier."},
+ {term:"Durability", def:"The probability data won't be lost — S3 Standard offers 11 nines (99.999999999%) durability."}
+],
+lab:["Create an S3 bucket with a globally unique name.","Upload 3-4 sample files (images or HTML).","Enable Static Website Hosting on the bucket and set index.html as the index document.","Adjust the bucket policy to allow public read access, then open the generated website URL in your browser."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 08", title:"AWS Networking — VPC",
+overview:"A VPC (Virtual Private Cloud) is your own isolated network inside AWS — every EC2 instance, database, and load balancer lives inside one. Understanding VPC basics is what separates someone who can launch a server from someone who can design secure cloud architecture.",
+topics:[
+ {t:"VPC and subnets", d:"A VPC is a private network with a defined IP range (CIDR block). Subnets divide that range into smaller segments — public subnets face the internet, private subnets don't."},
+ {t:"Route tables", d:"Route tables decide where network traffic goes — a public subnet's route table sends 0.0.0.0/0 traffic to an Internet Gateway; a private subnet routes it through a NAT Gateway instead."},
+ {t:"Internet Gateway vs NAT Gateway", d:"An Internet Gateway allows two-way internet access for public subnets. A NAT Gateway allows private subnet instances to reach the internet outbound-only, without being reachable from outside."},
+ {t:"Security Groups vs NACLs", d:"Security Groups are stateful and attached to instances. Network ACLs are stateless and attached to subnets, acting as an additional coarse-grained firewall layer."}
+],
+terms:[
+ {term:"CIDR block", def:"A notation (e.g. 10.0.0.0/16) defining a range of IP addresses for a network or subnet."},
+ {term:"Public vs Private subnet", def:"Public subnets route to the internet directly; private subnets don't have direct inbound internet access."},
+ {term:"NAT Gateway", def:"A managed service letting private subnet resources initiate outbound internet connections securely."},
+ {term:"Route Table", def:"A set of rules determining where network traffic from a subnet is directed."}
+],
+lab:["Create a custom VPC with CIDR 10.0.0.0/16.","Create one public subnet (10.0.1.0/24) and one private subnet (10.0.2.0/24) in different AZs.","Attach an Internet Gateway and update the public subnet's route table.","Launch one EC2 instance in each subnet and verify the public one is reachable from the internet while the private one is not."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 09", title:"AWS Databases",
+overview:"Almost every real application needs a database, and AWS offers managed options so you don't have to install, patch, or back up database software yourself. Today covers the two most common choices: relational (RDS) and NoSQL (DynamoDB).",
+topics:[
+ {t:"RDS — managed relational databases", d:"RDS runs MySQL, PostgreSQL, MariaDB, or SQL Server for you, handling patching, backups, and failover — you just connect and query, without managing the underlying server."},
+ {t:"Multi-AZ and read replicas", d:"Multi-AZ keeps a synchronized standby copy in a different Availability Zone for automatic failover. Read replicas offload read traffic to separate copies to improve performance."},
+ {t:"DynamoDB — NoSQL basics", d:"A fully managed key-value/document database designed for massive scale and single-digit millisecond latency, using a partition key (and optional sort key) instead of SQL tables and joins."},
+ {t:"SQL vs NoSQL, when to use which", d:"Use RDS when your data is relational with complex queries and joins. Use DynamoDB when you need extreme scale, simple access patterns, and predictable low latency."}
+],
+terms:[
+ {term:"RDS", def:"Relational Database Service — AWS's managed SQL database offering."},
+ {term:"Multi-AZ", def:"A high-availability configuration with a synchronized standby database in another Availability Zone."},
+ {term:"Partition key", def:"The primary attribute DynamoDB uses to distribute data across storage partitions."},
+ {term:"Read replica", def:"A read-only copy of a database used to offload read traffic from the primary instance."}
+],
+lab:["Launch a free-tier RDS MySQL instance (db.t2.micro, 20GB storage).","Note the endpoint, and update its security group to allow inbound access from your IP.","Connect using MySQL Workbench, DBeaver, or the CLI (mysql -h <endpoint> -u admin -p).","Create a sample table and insert 3 rows to confirm connectivity."]},
+
+{week:"Week 3 · Other Providers", eyebrow:"Day 10", title:"Introduction to Microsoft Azure",
+overview:"AWS isn't the only cloud provider — Azure has deep enterprise adoption, especially where organizations already use Windows Server, Active Directory, and Microsoft 365. Today builds the same fundamentals on a second provider.",
+topics:[
+ {t:"Azure portal and resource groups", d:"The Azure Portal is the web console; a Resource Group is a logical container that groups related resources (VMs, storage, databases) for a project so they can be managed and deleted together."},
+ {t:"Azure VMs vs AWS EC2", d:"Conceptually identical to EC2 — you pick a size (e.g. B1s, D2s), an OS image, and networking, then launch. The terminology and console layout differ but the underlying idea is the same."},
+ {t:"Azure Blob Storage vs AWS S3", d:"Blob Storage is Azure's equivalent of S3 — object storage with Hot, Cool, and Archive access tiers mirroring S3's storage classes."},
+ {t:"Azure Active Directory basics", d:"Azure AD is Microsoft's identity service, often already in use by companies for employee logins — a common reason enterprises choose Azure over other providers."}
+],
+terms:[
+ {term:"Resource Group", def:"A logical container in Azure that holds related resources for a single project or environment."},
+ {term:"Azure AD", def:"Azure Active Directory — Microsoft's cloud identity and access management service."},
+ {term:"ARM", def:"Azure Resource Manager — the deployment and management layer for Azure resources."},
+ {term:"Availability Set", def:"A logical grouping of VMs in Azure to protect against hardware failure and maintenance downtime."}
+],
+lab:["Create an Azure Free Trial account if you haven't already.","Create a new Resource Group named 'training-rg'.","Deploy a small Linux VM (B1s size) inside it.","SSH into the VM and compare the setup experience with your Day 6 EC2 launch — note 3 differences."]},
+
+{week:"Week 3 · Other Providers", eyebrow:"Day 11", title:"Introduction to Google Cloud Platform",
+overview:"GCP rounds out the 'big three' cloud providers and is particularly strong in data analytics and machine learning. Today gives you a working knowledge of GCP's console and core services so you can speak confidently about all three major providers.",
+topics:[
+ {t:"GCP console and project structure", d:"Everything in GCP lives inside a Project, which functions similarly to an AWS account or Azure resource group — it's the billing and permission boundary for your resources."},
+ {t:"Compute Engine", d:"GCP's equivalent of EC2 — virtual machines with configurable machine types, persistent disks, and custom images."},
+ {t:"Cloud Storage", d:"GCP's object storage service, equivalent to S3/Blob Storage, with Standard, Nearline, Coldline, and Archive storage classes."},
+ {t:"BigQuery, a quick look", d:"A serverless data warehouse that lets you run SQL queries over massive datasets without managing any infrastructure — a signature GCP strength not matched as directly by AWS or Azure."}
+],
+terms:[
+ {term:"Project", def:"The core organizational and billing unit in GCP, similar to an AWS account."},
+ {term:"Compute Engine", def:"GCP's virtual machine service, equivalent to EC2 or Azure VMs."},
+ {term:"BigQuery", def:"GCP's serverless, highly scalable data warehouse for running fast SQL analytics."},
+ {term:"IAM (GCP)", def:"Google Cloud's permission system, conceptually similar to AWS IAM but with its own role structure."}
+],
+lab:["Create a GCP account and a new Project.","Enable the Compute Engine API and launch a small VM (e2-micro, free tier eligible).","Create a Cloud Storage bucket and upload a sample file.","Note the total time it took from signup to a running VM, and compare it against your AWS and Azure experience."]},
+
+{week:"Week 3 · Modern Cloud", eyebrow:"Day 12", title:"Containers & Docker",
+overview:"Containers solved a problem VMs couldn't: fast, lightweight, consistent app packaging. Docker made containers mainstream, and today nearly all modern cloud-native applications are built and deployed as containers.",
+topics:[
+ {t:"Why containers beat VMs for microservices", d:"A VM virtualizes a whole OS (heavy, slow to boot); a container shares the host OS kernel and only packages the app plus its dependencies — this makes containers start in seconds and run many more per server."},
+ {t:"Images vs containers", d:"An image is a read-only template (like a class); a container is a running instance of that image (like an object) — you can run multiple containers from the same image."},
+ {t:"Writing a Dockerfile", d:"A Dockerfile is a script of instructions (FROM, COPY, RUN, CMD) that Docker uses to build an image layer by layer, producing a reproducible, portable app package."},
+ {t:"Docker Hub", d:"A public registry for storing and sharing container images — similar to how GitHub hosts code, Docker Hub hosts container images."}
+],
+terms:[
+ {term:"Image", def:"A read-only template containing an application and its dependencies, used to create containers."},
+ {term:"Container", def:"A lightweight, isolated running instance of an image, sharing the host OS kernel."},
+ {term:"Dockerfile", def:"A text file with instructions describing how to build a Docker image."},
+ {term:"Docker Hub", def:"A public registry for storing, sharing, and pulling container images."}
+],
+lab:["Install Docker Desktop (or Docker Engine on Linux).","Write a Dockerfile for a simple Node.js or Python app that starts a small web server.","Build the image (docker build -t myapp .) and run it (docker run -p 3000:3000 myapp).","Confirm the app is accessible at localhost:3000 in your browser, then push the image to Docker Hub."]},
+
+{week:"Week 3 · Modern Cloud", eyebrow:"Day 13", title:"Kubernetes Fundamentals",
+overview:"Once you have more than a handful of containers, running them by hand becomes unmanageable. Kubernetes automates deployment, scaling, and recovery of containerized applications — it's the industry-standard container orchestrator.",
+topics:[
+ {t:"Kubernetes architecture", d:"A cluster has a Control Plane (makes scheduling decisions) and Worker Nodes (run the actual containers inside Pods) — this separation lets Kubernetes self-heal and scale automatically."},
+ {t:"Deployments and Services", d:"A Deployment manages a set of identical Pods and handles rolling updates. A Service gives those Pods a stable network address, since individual Pods are ephemeral and can be replaced at any time."},
+ {t:"kubectl basics", d:"kubectl is the command-line tool for interacting with a cluster — kubectl apply to deploy, kubectl get pods to check status, kubectl logs to debug."},
+ {t:"When you actually need Kubernetes", d:"Kubernetes adds real operational complexity — it earns its keep at scale (many services, need for auto-healing/scaling) but is often overkill for a single small app."}
+],
+terms:[
+ {term:"Pod", def:"The smallest deployable unit in Kubernetes, wrapping one or more tightly coupled containers."},
+ {term:"Node", def:"A physical or virtual machine that runs Pods, managed by the Kubernetes control plane."},
+ {term:"Deployment", def:"A Kubernetes object that manages a set of replica Pods and handles updates/rollbacks."},
+ {term:"Service", def:"A stable network endpoint that routes traffic to a set of Pods, regardless of which specific Pods are running."}
+],
+lab:["Install Minikube and kubectl locally.","Start a local cluster (minikube start).","Deploy your Day 12 Docker image as a Pod using a Deployment YAML file.","Expose it via a Service (NodePort) and access it using minikube service <name>."]},
+
+{week:"Week 3 · Modern Cloud", eyebrow:"Day 14", title:"Cloud Security & Cost Management",
+overview:"Two things trip up almost every cloud beginner: leaving something insecure, and leaving something running (and billing) without realizing it. Today covers both — the essentials that keep you safe and solvent.",
+topics:[
+ {t:"Shared responsibility model, revisited", d:"AWS/Azure/GCP secure the underlying infrastructure ('security OF the cloud'); you are responsible for configuring your resources correctly ('security IN the cloud') — most breaches are misconfiguration, not provider failure."},
+ {t:"Encryption at rest and in transit", d:"Encryption at rest protects stored data (e.g. S3 server-side encryption); encryption in transit protects data moving over the network (HTTPS/TLS) — both should be enabled by default on any real project."},
+ {t:"Budgets, billing alerts, cost explorer", d:"AWS Budgets lets you set a spending threshold with email alerts; Cost Explorer visualizes spend by service over time — essential tools to avoid surprise bills."},
+ {t:"Common beginner cost traps", d:"Idle EC2 instances left running, unattached EBS volumes still being billed, and forgotten Elastic IPs are the most common ways beginners rack up unexpected charges."}
+],
+terms:[
+ {term:"Shared Responsibility Model", def:"The division of security duties between cloud provider (infrastructure) and customer (configuration, data, access)."},
+ {term:"Encryption at rest", def:"Protecting stored data by encrypting it on disk."},
+ {term:"Encryption in transit", def:"Protecting data while it moves across a network, typically via TLS/HTTPS."},
+ {term:"Cost Explorer", def:"An AWS tool for visualizing and analyzing cloud spending over time."}
+],
+lab:["Set up an AWS Budget with a $5 threshold and email alert.","Open Cost Explorer and review spend by service for the current month.","Go through your account and terminate/stop any resources from earlier labs you no longer need.","List any unattached EBS volumes or unused Elastic IPs and remove them."]},
+
+{week:"Week 3 · Capstone", eyebrow:"Day 15", title:"Capstone Project & Review",
+overview:"The final day ties every previous topic into one working deployment, plus a structured recap to lock in the fundamentals before moving toward certifications or real project work.",
+topics:[
+ {t:"Recap — service and deployment models", d:"Revisit IaaS/PaaS/SaaS and Public/Private/Hybrid/Multi-cloud — be able to classify any real-world example instantly."},
+ {t:"Recap — AWS/Azure/GCP core services", d:"Compute (EC2/VM/Compute Engine), Storage (S3/Blob/Cloud Storage), Database (RDS/DynamoDB) — know the equivalent service name across all three providers."},
+ {t:"Recap — networking, containers, Kubernetes", d:"VPC/subnets/security groups, Docker images/containers, and Kubernetes Pods/Deployments/Services — the building blocks of modern cloud-native architecture."},
+ {t:"Where to go next", d:"AWS Certified Cloud Practitioner and Microsoft Azure Fundamentals (AZ-900) are the standard entry-level certifications that validate exactly what this 15-day plan covered."}
+],
+terms:[
+ {term:"Certification", def:"A vendor-issued credential validating knowledge of a specific cloud platform, often used as a resume/interview signal."},
+ {term:"End-to-end deployment", def:"Deploying an application from code through to a live, publicly accessible URL."},
+ {term:"Architecture diagram", def:"A visual representation of how cloud components (compute, storage, network) connect together in a solution."},
+ {term:"Well-Architected Framework", def:"AWS's set of best-practice pillars (security, reliability, performance, cost, operational excellence) for designing cloud systems."}
+],
+lab:["Choose one: deploy a static site via S3 static hosting, or a small app via EC2.","Configure networking/security so it's publicly accessible.","Take a screenshot of the live, working site/app.","Prepare a 5-minute walkthrough explaining the architecture, as if demoing it to a client or interviewer."]}
+],
+30:[
+{week:"Week 1 · Foundations", eyebrow:"Day 01", title:"What is Cloud Computing",
+overview:"This extended track goes deeper at every stage. Day 1 lays the conceptual foundation: what cloud computing actually changed about how businesses buy and use technology, and why the shift happened when it did.",
+topics:[
+ {t:"Evolution of IT delivery", d:"Mainframes (1960s-70s, centralized, expensive) → client-server (1980s-90s, distributed but hardware-heavy) → virtualization (2000s, better utilization) → cloud (2006 onward, on-demand and metered)."},
+ {t:"Defining characteristics", d:"NIST's 5 traits: on-demand self-service, broad network access, resource pooling, rapid elasticity, and measured service — these distinguish 'true cloud' from just renting a server."},
+ {t:"Business drivers — CapEx to OpEx", d:"Buying servers is Capital Expenditure (large upfront cost, depreciates over years); cloud is Operational Expenditure (ongoing, scales with actual usage) — this shift is why finance teams pushed cloud adoption as much as engineering did."},
+ {t:"Market overview", d:"AWS leads in overall market share and service breadth, Azure leads in enterprise/Microsoft-shop adoption, GCP leads in data analytics and ML/AI tooling — each has genuine strengths, not just marketing differences."}
+],
+terms:[
+ {term:"NIST", def:"National Institute of Standards and Technology — source of the widely used formal definition of cloud computing."},
+ {term:"CapEx", def:"Capital Expenditure — upfront spending on physical assets like servers."},
+ {term:"OpEx", def:"Operational Expenditure — ongoing, usage-based spending, characteristic of cloud billing."},
+ {term:"Hyperscaler", def:"A term for the largest cloud providers (AWS, Azure, GCP) operating at massive global scale."}
+],
+lab:["List 10 apps/services you personally used today.","For each, research (or reason out) which cloud provider likely hosts it, if known publicly.","Identify which of the 5 NIST characteristics are most visible to you as an end user for each.","Summarize in 5 bullet points why cloud replaced traditional on-prem IT for most companies."]},
+
+{week:"Week 1 · Foundations", eyebrow:"Day 02", title:"Service Models Deep Dive",
+overview:"Building on the basic IaaS/PaaS/SaaS split, today goes deeper into what the provider manages at each layer, and how to reason about picking the right one for a real project.",
+topics:[
+ {t:"IaaS in depth", d:"You manage OS, runtime, and app; provider manages virtualization, hardware, storage, and networking. Maximum flexibility, requires the most operational skill (patching, scaling, monitoring)."},
+ {t:"PaaS in depth", d:"Provider additionally manages OS and runtime; you just push code. Faster development cycles, but you're constrained to what the platform supports (e.g. specific language versions)."},
+ {t:"SaaS in depth", d:"Provider manages everything down to the application itself; you configure and use it. Zero infrastructure concern, but zero customization beyond what's exposed in settings."},
+ {t:"Responsibility boundaries compared", d:"Drawing the boundary line for each model (what you touch vs what you don't) is the fastest way to reason about security, cost, and operational overhead for any given project."}
+],
+terms:[
+ {term:"Managed service", def:"Any cloud offering where the provider handles operational tasks like patching, scaling, or backups on your behalf."},
+ {term:"Runtime", def:"The environment (e.g. Node.js, Python, JVM) an application executes within, above the OS."},
+ {term:"Vendor-specific PaaS", def:"A PaaS offering with proprietary APIs, increasing lock-in risk (e.g. some serverless frameworks)."},
+ {term:"Configuration vs customization", def:"Configuration = adjusting settings within a SaaS product; customization = altering underlying code, which SaaS typically doesn't allow."}
+],
+lab:["Draw a table with 3 rows (IaaS/PaaS/SaaS) and 2 columns (Customer manages / Provider manages).","Fill in specifics: OS, runtime, app code, data, networking, physical hardware.","Pick one real product for each row (e.g. EC2, Elastic Beanstalk, Gmail) and justify its placement.","Write 2 sentences on when you'd choose PaaS over IaaS for a new project."]},
+
+{week:"Week 1 · Foundations", eyebrow:"Day 03", title:"Deployment Models & Cloud Economics",
+overview:"Deployment model choice has real financial consequences. Today pairs the public/private/hybrid/multi-cloud concepts with the actual cost mechanics behind cloud pricing.",
+topics:[
+ {t:"Deployment models recap and depth", d:"Public (shared, cheapest, fastest), private (dedicated, most control, highest cost), hybrid (mix, common in regulated industries), multi-cloud (avoids lock-in, adds complexity)."},
+ {t:"3-year TCO comparison", d:"On-prem servers have high year-1 cost (hardware) then lower ongoing cost (power, maintenance); cloud has low year-1 cost but continuous ongoing billing — crossover point depends on workload stability."},
+ {t:"Reserved instances, spot instances, savings plans", d:"On-Demand pricing costs the most but has no commitment; Reserved Instances commit to 1-3 years for a discount; Spot Instances use spare capacity at steep discounts but can be reclaimed anytime."},
+ {t:"Vendor lock-in risks", d:"Deep use of proprietary services (e.g. DynamoDB, Lambda-specific patterns) makes migrating to another provider expensive and slow — a real strategic risk, not just a technical inconvenience."}
+],
+terms:[
+ {term:"TCO", def:"Total Cost of Ownership — the full cost of a solution over its lifetime, not just sticker price."},
+ {term:"Reserved Instance", def:"A pricing model committing to 1-3 years of usage in exchange for a significant discount."},
+ {term:"Spot Instance", def:"Spare cloud capacity sold at a steep discount, reclaimable by the provider with short notice."},
+ {term:"Savings Plan", def:"A flexible AWS pricing commitment based on consistent usage ($/hour) rather than a specific instance type."}
+],
+lab:["Estimate the cost of 5 physical on-prem servers over 1 year (hardware + power + a technician's time).","Estimate the cost of 5 equivalent EC2 instances (on-demand pricing) for 1 year using the AWS pricing calculator.","Build a simple comparison spreadsheet with both totals.","Write 2 sentences on which scenario would flip the comparison (e.g. steady 24/7 load vs bursty load)."]},
+
+{week:"Week 1 · Foundations", eyebrow:"Day 04", title:"Virtualization Deep Dive",
+overview:"Today goes beyond 'what is a hypervisor' into the practical mechanics of virtual networking, snapshots, and migration — the operational tools that make virtualization production-ready.",
+topics:[
+ {t:"Hypervisors compared in detail", d:"VMware ESXi (enterprise standard, feature-rich), Hyper-V (deep Windows integration), KVM (open-source, Linux-native, used internally by many cloud providers), Xen (older, still used in some AWS infrastructure)."},
+ {t:"Virtual networking", d:"Virtual switches connect VMs to each other and to physical networks without physical cabling — this is what lets multiple tenants share one physical network interface securely."},
+ {t:"Snapshots, cloning, live migration", d:"Snapshots capture VM state for rollback; cloning duplicates a VM as a new independent copy; live migration moves a running VM between hosts with no downtime — critical for maintenance without outages."},
+ {t:"Resource overcommitment", d:"Hypervisors can allocate more virtual resources than physically exist, betting that not all VMs use their full allocation simultaneously — efficient, but risky if miscalculated."}
+],
+terms:[
+ {term:"Virtual switch", def:"A software-based network switch connecting VMs to each other and external networks."},
+ {term:"Live migration", def:"Moving a running VM between physical hosts without downtime."},
+ {term:"Overcommitment", def:"Allocating more virtual resources than physically available, relying on average usage patterns."},
+ {term:"KVM", def:"Kernel-based Virtual Machine — an open-source Type 1 hypervisor built into the Linux kernel."}
+],
+lab:["Create two VMs in VirtualBox on the same internal network.","Assign static IPs to each and confirm you can ping one from the other.","Take a snapshot of one VM, make a change (e.g. create a file), then restore the snapshot and confirm the change is gone.","Write 2 sentences on how live migration would differ from your local snapshot restore process."]},
+
+{week:"Week 1 · Foundations", eyebrow:"Day 05", title:"Data Centers, Regions & Edge",
+overview:"Where your data physically lives affects speed, cost, and legal compliance. Today covers the physical and geographic structure behind every cloud provider's global network.",
+topics:[
+ {t:"Anatomy of a data center", d:"Redundant power supplies, industrial cooling systems, physical security, and redundant network connections — all designed so no single failure takes the whole facility offline."},
+ {t:"Regions, AZs, and edge locations", d:"A Region is a geographic area (e.g. Mumbai); each Region has multiple isolated Availability Zones for fault tolerance; Edge Locations are smaller sites closer to end users for content delivery."},
+ {t:"Latency and data residency", d:"Choosing a region closer to your users reduces latency; some industries (finance, healthcare, government) are legally required to keep data within specific national borders."},
+ {t:"CDN basics", d:"A Content Delivery Network caches content at edge locations near users, dramatically speeding up delivery of static assets like images, videos, and JS/CSS files."}
+],
+terms:[
+ {term:"Region", def:"A geographic area containing multiple data centers, e.g. AWS ap-south-1 (Mumbai)."},
+ {term:"Availability Zone", def:"An isolated data center within a region, used to protect against localized failures."},
+ {term:"Edge Location", def:"A smaller facility closer to end users, used to cache and speed up content delivery."},
+ {term:"CDN", def:"Content Delivery Network — a distributed system caching content close to users for lower latency."}
+],
+lab:["Use a tool like cloudpingtest.com or ping directly to test latency from your location to 3 different AWS regions.","Record the latency figures for each.","Research which AWS/Azure/GCP region is physically closest to Tirupur/Coimbatore.","Write 2 sentences on why a company serving only Indian customers should pick that nearest region."]},
+
+{week:"Week 1 · Foundations", eyebrow:"Day 06", title:"Cloud Architecture Principles",
+overview:"Today shifts from individual services to how they combine into resilient systems — the design thinking that separates a working demo from a production-grade cloud architecture.",
+topics:[
+ {t:"Vertical vs horizontal scaling", d:"Vertical scaling means making a single server bigger (more CPU/RAM) — simple but has a hard ceiling. Horizontal scaling means adding more servers — more complex but scales almost infinitely."},
+ {t:"Elasticity and auto-scaling", d:"Auto Scaling Groups automatically add or remove instances based on real-time metrics like CPU usage, matching capacity to actual demand instead of guessing ahead of time."},
+ {t:"High availability and fault tolerance", d:"HA means minimizing downtime through redundancy (multiple AZs, load balancers); fault tolerance means the system keeps working correctly even when a component fails, not just staying 'up'."},
+ {t:"The Well-Architected Framework", d:"AWS's five pillars — Operational Excellence, Security, Reliability, Performance Efficiency, and Cost Optimization — provide a checklist for evaluating any cloud architecture design."}
+],
+terms:[
+ {term:"Horizontal scaling", def:"Adding more machines to handle increased load (scale-out)."},
+ {term:"Vertical scaling", def:"Increasing the resources (CPU/RAM) of a single machine (scale-up)."},
+ {term:"Auto Scaling Group", def:"An AWS feature that automatically adjusts the number of running instances based on demand."},
+ {term:"Fault tolerance", def:"A system's ability to continue operating correctly even when components fail."}
+],
+lab:["Sketch (on paper or a diagramming tool) an architecture for a scalable photo-sharing app.","Include: load balancer, auto-scaling EC2 group, S3 for photo storage, RDS for metadata, and a CDN.","Label which parts scale horizontally and which don't need to.","Identify one single point of failure in your first draft and redesign to remove it."]},
+
+{week:"Week 1 · Review", eyebrow:"Day 07", title:"Week 1 Review & Provider Comparison",
+overview:"A consolidation day — locking in Week 1's concepts before moving into hands-on AWS work, plus a head-to-head naming comparison across the three major providers.",
+topics:[
+ {t:"Recap — models and virtualization", d:"Service models (IaaS/PaaS/SaaS), deployment models (public/private/hybrid/multi-cloud), and virtualization (hypervisors, snapshots, migration) — the conceptual base for everything ahead."},
+ {t:"Recap — architecture principles", d:"Scaling (vertical/horizontal), elasticity, high availability, fault tolerance, and the Well-Architected Framework pillars."},
+ {t:"AWS vs Azure vs GCP naming", d:"Compute: EC2 / Azure VM / Compute Engine. Storage: S3 / Blob Storage / Cloud Storage. Database: RDS / Azure SQL / Cloud SQL. Serverless: Lambda / Azure Functions / Cloud Functions."},
+ {t:"Self-assessment", d:"Being able to explain each Week 1 concept out loud, without notes, in plain language is the real test of whether it's understood — not just recognized."}
+],
+terms:[
+ {term:"Service equivalence", def:"Matching functionally similar services across different cloud providers, useful for multi-cloud fluency."},
+ {term:"Conceptual fluency", def:"The ability to explain a concept in your own words without relying on memorized definitions."},
+ {term:"Knowledge gap", def:"A topic you can recognize but not yet explain — the target for focused review."},
+ {term:"Mini project", def:"A small, scoped hands-on task used to validate understanding of a batch of concepts."}
+],
+lab:["Take a 15-question self-quiz covering Days 1-6 (write your own questions if none provided).","Build a one-page AWS/Azure/GCP service comparison chart covering compute, storage, database, and networking.","Identify your 2 weakest topics from the week and re-read those sections.","Explain 'elasticity' and 'high availability' out loud to someone else (or record yourself) without looking at notes."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 08", title:"AWS Account Setup & IAM",
+overview:"Week 2 goes hands-on with AWS in depth. Day 8 revisits IAM with more rigor — the identity and access layer that, if misconfigured, is the single biggest security risk in any cloud account.",
+topics:[
+ {t:"Billing alarms and MFA", d:"Setting a billing alarm on the root account catches runaway costs early; enabling MFA on root (and ideally all IAM users) is the single highest-leverage security action you can take."},
+ {t:"IAM users, groups, roles, policies", d:"Users are individual identities, Groups bundle users with shared permissions, Roles are temporary identities assumed by services or federated users, Policies define the actual permissions attached to any of these."},
+ {t:"Policy JSON structure", d:"Effect (Allow/Deny), Action (specific API calls like s3:GetObject), Resource (which ARN it applies to), and optional Condition blocks for fine-grained control like IP restrictions or MFA requirements."},
+ {t:"Least privilege in practice", d:"Start with zero permissions and add only what's needed, rather than starting broad and trying to restrict later — this is both a security best practice and a common interview topic."}
+],
+terms:[
+ {term:"IAM Group", def:"A collection of IAM users that share the same set of permissions."},
+ {term:"ARN", def:"Amazon Resource Name — a unique identifier for any AWS resource, used in IAM policies."},
+ {term:"Policy condition", def:"An optional constraint in an IAM policy, e.g. requiring MFA or restricting by source IP."},
+ {term:"Federated identity", def:"An external identity (e.g. corporate SSO) granted temporary AWS access via an IAM role."}
+],
+lab:["Set an AWS Budget-based billing alarm at a threshold of your choice.","Create an IAM group 'Developers' with a custom policy granting EC2 full access and S3 read-only access.","Add a new IAM user to that group.","Log in as that user and verify: can launch/manage EC2, can view but not delete/upload S3 objects."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 09", title:"EC2 Deep Dive",
+overview:"Beyond launching a single instance, today covers how to size instances correctly, build reusable images, and set up the automation that underlies production EC2 usage at scale.",
+topics:[
+ {t:"Instance families and sizing strategy", d:"Match instance family to workload: t-family for bursty/light apps, m-family for balanced general use, c-family for CPU-intensive workloads, r-family for memory-intensive apps like caching or in-memory databases."},
+ {t:"AMIs — public, custom, marketplace", d:"Public AMIs are provided by AWS/community; custom AMIs are ones you build yourself from a configured instance; Marketplace AMIs are pre-configured, often paid, software stacks from vendors."},
+ {t:"Launch templates and Auto Scaling Groups", d:"A Launch Template defines a reusable instance configuration (AMI, instance type, security groups); an Auto Scaling Group uses that template to automatically maintain a target number of healthy instances."},
+ {t:"Instance store vs EBS-backed", d:"Instance store volumes are physically attached and lost when the instance stops; EBS-backed volumes persist independently of the instance lifecycle — nearly all production instances use EBS-backed root volumes."}
+],
+terms:[
+ {term:"Launch Template", def:"A saved, reusable configuration for launching EC2 instances consistently."},
+ {term:"Custom AMI", def:"An Amazon Machine Image created from a configured instance, used to replicate that exact setup."},
+ {term:"Instance store", def:"Temporary block storage physically attached to the host, lost when the instance stops."},
+ {term:"Marketplace AMI", def:"A pre-configured, often vendor-published AMI available for purchase/use via AWS Marketplace."}
+],
+lab:["Configure an EC2 instance fully (web server + sample app installed).","Create a custom AMI from that instance via the console.","Launch a second, brand-new instance using your custom AMI.","Confirm the second instance already has your app running without any manual setup."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 10", title:"EC2 Hands-On Lab",
+overview:"A focused, practical day on automating instance setup — the difference between manually configuring every server and having new instances configure themselves on boot.",
+topics:[
+ {t:"SSH key management", d:"Never share private keys, rotate them periodically, and use separate key pairs for different environments (dev/staging/prod) to limit blast radius if one is compromised."},
+ {t:"User data scripts", d:"A script passed at launch time that runs automatically on first boot — commonly used to install software, pull code from a repo, and start services without manual SSH intervention."},
+ {t:"Elastic IPs vs dynamic public IPs", d:"By default, EC2 public IPs change if you stop/start the instance. Elastic IPs stay fixed until you explicitly release them — useful when you need a stable, memorable IP or DNS mapping."},
+ {t:"Stopping vs terminating, cost implications", d:"Stopping keeps the instance (and its EBS storage cost) intact for later restart; terminating deletes it permanently — knowing the difference prevents both accidental data loss and unnecessary billing."}
+],
+terms:[
+ {term:"User data", def:"A script provided at EC2 launch time that runs automatically during first boot."},
+ {term:"Elastic IP", def:"A static public IPv4 address you can attach to and detach from EC2 instances."},
+ {term:"Stop vs Terminate", def:"Stop pauses an instance (billable storage remains); Terminate permanently deletes it."},
+ {term:"Bootstrap script", def:"Another name for a startup script used to automatically configure a fresh instance."}
+],
+lab:["Launch a new EC2 instance with a user-data script that runs 'apt update && apt install nginx -y && systemctl start nginx'.","Confirm nginx is already running the moment the instance finishes booting, without manual SSH setup.","Allocate an Elastic IP and associate it with the instance.","Stop and restart the instance, and confirm the Elastic IP stayed the same (unlike the default dynamic IP)."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 11", title:"S3 Deep Dive",
+overview:"S3 looks simple on the surface but has real depth in access control, lifecycle automation, and versioning — the features that make it suitable for production backup and hosting workloads.",
+topics:[
+ {t:"Bucket policies vs IAM policies vs ACLs", d:"Bucket policies are resource-based and attached directly to the bucket; IAM policies are identity-based and attached to users/roles; ACLs are a legacy, more limited access-control mechanism — bucket policies are now the recommended default."},
+ {t:"Storage classes in depth", d:"Standard (frequent access), Standard-IA (infrequent access, cheaper storage/costlier retrieval), One Zone-IA (single AZ, lower cost, less durable), Glacier and Deep Archive (archival, very cheap, slow retrieval)."},
+ {t:"Versioning and lifecycle rules", d:"Versioning keeps every version of an object, protecting against accidental overwrite/delete. Lifecycle rules automatically transition or expire objects based on age, reducing storage cost over time."},
+ {t:"Static website hosting", d:"S3 can directly serve a static site (HTML/CSS/JS) without any server — set an index and error document, adjust the bucket policy for public read, and it's live."}
+],
+terms:[
+ {term:"Bucket policy", def:"A resource-based JSON policy attached directly to an S3 bucket controlling access."},
+ {term:"Versioning", def:"An S3 feature that preserves every version of an object instead of overwriting it."},
+ {term:"Lifecycle rule", def:"An automated policy that transitions or deletes S3 objects based on age or other conditions."},
+ {term:"Glacier", def:"S3's low-cost archival storage class, designed for data accessed rarely, with slower retrieval."}
+],
+lab:["Create a new S3 bucket and enable Versioning.","Upload a file, then upload a modified version, and confirm both versions exist in the console.","Create a Lifecycle rule that transitions objects to Glacier after 30 days.","Test the rule logic by manually reviewing what would happen to a sample file, since the 30-day transition won't trigger immediately."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 12", title:"EBS, EFS & Backups",
+overview:"Persistent storage and backup strategy are what separate a toy project from something you'd trust with real data. Today covers volume types, shared file systems, and disaster recovery fundamentals.",
+topics:[
+ {t:"EBS volume types", d:"gp3 (general-purpose SSD, balanced cost/performance), io2 (high-performance SSD for demanding databases), st1 (throughput-optimized HDD for big sequential workloads), sc1 (cold HDD, cheapest, infrequent access)."},
+ {t:"EFS for shared access", d:"Unlike EBS (single-instance), EFS can be mounted by many EC2 instances simultaneously — useful for shared content directories, e.g. multiple web servers behind a load balancer serving the same files."},
+ {t:"Snapshots and backup strategy", d:"EBS snapshots are incremental, point-in-time backups stored in S3 — combined with AWS Backup, you can automate scheduled snapshots and retention policies across services."},
+ {t:"RTO and RPO", d:"Recovery Time Objective is how fast you must be back online after a failure; Recovery Point Objective is how much data loss (measured in time) is acceptable — these numbers drive your backup frequency and DR design."}
+],
+terms:[
+ {term:"gp3", def:"AWS's general-purpose SSD EBS volume type, offering balanced price and performance."},
+ {term:"EFS", def:"Elastic File System — a shared, network-attached file system mountable by multiple EC2 instances."},
+ {term:"RTO", def:"Recovery Time Objective — the maximum acceptable downtime after a failure."},
+ {term:"RPO", def:"Recovery Point Objective — the maximum acceptable data loss, measured in time."}
+],
+lab:["Create and attach a new EBS volume to your running EC2 instance.","Take a manual snapshot of it via the console.","Delete the volume, then create a new volume from the snapshot and re-attach it.","Verify any test data you created before deletion is present after restoring from the snapshot."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 13", title:"VPC Networking",
+overview:"Today builds a more complete, production-style VPC layout spanning multiple Availability Zones — the network foundation almost every real AWS architecture is built on.",
+topics:[
+ {t:"CIDR planning", d:"Choosing a VPC CIDR (e.g. 10.0.0.0/16) and subdividing it into subnets requires planning ahead for how many resources and subnets you'll eventually need, since resizing later is disruptive."},
+ {t:"Route tables in depth", d:"Each subnet is associated with exactly one route table; a public subnet's table routes 0.0.0.0/0 to an Internet Gateway, while a private subnet's table routes it to a NAT Gateway instead."},
+ {t:"NAT Gateway for private subnets", d:"A NAT Gateway sits in a public subnet and lets private-subnet instances reach the internet for updates/patches without being directly reachable from outside — critical for securing backend servers and databases."},
+ {t:"VPC peering", d:"A network connection between two VPCs (same or different accounts) that lets resources communicate as if on the same network, without traffic going over the public internet."}
+],
+terms:[
+ {term:"VPC Peering", def:"A private network connection linking two VPCs so resources can communicate directly."},
+ {term:"Subnet association", def:"The link between a subnet and the specific route table that controls its traffic."},
+ {term:"Multi-AZ subnet design", def:"Spreading subnets (and the resources in them) across multiple Availability Zones for fault tolerance."},
+ {term:"NAT Gateway", def:"A managed AWS service enabling outbound-only internet access for private subnet resources."}
+],
+lab:["Design a VPC (10.0.0.0/16) with 2 public and 2 private subnets, spread across 2 Availability Zones.","Deploy an Internet Gateway and a NAT Gateway, and configure route tables for each subnet type.","Launch a test EC2 instance in a private subnet.","Confirm it can reach the internet (e.g. run sudo apt update) via the NAT Gateway, but is not directly reachable from outside."]},
+
+{week:"Week 2 · AWS Core", eyebrow:"Day 14", title:"Security Groups & Load Balancers",
+overview:"Today covers how traffic actually gets distributed and filtered in a real, scalable AWS architecture — the layer that sits between your users and your fleet of servers.",
+topics:[
+ {t:"Security Groups vs NACLs", d:"Security Groups are stateful (return traffic automatically allowed) and attached per-instance; NACLs are stateless (return traffic must be explicitly allowed) and attached per-subnet — used together for layered defense."},
+ {t:"ALB vs NLB", d:"Application Load Balancer operates at Layer 7 (HTTP/HTTPS), supporting path-based routing and host-based routing; Network Load Balancer operates at Layer 4 (TCP/UDP), built for extreme performance and static IP requirements."},
+ {t:"Target groups and health checks", d:"A target group is a set of instances a load balancer routes to; health checks periodically ping each target and automatically stop sending traffic to unhealthy ones."},
+ {t:"Basic DDoS protection", d:"AWS Shield Standard is automatically included for all customers, protecting against common network-layer DDoS attacks; Shield Advanced adds more protection for an additional cost."}
+],
+terms:[
+ {term:"ALB", def:"Application Load Balancer — a Layer 7 load balancer for HTTP/HTTPS traffic with advanced routing."},
+ {term:"Target Group", def:"A set of resources (e.g. EC2 instances) that a load balancer distributes traffic to."},
+ {term:"Health check", def:"A periodic check confirming whether a target is healthy enough to receive traffic."},
+ {term:"AWS Shield", def:"AWS's managed DDoS protection service, with a free Standard tier for all accounts."}
+],
+lab:["Launch 2 EC2 instances in different AZs, each running a simple web server.","Create an Application Load Balancer with a target group containing both instances.","Configure a health check path (e.g. '/').","Refresh the ALB's DNS name repeatedly and confirm requests are distributed across both instances."]},
+
+{week:"Week 3 · Databases & Serverless", eyebrow:"Day 15", title:"RDS Deep Dive",
+overview:"Today goes beyond launching a single RDS instance into the high-availability and performance features that make managed databases production-ready.",
+topics:[
+ {t:"Multi-AZ setup", d:"Multi-AZ RDS maintains a synchronously replicated standby in a different AZ; if the primary fails, AWS automatically fails over to the standby, typically within 1-2 minutes, with no application changes needed."},
+ {t:"Read replicas", d:"Read replicas asynchronously copy data from the primary and can serve read-only queries, offloading traffic from the primary — useful for reporting or read-heavy applications."},
+ {t:"Automated backups and PITR", d:"RDS takes automated daily backups plus continuous transaction logs, enabling Point-In-Time Recovery to restore the database to any second within the retention window."},
+ {t:"Parameter groups and tuning", d:"Parameter groups let you adjust database engine settings (e.g. max connections, query cache) without modifying the underlying instance directly — a key performance tuning lever."}
+],
+terms:[
+ {term:"Point-In-Time Recovery (PITR)", def:"Restoring a database to a specific moment in time using continuous transaction logs."},
+ {term:"Failover", def:"Automatically switching to a standby resource when the primary fails."},
+ {term:"Parameter group", def:"A set of configurable database engine settings applied to an RDS instance."},
+ {term:"Read replica", def:"An asynchronously updated, read-only copy of a database used to offload read traffic."}
+],
+lab:["Modify your existing RDS instance (or launch a new one) to enable Multi-AZ.","Create one read replica from the primary instance.","Simulate a failover using the 'Reboot with failover' option and time how long the instance is unavailable.","Insert a row into the primary and confirm it appears on the read replica after a short delay."]},
+
+{week:"Week 3 · Databases & Serverless", eyebrow:"Day 16", title:"DynamoDB Basics",
+overview:"NoSQL databases think about data very differently from SQL — today builds the mental model for DynamoDB's key-based design, which trades query flexibility for massive, predictable scale.",
+topics:[
+ {t:"NoSQL vs relational modeling", d:"Relational databases normalize data across tables and join at query time; DynamoDB typically denormalizes, storing related data together in a single item, designed around the specific access patterns you'll query."},
+ {t:"Partition keys and sort keys", d:"The partition key determines which physical partition stores an item (and enables O(1) lookups); an optional sort key allows multiple related items to share a partition key while remaining individually addressable."},
+ {t:"Provisioned vs on-demand capacity", d:"Provisioned capacity requires specifying read/write throughput in advance (cheaper if usage is predictable); on-demand automatically scales with actual traffic (simpler, better for unpredictable workloads)."},
+ {t:"Global Secondary Indexes", d:"A GSI lets you query DynamoDB using an alternate key structure beyond the primary key, at the cost of additional storage and write overhead — necessary when you need to query the same data multiple ways."}
+],
+terms:[
+ {term:"Partition key", def:"The primary attribute determining which physical partition stores a DynamoDB item."},
+ {term:"Sort key", def:"An optional secondary key allowing multiple items to share a partition key while staying uniquely addressable."},
+ {term:"GSI", def:"Global Secondary Index — an alternate query path into a DynamoDB table beyond its primary key."},
+ {term:"On-demand capacity", def:"A DynamoDB billing mode that automatically scales throughput with actual traffic."}
+],
+lab:["Create a DynamoDB table named 'Tasks' with partition key 'userId' and sort key 'taskId'.","Insert 4-5 sample task items via the console for 2 different userIds.","Query the table for all tasks belonging to one specific userId.","Add a Global Secondary Index on a 'status' attribute and query tasks by status across all users."]},
+
+{week:"Week 3 · Databases & Serverless", eyebrow:"Day 17", title:"AWS Lambda & Serverless",
+overview:"Serverless doesn't mean no servers — it means you never think about them. Today covers the event-driven execution model that underlies modern serverless architecture.",
+topics:[
+ {t:"What 'serverless' really means", d:"Servers still exist, but AWS fully manages provisioning, scaling, and patching; you only supply code and pay per invocation/execution time, not for idle capacity."},
+ {t:"Lambda function anatomy", d:"A handler function receives an event and context object, executes your logic, and returns a response — the runtime (Node.js, Python, Java, etc.) and memory/timeout settings are configured separately."},
+ {t:"Cold starts and execution limits", d:"A 'cold start' is the extra latency when Lambda initializes a new execution environment; functions also have hard limits (max 15-minute execution, memory caps) that shape what workloads suit Lambda."},
+ {t:"Common serverless use cases", d:"Image/file processing triggered by S3 uploads, API backends via API Gateway, scheduled tasks via EventBridge, and lightweight data transformation pipelines."}
+],
+terms:[
+ {term:"Cold start", def:"The extra latency incurred when a serverless function initializes a new execution environment."},
+ {term:"Event-driven architecture", def:"A design pattern where code executes in response to events (e.g. a file upload) rather than running continuously."},
+ {term:"Handler", def:"The entry-point function AWS Lambda invokes when a function is triggered."},
+ {term:"Trigger", def:"An event source (e.g. S3, API Gateway, EventBridge) that invokes a Lambda function."}
+],
+lab:["Create a new Lambda function (Python or Node.js runtime).","Write code that reads an image uploaded to an S3 bucket and creates a resized thumbnail, saving it to a second bucket.","Configure an S3 trigger on the source bucket for object-create events.","Upload a test image and confirm a thumbnail is automatically generated within seconds."]},
+
+{week:"Week 3 · Databases & Serverless", eyebrow:"Day 18", title:"API Gateway + Lambda Lab",
+overview:"Lambda functions become genuinely useful applications once you can call them over HTTP. Today wires up a real REST API backed entirely by serverless compute.",
+topics:[
+ {t:"REST basics on API Gateway", d:"API Gateway lets you define resources (URL paths) and methods (GET, POST, etc.), each of which can be wired to a backend like a Lambda function, without managing any server infrastructure."},
+ {t:"Connecting API Gateway to Lambda", d:"Lambda proxy integration passes the entire HTTP request to your function and expects a structured response back, giving your function full control over status codes, headers, and body."},
+ {t:"Request/response mapping", d:"For non-proxy integrations, API Gateway can transform requests and responses using mapping templates — more control, more configuration overhead."},
+ {t:"Deploying and testing an API stage", d:"A 'stage' (e.g. dev, prod) is a named, deployed snapshot of your API configuration, each with its own invoke URL — allowing safe testing before promoting changes to production."}
+],
+terms:[
+ {term:"API Gateway", def:"A managed AWS service for creating, publishing, and securing REST or HTTP APIs."},
+ {term:"Lambda proxy integration", def:"An API Gateway configuration that passes the full request to Lambda and expects a full response back."},
+ {term:"Stage", def:"A named, deployed version of an API configuration (e.g. dev, prod) with its own URL."},
+ {term:"CORS", def:"Cross-Origin Resource Sharing — browser security rules that APIs must explicitly allow for cross-domain requests."}
+],
+lab:["Create a new REST API in API Gateway.","Add a GET method on a '/tasks' resource, integrated with your Day 17 (or a new) Lambda function via proxy integration.","Deploy the API to a 'dev' stage and note the invoke URL.","Test the endpoint using a browser or a tool like Postman/curl, confirming Lambda's response comes back correctly."]},
+
+{week:"Week 3 · Other Providers", eyebrow:"Day 19", title:"Microsoft Azure Fundamentals",
+overview:"A more thorough Azure pass than the 15-day track — today covers the account/permission structure in depth, which Azure organizes somewhat differently from AWS.",
+topics:[
+ {t:"Azure Resource Manager", d:"ARM is the deployment and management layer underlying all Azure resources — it enables consistent, template-based deployment (ARM templates or Bicep) similar to AWS CloudFormation."},
+ {t:"Subscriptions and management groups", d:"A Subscription is a billing and access boundary (similar to an AWS account); Management Groups let large organizations group multiple subscriptions under shared policies."},
+ {t:"Azure CLI and Portal", d:"The Portal is Azure's web console; the Azure CLI (az command) enables scripted, repeatable resource management — essential for any real automation or CI/CD work."},
+ {t:"Azure AD for identity", d:"Azure Active Directory is Microsoft's cloud identity platform, often already deployed for employee logins in enterprises — a major reason large companies default to Azure."}
+],
+terms:[
+ {term:"Subscription", def:"Azure's billing and access-control boundary, roughly equivalent to an AWS account."},
+ {term:"Management Group", def:"A container for organizing multiple Azure subscriptions under shared governance policies."},
+ {term:"ARM Template", def:"A JSON file defining Azure infrastructure declaratively, for repeatable deployments."},
+ {term:"Azure CLI", def:"A command-line tool (az) for managing Azure resources via scripts."}
+],
+lab:["Install the Azure CLI and log in (az login).","Create a Resource Group and a small VM entirely via CLI commands.","Repeat the same VM creation through the Azure Portal, comparing the two workflows.","Write 3 sentences comparing Azure CLI to what you know of AWS CLI so far."]},
+
+{week:"Week 3 · Other Providers", eyebrow:"Day 20", title:"Azure Compute & Storage",
+overview:"Today deepens hands-on Azure skills with VM configuration options and Blob Storage's access-tier system, drawing direct parallels to the AWS equivalents you already know.",
+topics:[
+ {t:"Azure VM sizing and availability sets", d:"VM sizes (B, D, F series etc.) map to different CPU/RAM/disk profiles; Availability Sets group VMs across separate hardware racks so a single hardware failure doesn't take down all instances of an app."},
+ {t:"Blob Storage — containers and access tiers", d:"Blob Storage organizes data into Containers (like S3 buckets); Hot tier suits frequently accessed data, Cool suits infrequent access, Archive suits rarely accessed data with the lowest storage cost."},
+ {t:"Azure Storage Explorer", d:"A free desktop tool for browsing and managing Azure Storage accounts visually — similar in purpose to the AWS S3 console or a third-party S3 client."},
+ {t:"Azure Files vs AWS EFS", d:"Azure Files provides SMB/NFS-based shared file storage mountable by multiple VMs, directly comparable to how EFS serves the same purpose in AWS."}
+],
+terms:[
+ {term:"Availability Set", def:"A logical grouping ensuring VMs are spread across separate hardware to reduce correlated failure risk."},
+ {term:"Blob container", def:"A logical grouping of blobs (objects) within an Azure Storage account, similar to an S3 bucket."},
+ {term:"Access tier", def:"A cost/performance tier (Hot/Cool/Archive) for blob data based on expected access frequency."},
+ {term:"SAS token", def:"A Shared Access Signature — a time-limited, scoped credential for accessing Azure Storage resources."}
+],
+lab:["Create a Storage Account and a Blob container inside it.","Upload 3-4 files and set one to the Cool access tier.","Generate a SAS token with read-only access, expiring in 1 hour.","Use the SAS URL to access a file from a browser in an incognito window, without being logged into Azure."]},
+
+{week:"Week 3 · Other Providers", eyebrow:"Day 21", title:"Google Cloud Platform Fundamentals",
+overview:"A deeper GCP session, connecting Compute Engine and Cloud Storage to BigQuery — showcasing GCP's distinct strength in data analytics that AWS and Azure don't match as directly.",
+topics:[
+ {t:"GCP project and IAM structure", d:"Projects are the core billing/permission boundary; GCP IAM uses Roles (collections of permissions) assigned to Members (users, groups, service accounts) — conceptually similar to AWS IAM but with different terminology."},
+ {t:"Compute Engine sizing", d:"Machine types (e2, n2, c2 series) map to general-purpose, balanced, or compute-optimized workloads, directly analogous to AWS's t/m/c instance families."},
+ {t:"Cloud Storage classes", d:"Standard, Nearline (monthly access), Coldline (quarterly access), and Archive (yearly access) — GCP's equivalent ladder to S3's storage classes, optimized around minimum storage duration."},
+ {t:"BigQuery for analytics", d:"A fully serverless data warehouse — you load data and run SQL queries directly, with GCP automatically managing all underlying compute and storage scaling."}
+],
+terms:[
+ {term:"Service Account", def:"A non-human identity in GCP used by applications or VMs to authenticate and access resources."},
+ {term:"Nearline/Coldline/Archive", def:"GCP's tiered storage classes for progressively less-frequently accessed data."},
+ {term:"BigQuery dataset", def:"A top-level container for organizing tables within BigQuery."},
+ {term:"Serverless data warehouse", def:"A data warehouse (like BigQuery) requiring no manual infrastructure provisioning or scaling."}
+],
+lab:["Create a Cloud Storage bucket and upload a sample CSV dataset (e.g. sample sales data).","Create a BigQuery dataset and load the CSV as a new table.","Run a simple SQL query in BigQuery (e.g. SUM or COUNT by category).","Note how long the query took and compare mentally to running the same aggregation manually in Excel."]},
+
+{week:"Week 4 · DevOps & Containers", eyebrow:"Day 22", title:"Docker Fundamentals",
+overview:"A deeper Docker session than the 15-day track, focused on writing efficient, production-quality Dockerfiles rather than just getting a container running.",
+topics:[
+ {t:"Images, layers, and the daemon", d:"Each Dockerfile instruction creates a cached layer; the Docker daemon is the background process that builds, runs, and manages containers and images on the host."},
+ {t:"Writing an efficient Dockerfile", d:"Order instructions from least-to-most frequently changing (e.g. install dependencies before copying source code) so Docker's layer cache speeds up rebuilds; use multi-stage builds to keep final images small."},
+ {t:"Docker Hub workflow", d:"docker login, docker tag, and docker push let you publish images publicly or privately, enabling teams (or CI/CD pipelines) to pull consistent, versioned images."},
+ {t:"Volumes and networking", d:"Volumes persist data outside a container's lifecycle (so data survives container removal); Docker networks let multiple containers communicate with each other by name, not just by IP."}
+],
+terms:[
+ {term:"Layer caching", def:"Docker's optimization that reuses unchanged image layers across builds to speed up rebuild time."},
+ {term:"Multi-stage build", def:"A Dockerfile technique using multiple FROM stages to keep the final image small by discarding build-only dependencies."},
+ {term:"Volume", def:"A persistent storage mechanism in Docker that exists independently of any single container's lifecycle."},
+ {term:"Docker network", def:"A virtual network allowing containers to communicate with each other, often by container name."}
+],
+lab:["Write a multi-stage Dockerfile for a web app: one stage to build/install dependencies, a second minimal stage to run it.","Build the image and check its size (docker images) compared to a naive single-stage version.","Create a named Docker volume and mount it into the container for persistent data.","Push the final image to Docker Hub with a version tag (e.g. myapp:1.0)."]},
+
+{week:"Week 4 · DevOps & Containers", eyebrow:"Day 23", title:"Docker Compose Lab",
+overview:"Real applications are rarely a single container — Docker Compose lets you define and run multi-container applications (e.g. app + database) as a single, reproducible unit.",
+topics:[
+ {t:"docker-compose.yml structure", d:"A YAML file defining services (containers), each with an image or build context, ports, environment variables, and dependencies — one file describes your entire local application stack."},
+ {t:"Multi-container example", d:"A typical setup pairs a web app service with a database service (e.g. Postgres or MySQL), connected automatically over a shared Compose network using service names as hostnames."},
+ {t:"Environment variables and secrets", d:"Compose supports .env files and environment blocks for configuration, keeping credentials out of the image itself — a basic but important security practice."},
+ {t:"Scaling services locally", d:"docker-compose up --scale <service>=3 runs multiple instances of a service locally, useful for testing load-balancing behavior before deploying to a real orchestrator."}
+],
+terms:[
+ {term:"docker-compose.yml", def:"A YAML configuration file defining a multi-container application's services, networks, and volumes."},
+ {term:"Service", def:"In Compose, a single containerized component of a larger application (e.g. 'web' or 'db')."},
+ {term:".env file", def:"A file storing environment variables referenced by docker-compose.yml, kept out of version control."},
+ {term:"Compose network", def:"An automatically created virtual network letting Compose services reach each other by name."}
+],
+lab:["Write a docker-compose.yml with two services: 'web' (your app) and 'db' (Postgres or MySQL).","Use environment variables in an .env file for database credentials.","Run docker-compose up and confirm the web service can connect to the db service using its service name as hostname.","Test docker-compose down and up again, confirming data persists if you used a named volume for the database."]},
+
+{week:"Week 4 · DevOps & Containers", eyebrow:"Day 24", title:"Kubernetes Architecture",
+overview:"A structural deep-dive into how Kubernetes clusters are actually organized, going beyond 'pods run containers' into the specific components that make orchestration possible.",
+topics:[
+ {t:"Control plane vs worker nodes", d:"The Control Plane (API server, scheduler, controller manager, etcd) makes all cluster decisions; Worker Nodes run the actual Pods and report status back to the control plane via the kubelet agent."},
+ {t:"Pods, ReplicaSets, Deployments", d:"A Pod wraps one or more containers; a ReplicaSet ensures a specified number of identical Pods are always running; a Deployment manages ReplicaSets and adds rolling update/rollback capability on top."},
+ {t:"Services — ClusterIP, NodePort, LoadBalancer", d:"ClusterIP exposes a service only within the cluster; NodePort exposes it on a static port on every node; LoadBalancer provisions an external cloud load balancer — each suits a different exposure need."},
+ {t:"ConfigMaps and Secrets", d:"ConfigMaps store non-sensitive configuration data separately from container images; Secrets store sensitive data (base64-encoded, not encrypted by default) like API keys or passwords, both injectable as environment variables or files."}
+],
+terms:[
+ {term:"etcd", def:"A distributed key-value store that holds all cluster state data for Kubernetes."},
+ {term:"kubelet", def:"The agent running on each worker node that communicates with the control plane and manages Pods."},
+ {term:"ReplicaSet", def:"A Kubernetes controller ensuring a specified number of identical Pod replicas are running."},
+ {term:"ConfigMap", def:"A Kubernetes object storing non-sensitive configuration data separately from application code."}
+],
+lab:["Diagram the full request path: external user → LoadBalancer Service → Pod, labeling every component involved (control plane, kubelet, etc.).","Write a ConfigMap YAML with 2 sample configuration key-value pairs.","Write a Secret YAML with 1 sample credential (base64-encode the value first).","Explain in 2-3 sentences why Secrets being base64-encoded (not truly encrypted) matters for security."]},
+
+{week:"Week 4 · DevOps & Containers", eyebrow:"Day 25", title:"Kubernetes Hands-On",
+overview:"Today moves from diagrams to a working local cluster — deploying, scaling, and updating a real containerized application using kubectl.",
+topics:[
+ {t:"Installing Minikube and kubectl", d:"Minikube runs a single-node Kubernetes cluster locally (in a VM or container), letting you practice real kubectl commands without needing a cloud-managed cluster."},
+ {t:"Writing Deployment and Service YAML", d:"A Deployment YAML specifies the container image, replica count, and resource limits; a Service YAML specifies how to expose those Pods, either internally or externally."},
+ {t:"Scaling replicas", d:"kubectl scale deployment <name> --replicas=5 changes the number of running Pods instantly, demonstrating Kubernetes' core self-healing and scaling behavior."},
+ {t:"Rolling updates and rollbacks", d:"kubectl set image triggers a rolling update, replacing Pods gradually with zero downtime; kubectl rollout undo reverts to the previous version if something breaks."}
+],
+terms:[
+ {term:"Rolling update", def:"A deployment strategy that gradually replaces old Pods with new ones, avoiding downtime."},
+ {term:"Rollback", def:"Reverting a Deployment to its previous working version after a failed update."},
+ {term:"kubectl scale", def:"A command to change the number of running replicas for a Deployment."},
+ {term:"minikube", def:"A tool that runs a single-node Kubernetes cluster locally for development and learning."}
+],
+lab:["Start Minikube and deploy your Day 22 Docker image using a Deployment YAML with 2 replicas.","Expose it via a NodePort Service and access it using minikube service.","Scale the deployment to 4 replicas and confirm with kubectl get pods.","Update the image tag to a new version and run a rolling update, then intentionally roll it back using kubectl rollout undo."]},
+
+{week:"Week 4 · DevOps & Containers", eyebrow:"Day 26", title:"CI/CD Pipelines",
+overview:"Automating the build-test-deploy cycle is what makes frequent, reliable releases possible. Today introduces CI/CD concepts and builds a working GitHub Actions pipeline.",
+topics:[
+ {t:"CI/CD core concepts", d:"Continuous Integration automatically builds and tests code on every commit; Continuous Deployment (or Delivery) automatically ships passing changes toward production, reducing manual release overhead and human error."},
+ {t:"GitHub Actions basics", d:"Workflows are defined in YAML under .github/workflows/, triggered by events (push, pull_request), and composed of jobs and steps that run in a hosted or self-hosted runner."},
+ {t:"Jenkins as an alternative", d:"Jenkins is a self-hosted, highly extensible CI/CD server — more setup overhead than GitHub Actions but offers deep customization, common in larger or on-prem-heavy organizations."},
+ {t:"Automated cloud deployment", d:"A typical pipeline builds a Docker image, pushes it to a registry, then triggers a deployment update (e.g. to ECS, Kubernetes, or an EC2 instance) — all without manual intervention after the initial commit."}
+],
+terms:[
+ {term:"CI (Continuous Integration)", def:"Automatically building and testing code changes as soon as they're committed."},
+ {term:"CD (Continuous Deployment)", def:"Automatically releasing passing code changes toward production without manual steps."},
+ {term:"Workflow (GitHub Actions)", def:"A YAML-defined automated process triggered by repository events like pushes or pull requests."},
+ {term:"Runner", def:"The machine (hosted or self-hosted) that executes the steps in a CI/CD pipeline."}
+],
+lab:["Create a GitHub repository containing your Dockerized app from Day 22.","Write a GitHub Actions workflow (.github/workflows/deploy.yml) that builds the Docker image on every push to main.","Add a step that logs into Docker Hub and pushes the built image with a version tag.","Push a small code change and confirm the workflow runs automatically and successfully in the Actions tab."]},
+
+{week:"Week 4 · Security & Ops", eyebrow:"Day 27", title:"Cloud Security Essentials",
+overview:"A more thorough security day than the 15-day track, covering encryption, compliance frameworks, and the misconfiguration patterns responsible for most real-world cloud breaches.",
+topics:[
+ {t:"Shared responsibility across models", d:"The security split shifts with each service model — IaaS leaves you responsible for OS patching and app security, PaaS narrows that to just app-level security, SaaS narrows it further to data and access configuration."},
+ {t:"Encryption and KMS", d:"AWS Key Management Service (KMS) centrally manages encryption keys used across services (S3, EBS, RDS) — understanding key rotation and access policies is core to a real security posture."},
+ {t:"Compliance frameworks overview", d:"ISO 27001 (information security management), SOC 2 (service organization controls, common in SaaS due-diligence), and GDPR (EU data protection law) are frequently referenced compliance standards cloud providers and customers must navigate."},
+ {t:"Common misconfigurations", d:"Publicly readable S3 buckets, overly permissive IAM policies (using '*' wildcards), unencrypted databases, and open security groups (0.0.0.0/0 on sensitive ports) account for the majority of real cloud breaches."}
+],
+terms:[
+ {term:"KMS", def:"Key Management Service — AWS's managed service for creating and controlling encryption keys."},
+ {term:"SOC 2", def:"A compliance framework auditing a service provider's security, availability, and confidentiality controls."},
+ {term:"GDPR", def:"General Data Protection Regulation — EU law governing personal data privacy and handling."},
+ {term:"Misconfiguration", def:"An incorrectly set security setting (e.g. public bucket) that is the leading cause of cloud data breaches."}
+],
+lab:["Open AWS Security Hub or Trusted Advisor and run a security scan on your account.","Document 3 findings, however minor.","For each finding, write the specific fix (e.g. 'restrict security group rule X to my IP only').","Apply at least one of the fixes and re-scan to confirm it's resolved."]},
+
+{week:"Week 4 · Security & Ops", eyebrow:"Day 28", title:"Cost Management & Monitoring",
+overview:"Today combines observability (knowing what your infrastructure is doing) with cost discipline (knowing what it's costing you) — two operational skills every cloud professional needs day-to-day.",
+topics:[
+ {t:"CloudWatch metrics, alarms, dashboards", d:"CloudWatch automatically collects metrics like CPU utilization and network I/O from most AWS services; Alarms trigger notifications or actions when a metric crosses a threshold; Dashboards visualize multiple metrics together."},
+ {t:"Budgets and Cost Explorer in depth", d:"Budgets can alert on both actual and forecasted spend; Cost Explorer breaks down spend by service, tag, or linked account, letting you pinpoint exactly what's driving cost."},
+ {t:"Tagging strategy", d:"Consistent tags (e.g. Project, Environment, Owner) applied to every resource enable accurate cost allocation reports and make it possible to answer 'which team/project is spending what.'"},
+ {t:"Right-sizing and eliminating waste", d:"Regularly reviewing CloudWatch utilization data to downsize over-provisioned instances, and removing genuinely idle resources, are the highest-leverage ongoing cost-control habits."}
+],
+terms:[
+ {term:"CloudWatch Alarm", def:"A rule that triggers an action or notification when a monitored metric crosses a defined threshold."},
+ {term:"Tagging", def:"Attaching key-value metadata to cloud resources for organization, cost allocation, and automation."},
+ {term:"Right-sizing", def:"Adjusting resource size (e.g. instance type) to match actual observed usage, avoiding overpayment."},
+ {term:"Forecasted spend", def:"A cost projection based on current usage trends, used to catch budget overruns before they happen."}
+],
+lab:["Create a CloudWatch Dashboard showing CPU utilization for your active EC2 instances.","Set a CloudWatch Alarm that triggers at 80% CPU utilization sustained for 5 minutes.","Tag all your active resources with Project=CloudTraining and Environment=Dev.","Open Cost Explorer, filter by your new tags, and confirm the cost breakdown reflects only your training resources."]},
+
+{week:"Week 4 · Career & Capstone", eyebrow:"Day 29", title:"Multi-Cloud & Certification Paths",
+overview:"A career-focused day, connecting everything learned to real next steps — when multi-cloud strategy makes sense, and which certifications validate the skills built over this month.",
+topics:[
+ {t:"Why companies go multi-cloud", d:"Avoiding vendor lock-in, using best-of-breed services (e.g. GCP for ML alongside AWS for general infrastructure), regulatory requirements, or M&A bringing together companies already on different providers."},
+ {t:"Career paths in cloud", d:"Cloud Engineer (builds/maintains infrastructure), DevOps Engineer (focuses on CI/CD and automation), SRE (focuses on reliability and incident response), Solutions Architect (designs systems and advises on architecture)."},
+ {t:"Certification roadmap", d:"AWS: Cloud Practitioner → Solutions Architect Associate → specialty certs. Azure: AZ-900 Fundamentals → AZ-104 Administrator. GCP: Associate Cloud Engineer → Professional certs — each path has a clear entry-to-intermediate progression."},
+ {t:"Building a cloud portfolio", d:"A GitHub repo showing real Terraform/CloudFormation code, a documented capstone project, and a LinkedIn profile reflecting specific cloud skills (not just 'cloud computing') meaningfully strengthens job applications."}
+],
+terms:[
+ {term:"SRE", def:"Site Reliability Engineer — a role focused on system reliability, monitoring, and incident response."},
+ {term:"AZ-900", def:"Microsoft's entry-level Azure Fundamentals certification exam."},
+ {term:"Solutions Architect", def:"A role/certification focused on designing cloud systems that meet business and technical requirements."},
+ {term:"Portfolio project", def:"A documented, demonstrable piece of hands-on work used to prove skills to employers."}
+],
+lab:["Research the syllabus for one certification matching your career interest (AWS CCP, AZ-900, or GCP ACE).","Draft a 3-month study plan with weekly milestones toward that certification.","Update your LinkedIn/resume to explicitly list the specific services you've now used hands-on (EC2, S3, VPC, Lambda, Docker, Kubernetes, etc.).","Create a GitHub repository and push at least one artifact from this course (Dockerfile, Kubernetes YAML, or architecture diagram)."]},
+
+{week:"Week 4 · Career & Capstone", eyebrow:"Day 30", title:"Capstone Project",
+overview:"The final day brings together infrastructure, containers, CI/CD, and monitoring into one complete, end-to-end deployment — the single best artifact to show in an interview or client pitch.",
+topics:[
+ {t:"Full-stack deployment architecture", d:"Frontend (e.g. React) served via S3/CloudFront or a container, backend (e.g. Node/Express or Python) running on EC2, ECS, or Kubernetes, and a database (RDS or DynamoDB) — a realistic, complete application stack."},
+ {t:"CI/CD-triggered deployment", d:"Reuse your Day 26 GitHub Actions pipeline so that pushing code automatically builds, tests, and deploys the updated application without manual steps."},
+ {t:"Monitoring and cost dashboard", d:"A CloudWatch dashboard (from Day 28 patterns) showing the live application's health and resource usage, plus a cost tag strategy so the project's spend is clearly isolated and trackable."},
+ {t:"Presenting the architecture", d:"Being able to clearly walk through why each component was chosen, what tradeoffs were made, and what you'd improve with more time is often more valuable in interviews than the project itself."}
+],
+terms:[
+ {term:"End-to-end architecture", def:"A complete system spanning frontend, backend, database, and infrastructure, working together as a deployed whole."},
+ {term:"Deployment pipeline", def:"The automated sequence of build, test, and deploy steps taking code from commit to production."},
+ {term:"Architecture walkthrough", def:"A structured explanation of a system's components and design decisions, commonly used in interviews and demos."},
+ {term:"Tradeoff", def:"A deliberate design compromise (e.g. cost vs performance) made when no single option is best on every dimension."}
+],
+lab:["Deploy a complete app (e.g. MERN stack): frontend on S3/CloudFront, backend on EC2 or ECS, database on RDS or DynamoDB.","Wire up your GitHub Actions pipeline so a push to main redeploys the backend automatically.","Build a CloudWatch dashboard tracking the live app's CPU, requests, and errors.","Prepare and deliver a 10-minute walkthrough covering architecture, design tradeoffs, and what you'd add next (e.g. auto-scaling, multi-region)."]}
+]
+};
+
+let currentPlan = 15;
+let activeIndex = 0;
+let doneState = {15:{}, 30:{}};
+
+function setPlan(plan){
+  currentPlan = plan;
+  activeIndex = 0;
+  document.getElementById('btn15').classList.toggle('active', plan===15);
+  document.getElementById('btn30').classList.toggle('active', plan===30);
+  document.getElementById('progressLabel').textContent = plan===15 ? "DAYS COMPLETE · 15-DAY TRACK" : "DAYS COMPLETE · 30-DAY TRACK";
+  renderDayList();
+  renderContent();
+  updateProgress();
+}
+
+function toggleDone(i, evt){
+  if(evt) evt.stopPropagation();
+  doneState[currentPlan][i] = !doneState[currentPlan][i];
+  renderDayList();
+  renderContent();
+  updateProgress();
+}
+
+function selectDay(i){
+  activeIndex = i;
+  renderDayList();
+  renderContent();
+}
+
+function renderDayList(){
+  const days = DATA[currentPlan];
+  const list = document.getElementById('dayList');
+  let html = "";
+  let lastWeek = "";
+  days.forEach((d, i) => {
+    if(d.week !== lastWeek){
+      html += `<div class="week-label">${d.week}</div>`;
+      lastWeek = d.week;
+    }
+    const isActive = i === activeIndex ? "active" : "";
+    const isDone = doneState[currentPlan][i] ? "done" : "";
+    html += `
+      <div class="day-item ${isActive}" onclick="selectDay(${i})">
+        <div class="check ${isDone}" onclick="toggleDone(${i}, event)"></div>
+        <span class="day-num">${d.eyebrow.replace('Day ','')}</span>
+        <span class="day-title-mini">${d.title}</span>
+      </div>`;
+  });
+  list.innerHTML = html;
+}
+
+function renderContent(){
+  const d = DATA[currentPlan][activeIndex];
+  const isDone = !!doneState[currentPlan][activeIndex];
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="content-head">
+      <div>
+        <div class="content-eyebrow">${d.eyebrow} · ${d.week}</div>
+        <div class="content-title">${d.title}</div>
+      </div>
+      <button class="mark-btn ${isDone ? 'is-done' : ''}" onclick="toggleDone(${activeIndex})">
+        ${isDone ? '✓ Completed' : 'Mark Complete'}
+      </button>
+    </div>
+
+    <div class="overview">${d.overview}</div>
+
+    <div class="section-label">Topics Covered</div>
+    ${d.topics.map(t => `
+      <div class="topic-block">
+        <div class="t-title">${t.t}</div>
+        <div class="t-detail">${t.d}</div>
+      </div>
+    `).join('')}
+
+    <div class="section-label">Key Terms</div>
+    <div class="terms-grid">
+      ${d.terms.map(x => `
+        <div class="term-card">
+          <div class="term">${x.term}</div>
+          <div class="def">${x.def}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="section-label">Hands-On Lab</div>
+    <div class="lab-box">
+      <b>Do this →</b>
+      <ol class="lab-steps">
+        ${d.lab.map(step => `<li>${step}</li>`).join('')}
+      </ol>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn" onclick="prevDay()" ${activeIndex===0?'disabled':''}>← Previous Day</button>
+      <button class="nav-btn" onclick="nextDay()" ${activeIndex===DATA[currentPlan].length-1?'disabled':''}>Next Day →</button>
+    </div>
+  `;
+}
+
+function prevDay(){ if(activeIndex>0){ activeIndex--; renderDayList(); renderContent(); } }
+function nextDay(){ if(activeIndex<DATA[currentPlan].length-1){ activeIndex++; renderDayList(); renderContent(); } }
+
+function updateProgress(){
+  const total = DATA[currentPlan].length;
+  const done = Object.values(doneState[currentPlan]).filter(Boolean).length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('progressFill').style.width = pct + "%";
+  document.getElementById('progressPct').textContent = pct + "%";
+}
+
+setPlan(15);
+</script>
+</body>
+</html>

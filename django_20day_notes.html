@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Django 20-Day Course — Fironix Technology</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+<style>
+:root{
+  --bg:#0b0f14; --panel:#0f1620; --panel-2:#121a26; --line:#1e2a38;
+  --green-django:#0C4B33; --green-accent:#44B78B; --yellow:#FFD43B;
+  --text:#c9d6e3; --text-dim:#7c8fa3; --white:#eef4fa;
+  --green:#5fd88f; --red:#ff6b6b; --orange:#f0a860;
+  --radius:10px; --mono:'JetBrains Mono','Fira Code',Consolas,monospace; --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
+body{display:flex;min-height:100vh;}
+#sidebar{width:280px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;}
+#sidebar::-webkit-scrollbar{width:6px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+.brand{padding:0 20px 18px;border-bottom:1px solid var(--line);margin-bottom:14px;}
+.brand .dj{color:var(--green-accent);font-family:var(--mono);font-weight:700;font-size:21px;}
+.brand small{display:block;color:var(--text-dim);margin-top:4px;font-size:12px;letter-spacing:.5px;}
+.progress-wrap{padding:0 20px 16px;}
+.progress-track{height:6px;background:var(--panel-2);border-radius:6px;overflow:hidden;border:1px solid var(--line);}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--green-accent),var(--yellow));transition:width .4s ease;}
+.progress-label{font-size:11px;color:var(--text-dim);margin-top:6px;font-family:var(--mono);}
+nav.toc{padding:0 10px;}
+nav.toc a{display:flex;align-items:center;gap:10px;padding:9px 12px;margin:2px 0;border-radius:8px;color:var(--text-dim);text-decoration:none;font-size:13px;border-left:2px solid transparent;cursor:pointer;}
+nav.toc a:hover{background:var(--panel-2);color:var(--white);}
+nav.toc a.active{background:var(--panel-2);color:var(--yellow);border-left:2px solid var(--yellow);}
+nav.toc a .chk{width:20px;height:20px;border-radius:5px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-family:var(--mono);}
+nav.toc a.done .chk{background:var(--green);border-color:var(--green);color:#08130c;}
+nav.toc .grp-label{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);padding:14px 12px 6px;}
+
+#main{flex:1;padding:36px 48px;max-width:1000px;}
+header.page-head{margin-bottom:24px;}
+header.page-head .daytag{font-family:var(--mono);color:var(--green-accent);font-size:12.5px;background:var(--panel);border:1px solid var(--line);padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:10px;}
+header.page-head h1{font-family:var(--mono);font-size:28px;margin:0 0 6px;color:var(--white);}
+header.page-head p{color:var(--text-dim);margin:0;font-size:14.5px;}
+
+section.day{display:none;animation:fade .3s ease;}
+section.day.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.day h2{font-family:var(--mono);color:var(--yellow);font-size:20px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.mark-btn{font-family:var(--sans);font-size:12px;background:var(--panel-2);color:var(--text-dim);border:1px solid var(--line);padding:6px 12px;border-radius:20px;cursor:pointer;flex-shrink:0;}
+.mark-btn.done{background:var(--green);color:#08130c;border-color:var(--green);}
+
+.objectives{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--green-accent);border-radius:var(--radius);padding:14px 18px;margin:14px 0;font-size:13.5px;}
+.objectives h3{margin:0 0 8px;color:var(--green-accent);font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;}
+.objectives ul{margin:0;padding-left:20px;}
+.objectives li{margin:4px 0;}
+
+.theory{background:var(--panel);border:1px solid var(--line);border-left:3px solid #4B8BBE;border-radius:var(--radius);padding:16px 18px;margin:16px 0;font-size:14.5px;line-height:1.68;}
+.theory h3{margin:0 0 8px;color:#6fb3e0;font-size:15px;font-family:var(--mono);}
+.theory h4{margin:14px 0 6px;color:var(--white);font-size:13.5px;}
+.theory ul{margin:8px 0 0;padding-left:20px;}
+.theory code{background:var(--panel-2);padding:1px 6px;border-radius:4px;color:var(--yellow);font-family:var(--mono);font-size:13px;}
+
+.subhead{color:var(--white);font-size:15px;margin:22px 0 8px;font-weight:600;}
+.subhead .tag{font-family:var(--mono);font-size:10.5px;background:var(--panel-2);color:var(--green);border:1px solid var(--line);padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+.subhead .filetag{font-family:var(--mono);font-size:11px;background:#1a2332;color:var(--green-accent);border:1px solid var(--line);padding:2px 10px;border-radius:6px;margin-left:8px;vertical-align:middle;}
+
+pre{background:#0d1117 !important;border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;overflow-x:auto;margin:10px 0 18px;font-size:13px;}
+code.hljs{background:transparent !important;font-family:var(--mono);}
+
+.explain{font-size:13.5px;color:var(--text-dim);background:var(--panel-2);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:-10px 0 18px;line-height:1.6;}
+.explain b{color:var(--text);}
+.explain .out{color:var(--green);font-family:var(--mono);}
+
+.practice{background:linear-gradient(135deg,#1a1408,#0f1620);border:1px solid #3a2f14;border-left:3px solid var(--orange);border-radius:var(--radius);padding:16px 18px;margin:22px 0 10px;}
+.practice h3{margin:0 0 8px;color:var(--orange);font-size:14px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;}
+.practice ol{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.7;}
+.practice li{margin:4px 0;}
+
+table.reftable{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:13.5px;}
+table.reftable th,table.reftable td{border:1px solid var(--line);padding:8px 12px;text-align:left;}
+table.reftable th{background:var(--panel-2);color:var(--yellow);font-family:var(--mono);font-size:12.5px;}
+table.reftable td code{font-family:var(--mono);color:#6fb3e0;}
+table.reftable tr:nth-child(even){background:var(--panel);}
+
+.nav-footer{display:flex;justify-content:space-between;margin-top:34px;padding-top:16px;border-top:1px solid var(--line);}
+.nav-footer button{font-family:var(--sans);background:var(--panel);color:var(--text);border:1px solid var(--line);padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13.5px;}
+.nav-footer button:hover{border-color:var(--green-accent);color:var(--white);}
+
+@media(max-width:800px){body{flex-direction:column;}#sidebar{width:100%;height:auto;position:relative;}#main{padding:24px 18px;}}
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="brand">
+    <span class="dj">&#9670; Django 20-Day Course</span>
+    <small>Fironix Technology — Build a Blog App from Scratch</small>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 20 days completed</div>
+  </div>
+  <nav class="toc" id="toc">
+    <div class="grp-label">Week 1 — Foundations</div>
+    <a data-target="d1"><span class="chk">1</span> Intro & Setup</a>
+    <a data-target="d2"><span class="chk">2</span> Project & Apps</a>
+    <a data-target="d3"><span class="chk">3</span> URLs & Views</a>
+    <a data-target="d4"><span class="chk">4</span> Templates (DTL)</a>
+    <a data-target="d5"><span class="chk">5</span> Inheritance & Static</a>
+    <div class="grp-label">Week 2 — Models & Data</div>
+    <a data-target="d6"><span class="chk">6</span> Models & ORM</a>
+    <a data-target="d7"><span class="chk">7</span> Migrations & Shell</a>
+    <a data-target="d8"><span class="chk">8</span> Django Admin</a>
+    <a data-target="d9"><span class="chk">9</span> QuerySets Deep Dive</a>
+    <a data-target="d10"><span class="chk">10</span> Django Forms</a>
+    <div class="grp-label">Week 3 — CRUD & Views</div>
+    <a data-target="d11"><span class="chk">11</span> ModelForms</a>
+    <a data-target="d12"><span class="chk">12</span> CBVs: List/Detail</a>
+    <a data-target="d13"><span class="chk">13</span> CBVs: Create/Update/Delete</a>
+    <a data-target="d14"><span class="chk">14</span> Model Relationships</a>
+    <a data-target="d15"><span class="chk">15</span> Authentication</a>
+    <div class="grp-label">Week 4 — Advanced & Deploy</div>
+    <a data-target="d16"><span class="chk">16</span> Authorization & Permissions</a>
+    <a data-target="d17"><span class="chk">17</span> DRF: Serializers</a>
+    <a data-target="d18"><span class="chk">18</span> DRF: Views & Routers</a>
+    <a data-target="d19"><span class="chk">19</span> Media, Pagination, Search</a>
+    <a data-target="d20"><span class="chk">20</span> Deployment & Capstone</a>
+  </nav>
+</aside>
+
+<main id="main">
+<header class="page-head">
+  <span class="daytag" id="dayTag">DAY 1 / 20</span>
+  <h1 id="pageTitle">Introduction & Environment Setup</h1>
+  <p id="pageSub">What Django is, how MVT works, and getting your first project running.</p>
+</header>
+
+<!-- ================= DAY 1 ================= -->
+<section class="day" data-id="d1">
+  <h2>Day 1 — Introduction & Environment Setup <button class="mark-btn" data-mark="d1">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What Django is and why it's used</li>
+    <li>The MVT (Model-View-Template) architecture</li>
+    <li>Setting up a virtual environment and installing Django</li>
+    <li>Creating your first Django project and running the dev server</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Django</b> is a high-level, free and open-source Python web framework that encourages rapid development
+    and clean, pragmatic design. It follows the philosophy of "batteries included" — an ORM, admin panel, forms,
+    authentication, and security protections all come built-in, so you don't need to hunt for third-party packages
+    to build a real application.</p>
+    <h4>MVT Architecture</h4>
+    <p>Django follows the <b>Model-View-Template</b> pattern (its own take on MVC):</p>
+    <ul>
+      <li><b>Model</b> — defines your data structure and talks to the database (Python classes → database tables)</li>
+      <li><b>View</b> — contains the business logic; decides what data to fetch and which template to render</li>
+      <li><b>Template</b> — the HTML file that defines how the data is displayed to the user</li>
+    </ul>
+    <p>Request flow: <code>Browser → urls.py (router) → views.py (logic) → models.py (data) → template (HTML) → back to Browser</code></p>
+    <h4>Why a virtual environment?</h4>
+    <p>A <b>virtual environment</b> is an isolated Python installation for one project, so its package versions
+    (e.g. Django 4.2) don't clash with another project that might need Django 5.0. It's standard practice for every
+    real Python project, not just Django.</p>
+  </div>
+
+  <div class="subhead">Setup commands <span class="filetag">terminal</span></div>
+  <pre><code class="language-bash"># 1. Check Python is installed
+python --version
+
+# 2. Create a virtual environment named 'venv'
+python -m venv venv
+
+# 3. Activate it
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+
+# 4. Install Django inside the virtual environment
+pip install django
+
+# 5. Confirm the installed version
+python -m django --version</code></pre>
+  <div class="explain">Once activated, your terminal prompt shows <code>(venv)</code> — meaning any <code>pip install</code>
+  now happens only inside this project's isolated environment, not system-wide.</div>
+
+  <div class="subhead">Create your first project <span class="filetag">terminal</span></div>
+  <pre><code class="language-bash"># create a new Django project named 'mysite'
+django-admin startproject mysite
+cd mysite
+
+# run the development server
+python manage.py runserver</code></pre>
+  <div class="explain">After running the server, open <b>http://127.0.0.1:8000/</b> in your browser — you should see
+  Django's default "The install worked successfully!" congratulations page. <code>manage.py</code> is your command
+  center for this project — every Django command runs through it.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Install Python (if not already installed) and confirm with <code>python --version</code>.</li>
+      <li>Create a virtual environment called <code>venv</code> and activate it.</li>
+      <li>Install Django and confirm the version.</li>
+      <li>Create a project called <code>blogproject</code> (we'll build a Blog app across the next 20 days).</li>
+      <li>Run the server and take a screenshot of the success page.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 2 ================= -->
+<section class="day" data-id="d2">
+  <h2>Day 2 — Project Structure & Apps <button class="mark-btn" data-mark="d2">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What each auto-generated file does</li>
+    <li>The difference between a Django <b>project</b> and an <b>app</b></li>
+    <li>Creating and registering your first app</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A Django <b>project</b> is the whole website/configuration; an <b>app</b> is a self-contained module that
+    does one thing (e.g. a blog, a store, a user-profile system). One project can contain many apps, and apps can
+    even be reused across different projects.</p>
+    <h4>Key files after <code>startproject</code></h4>
+    <table class="reftable">
+      <tr><th>File</th><th>Purpose</th></tr>
+      <tr><td><code>manage.py</code></td><td>Command-line utility to run the server, migrations, admin commands</td></tr>
+      <tr><td><code>settings.py</code></td><td>All project configuration — installed apps, database, templates, static files</td></tr>
+      <tr><td><code>urls.py</code></td><td>The root URL router — maps URLs to views</td></tr>
+      <tr><td><code>wsgi.py / asgi.py</code></td><td>Entry points used by the web server when deploying</td></tr>
+    </table>
+  </div>
+
+  <div class="subhead">Create an app <span class="filetag">terminal</span></div>
+  <pre><code class="language-bash">python manage.py startapp blog</code></pre>
+  <div class="explain">This creates a <code>blog/</code> folder with <code>models.py</code>, <code>views.py</code>,
+  <code>admin.py</code>, <code>apps.py</code>, and a <code>migrations/</code> folder — the standard skeleton every
+  Django app starts with.</div>
+
+  <div class="subhead">Register the app <span class="filetag">mysite/settings.py</span></div>
+  <pre><code class="language-python">INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'blog',            # <-- our new app added here
+]</code></pre>
+  <div class="explain">Django won't "see" your app — its models, templates, or admin registrations — until it's
+  listed in <code>INSTALLED_APPS</code>. This is one of the most common beginner mistakes: creating an app but
+  forgetting this step.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Inside <code>blogproject</code>, create an app called <code>blog</code>.</li>
+      <li>Register it in <code>INSTALLED_APPS</code>.</li>
+      <li>Open every auto-generated file in <code>blog/</code> and write a one-line comment describing what you think it's for.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 3 ================= -->
+<section class="day" data-id="d3">
+  <h2>Day 3 — URLs & Views (Function-Based) <button class="mark-btn" data-mark="d3">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>How Django routes a URL to a view function</li>
+    <li>Writing your first views with <code>HttpResponse</code></li>
+    <li>Connecting an app's URLs to the project using <code>include()</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>view</b> is a Python function (or class) that takes a web request and returns a web response. The
+    <b>URL dispatcher</b> (<code>urls.py</code>) decides which view handles which URL path. Good practice: each app
+    has its own <code>urls.py</code>, and the project's root <code>urls.py</code> includes it — this keeps routing
+    modular as your project grows.</p>
+  </div>
+
+  <div class="subhead">Basic view <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("<h1>Welcome to my Blog!</h1>")
+
+def about(request):
+    return HttpResponse("This is the about page.")</code></pre>
+  <div class="explain">Every view function takes at least one argument, <code>request</code> — an object holding
+  everything about the incoming request (method, user, GET/POST data). It must always return an
+  <code>HttpResponse</code> (or a subclass of it, like <code>render()</code>, which we'll use from Day 4).</div>
+
+  <div class="subhead">App-level URLs <span class="filetag">blog/urls.py (new file)</span></div>
+  <pre><code class="language-python">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('about/', views.about, name='about'),
+]</code></pre>
+  <div class="explain"><code>path('', ...)</code> matches the empty path (the app's root). The <code>name='home'</code>
+  argument lets you refer to this URL by name elsewhere (in templates, redirects) instead of hardcoding the path
+  string — so if the URL ever changes, you only update it in one place.</div>
+
+  <div class="subhead">Wiring into the project <span class="filetag">mysite/urls.py</span></div>
+  <pre><code class="language-python">from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),   # hand off all other URLs to blog app
+]</code></pre>
+  <div class="explain"><code>include()</code> tells Django "for anything matching this prefix, go check that app's
+  own urls.py". Here the prefix is empty, so blog's URLs are mounted at the site root.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Create <code>home</code>, <code>about</code>, and <code>contact</code> views, each returning a simple HTML heading.</li>
+      <li>Wire them up in <code>blog/urls.py</code> with named URLs.</li>
+      <li>Visit <code>/</code>, <code>/about/</code>, and <code>/contact/</code> in your browser to confirm all three work.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 4 ================= -->
+<section class="day" data-id="d4">
+  <h2>Day 4 — Templates & the Django Template Language <button class="mark-btn" data-mark="d4">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Rendering HTML files instead of raw strings using <code>render()</code></li>
+    <li>Passing data from a view into a template with <b>context</b></li>
+    <li>Django Template Language: variables, <code>{% if %}</code>, <code>{% for %}</code></li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Instead of writing HTML directly inside <code>views.py</code> (unmaintainable for real pages), Django uses
+    <b>templates</b> — HTML files with special syntax that Django processes before sending them to the browser.</p>
+    <ul>
+      <li><code>{{ variable }}</code> — outputs a value from the context</li>
+      <li><code>{% tag %}</code> — logic: loops, conditionals, template inheritance</li>
+      <li><b>context</b> — a Python dictionary passed from the view, containing the data the template needs</li>
+    </ul>
+    <p>By default Django looks for templates inside <code>appname/templates/appname/</code> — the doubled app name
+    folder avoids naming collisions between apps that both have a file called e.g. <code>detail.html</code>.</p>
+  </div>
+
+  <div class="subhead">Update the view to render a template <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.shortcuts import render
+
+def home(request):
+    posts = [
+        {"title": "My First Post", "content": "Hello Django world!"},
+        {"title": "Learning Templates", "content": "DTL is powerful."},
+    ]
+    context = {"posts": posts, "page_title": "Home"}
+    return render(request, "blog/home.html", context)</code></pre>
+  <div class="explain"><code>render()</code> combines a template file with a context dictionary and returns a proper
+  <code>HttpResponse</code> — it's the standard way almost every Django view ends.</div>
+
+  <div class="subhead">The template <span class="filetag">blog/templates/blog/home.html</span></div>
+  <pre><code class="language-xml">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;{{ page_title }}&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome, {{ page_title }} page&lt;/h1&gt;
+
+    {% if posts %}
+        &lt;ul&gt;
+        {% for post in posts %}
+            &lt;li&gt;&lt;strong&gt;{{ post.title }}&lt;/strong&gt; — {{ post.content }}&lt;/li&gt;
+        {% endfor %}
+        &lt;/ul&gt;
+    {% else %}
+        &lt;p&gt;No posts yet.&lt;/p&gt;
+    {% endif %}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  <div class="explain">
+    <code>{{ post.title }}</code> works for dictionary keys, object attributes, and even method calls — DTL uses
+    the dot for all of them, unlike Python which needs different syntax for each. Every <code>{% for %}</code> and
+    <code>{% if %}</code> must be explicitly closed with <code>{% endfor %}</code> / <code>{% endif %}</code>.
+  </div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Create a list of at least 4 dictionaries representing blog posts (title, author, date).</li>
+      <li>Pass them to a template via context and loop through them with <code>{% for %}</code>.</li>
+      <li>Add an <code>{% if %}</code> that shows "No posts available" when the list is empty — test it by passing an empty list.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 5 ================= -->
+<section class="day" data-id="d5">
+  <h2>Day 5 — Template Inheritance & Static Files <button class="mark-btn" data-mark="d5">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Avoiding repeated HTML using <code>{% extends %}</code> and <code>{% block %}</code></li>
+    <li>Serving CSS, JS, and images with Django's static files system</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Template inheritance</b> lets you define a common layout (navbar, footer, CSS links) once in a
+    <code>base.html</code> and have every other page extend it, overriding only the parts that differ.
+    <b>Static files</b> (CSS, JavaScript, images) are handled separately from templates — Django needs to know
+    where to find them (<code>STATICFILES_DIRS</code>) and what URL prefix to serve them under
+    (<code>STATIC_URL</code>).</p>
+  </div>
+
+  <div class="subhead">Base template <span class="filetag">blog/templates/blog/base.html</span></div>
+  <pre><code class="language-xml">{% load static %}
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{% block title %}My Blog{% endblock %}&lt;/title&gt;
+    &lt;link rel="stylesheet" href="{% static 'blog/css/style.css' %}"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;nav&gt;&lt;a href="{% url 'home' %}"&gt;Home&lt;/a&gt; | &lt;a href="{% url 'about' %}"&gt;About&lt;/a&gt;&lt;/nav&gt;
+
+    &lt;main&gt;
+        {% block content %}
+        {% endblock %}
+    &lt;/main&gt;
+
+    &lt;footer&gt;&copy; 2026 My Blog&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  <div class="explain"><code>{% load static %}</code> must appear at the top before using <code>{% static %}</code>.
+  <code>{% url 'home' %}</code> generates the correct URL by looking up the <b>name</b> you gave in
+  <code>path(..., name='home')</code> on Day 3 — so links never break even if the actual path string changes.</div>
+
+  <div class="subhead">Child template <span class="filetag">blog/templates/blog/home.html</span></div>
+  <pre><code class="language-xml">{% extends 'blog/base.html' %}
+
+{% block title %}Home — My Blog{% endblock %}
+
+{% block content %}
+    &lt;h1&gt;Latest Posts&lt;/h1&gt;
+    {% for post in posts %}
+        &lt;h2&gt;{{ post.title }}&lt;/h2&gt;
+        &lt;p&gt;{{ post.content }}&lt;/p&gt;
+    {% endfor %}
+{% endblock %}</code></pre>
+  <div class="explain">The child template only defines what's <b>different</b> for this page — everything inside
+  <code>{% block content %}</code> replaces the empty block in base.html; everything else (nav, footer) is inherited
+  automatically.</div>
+
+  <div class="subhead">Static files config <span class="filetag">mysite/settings.py</span></div>
+  <pre><code class="language-python">STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]   # project-wide static folder (optional)
+# App-level static files just need to live in: blog/static/blog/css/style.css</code></pre>
+  <pre><code class="language-css">/* blog/static/blog/css/style.css */
+body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
+nav { background: #0C4B33; padding: 12px; }
+nav a { color: white; margin-right: 15px; text-decoration: none; }</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Create <code>base.html</code> with a navbar and footer, using <code>{% block content %}</code>.</li>
+      <li>Convert <code>home.html</code> and <code>about.html</code> to extend it.</li>
+      <li>Add a CSS file that styles the navbar with a background color and white text.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 6 ================= -->
+<section class="day" data-id="d6">
+  <h2>Day 6 — Models & the Django ORM <button class="mark-btn" data-mark="d6">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What the ORM is and why it's useful</li>
+    <li>Defining a model with fields</li>
+    <li>Common field types</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>The <b>ORM</b> (Object-Relational Mapper) lets you work with your database using Python classes and objects
+    instead of writing raw SQL. Each model class becomes a database table; each class attribute becomes a column;
+    each instance of the class becomes one row.</p>
+    <h4>Common field types</h4>
+    <table class="reftable">
+      <tr><th>Field</th><th>Use for</th></tr>
+      <tr><td><code>CharField(max_length=..)</code></td><td>Short text (requires max_length)</td></tr>
+      <tr><td><code>TextField()</code></td><td>Long text, no length limit</td></tr>
+      <tr><td><code>IntegerField()</code></td><td>Whole numbers</td></tr>
+      <tr><td><code>DateTimeField(auto_now_add=True)</code></td><td>Timestamp, set once when created</td></tr>
+      <tr><td><code>BooleanField(default=False)</code></td><td>True/False flags</td></tr>
+      <tr><td><code>EmailField()</code></td><td>Email addresses (adds validation)</td></tr>
+      <tr><td><code>ForeignKey(Model, on_delete=..)</code></td><td>Many-to-one relationship (Day 14)</td></tr>
+    </table>
+  </div>
+
+  <div class="subhead">Defining the Post model <span class="filetag">blog/models.py</span></div>
+  <pre><code class="language-python">from django.db import models
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title</code></pre>
+  <div class="explain">
+    <code>auto_now_add=True</code> sets the field automatically the <b>first time</b> the object is created and
+    never touches it again. <code>auto_now=True</code> updates the field <b>every time</b> the object is saved.
+    <code>__str__</code> defines what shows up when you print a Post object or view it in the admin — without it
+    you'd just see <code>Post object (1)</code>, which is not useful.
+  </div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Add an <code>author</code> field (<code>CharField</code>) to the Post model.</li>
+      <li>Add a <code>views_count</code> field (<code>IntegerField</code>, default 0).</li>
+      <li>Write a <code>__str__</code> method that returns <code>"{title} by {author}"</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 7 ================= -->
+<section class="day" data-id="d7">
+  <h2>Day 7 — Migrations & Django Shell <button class="mark-btn" data-mark="d7">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>How Django turns model changes into database schema changes</li>
+    <li>Using the interactive shell to create and read data</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Migrations</b> are Django's way of version-controlling your database schema. Every time you change a
+    model (add a field, rename one, etc.), you generate a migration file describing that change, then apply it.</p>
+    <ul>
+      <li><code>makemigrations</code> — scans your models for changes and writes a migration file (does NOT touch the database yet)</li>
+      <li><code>migrate</code> — actually applies migration files to the database</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Creating and applying migrations <span class="filetag">terminal</span></div>
+  <pre><code class="language-bash">python manage.py makemigrations
+python manage.py migrate</code></pre>
+  <div class="explain"><code>makemigrations</code> output looks like
+  <span class="out">Migrations for 'blog': blog/migrations/0001_initial.py - Create model Post</span> — showing what
+  will change. Always run <code>makemigrations</code> before <code>migrate</code>, and re-run both whenever you edit
+  <code>models.py</code>.</div>
+
+  <div class="subhead">Django shell — creating &amp; reading data <span class="filetag">terminal</span></div>
+  <pre><code class="language-bash">python manage.py shell</code></pre>
+  <pre><code class="language-python">from blog.models import Post
+
+# CREATE
+p1 = Post(title="My First Post", content="Hello Django!")
+p1.save()
+
+# shortcut: create() saves immediately, no separate .save() needed
+p2 = Post.objects.create(title="Second Post", content="Learning ORM.")
+
+# READ — get all records
+all_posts = Post.objects.all()
+print(all_posts)
+
+# READ — get a single record
+post = Post.objects.get(id=1)
+print(post.title)</code></pre>
+  <div class="explain"><code>Post.objects</code> is the model's <b>manager</b> — the entry point for every database
+  query. <code>.get()</code> expects exactly one matching result and raises an error if zero or multiple rows match
+  — use it only when you're certain of a unique match (like a primary key).</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Run <code>makemigrations</code> and <code>migrate</code> for your updated Post model.</li>
+      <li>Open the shell and create 5 different Post records.</li>
+      <li>Retrieve and print all of them, then retrieve just one by its <code>id</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 8 ================= -->
+<section class="day" data-id="d8">
+  <h2>Day 8 — Django Admin <button class="mark-btn" data-mark="d8">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Creating a superuser account</li>
+    <li>Registering models so they appear in the admin panel</li>
+    <li>Customizing how models are displayed in admin</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Django's <b>admin panel</b> is an automatically generated interface for managing your data — one of Django's
+    most famous "batteries included" features. It's meant for site staff/content managers, not end users, but it's
+    also invaluable during development to quickly add test data.</p>
+  </div>
+
+  <div class="subhead">Create a superuser <span class="filetag">terminal</span></div>
+  <pre><code class="language-bash">python manage.py createsuperuser
+# follow the prompts: username, email, password</code></pre>
+
+  <div class="subhead">Register the model <span class="filetag">blog/admin.py</span></div>
+  <pre><code class="language-python">from django.contrib import admin
+from .models import Post
+
+admin.site.register(Post)</code></pre>
+  <div class="explain">Now visit <b>http://127.0.0.1:8000/admin/</b>, log in with your superuser account, and you'll
+  see "Posts" listed — with full add/edit/delete forms generated automatically from your model fields.</div>
+
+  <div class="subhead">Customizing the admin display <span class="filetag">blog/admin.py</span></div>
+  <pre><code class="language-python">from django.contrib import admin
+from .models import Post
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_published', 'created_at')   # columns shown in the list view
+    list_filter = ('is_published', 'created_at')               # sidebar filters
+    search_fields = ('title', 'content')                         # adds a search box
+    prepopulated_fields = {}    # (used with slug fields, covered later)</code></pre>
+  <div class="explain">
+    <code>@admin.register(Post)</code> is a decorator shortcut equivalent to calling
+    <code>admin.site.register(Post, PostAdmin)</code> afterward. <code>list_display</code> controls which columns
+    show in the table view (by default admin only shows one column, the <code>__str__</code>).
+  </div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Create a superuser and log into <code>/admin/</code>.</li>
+      <li>Register the Post model with a customized <code>PostAdmin</code> showing title, author, and created_at as columns.</li>
+      <li>Add a search box for title and content, and a filter for is_published.</li>
+      <li>Add 3 new posts directly through the admin panel.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 9 ================= -->
+<section class="day" data-id="d9">
+  <h2>Day 9 — QuerySets Deep Dive (CRUD) <button class="mark-btn" data-mark="d9">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Filtering, ordering, and excluding records</li>
+    <li>Updating and deleting existing records</li>
+    <li>Field lookups (contains, gt, lt, etc.)</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <b>QuerySet</b> is Django's representation of a database query — it's <b>lazy</b>, meaning the actual SQL
+    only runs when you evaluate it (loop over it, print it, or call <code>list()</code>), not the moment you write
+    the line of code. This lets you chain filters efficiently before hitting the database.</p>
+  </div>
+
+  <div class="subhead">Filtering &amp; ordering <span class="filetag">shell</span></div>
+  <pre><code class="language-python">from blog.models import Post
+
+# filter — returns a QuerySet (can be empty, one, or many)
+published = Post.objects.filter(is_published=True)
+
+# exclude — opposite of filter
+drafts = Post.objects.exclude(is_published=True)
+
+# ordering
+newest_first = Post.objects.order_by('-created_at')   # '-' means descending
+oldest_first = Post.objects.order_by('created_at')
+
+# field lookups — double underscore syntax
+title_contains = Post.objects.filter(title__icontains='django')  # case-insensitive contains
+recent = Post.objects.filter(created_at__year=2026)
+long_posts = Post.objects.filter(views_count__gt=100)              # greater than
+chained = Post.objects.filter(is_published=True).order_by('-created_at')[:5]  # top 5</code></pre>
+  <div class="explain">
+    The double-underscore syntax (<code>title__icontains</code>) is how Django ORM expresses SQL operators in
+    Python. <code>__gt</code>/<code>__lt</code>/<code>__gte</code>/<code>__lte</code> = greater/less than (or
+    equal). Slicing a QuerySet like <code>[:5]</code> works like a Python list, but translates to a SQL
+    <code>LIMIT</code> clause — much more efficient than fetching everything and slicing in Python.
+  </div>
+
+  <div class="subhead">Update &amp; delete <span class="filetag">shell</span></div>
+  <pre><code class="language-python"># UPDATE — single object
+post = Post.objects.get(id=1)
+post.title = "Updated Title"
+post.save()
+
+# UPDATE — bulk update matching many rows at once (faster, no .save() needed)
+Post.objects.filter(is_published=False).update(is_published=True)
+
+# DELETE — single object
+post = Post.objects.get(id=2)
+post.delete()
+
+# DELETE — bulk delete
+Post.objects.filter(views_count=0).delete()</code></pre>
+  <div class="explain"><code>.update()</code> called directly on a QuerySet runs one efficient SQL UPDATE for all
+  matching rows — much faster than looping through objects and calling <code>.save()</code> on each individually.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Write a query for all posts with "django" in the title (case-insensitive).</li>
+      <li>Write a query for the 3 most recently created posts.</li>
+      <li>Bulk-update all draft posts to published.</li>
+      <li>Delete any posts with zero views.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 10 ================= -->
+<section class="day" data-id="d10">
+  <h2>Day 10 — Django Forms <button class="mark-btn" data-mark="d10">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Creating a plain <code>forms.Form</code></li>
+    <li>Rendering a form in a template and handling submission</li>
+    <li>Built-in validation and CSRF protection</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Django's <code>forms</code> module handles rendering HTML form fields, validating submitted data, and
+    displaying error messages — all from one Python class definition. This is separate from
+    <b>ModelForms</b> (Day 11), which are auto-generated directly from a model.</p>
+    <p>Every form that changes data (POST request) needs <b>CSRF protection</b> — a hidden token Django checks to
+    make sure the submission actually came from your own site, not a malicious external page.</p>
+  </div>
+
+  <div class="subhead">Defining a form <span class="filetag">blog/forms.py (new file)</span></div>
+  <pre><code class="language-python">from django import forms
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)</code></pre>
+
+  <div class="subhead">Handling it in a view <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.shortcuts import render
+from .forms import ContactForm
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            # here you'd typically save to DB or send an email
+            return render(request, 'blog/thanks.html', {'name': name})
+    else:
+        form = ContactForm()
+    return render(request, 'blog/contact.html', {'form': form})</code></pre>
+  <div class="explain">
+    <code>request.method == 'POST'</code> checks whether the form was submitted (POST) or the page was just loaded
+    (GET). <code>form.is_valid()</code> runs all field validation (required fields, correct email format, etc.) and
+    returns True only if everything passes. <code>form.cleaned_data</code> is a dict of the validated, type-converted
+    values — safe to use directly.
+  </div>
+
+  <div class="subhead">Template <span class="filetag">blog/templates/blog/contact.html</span></div>
+  <pre><code class="language-xml">{% extends 'blog/base.html' %}
+{% block content %}
+&lt;form method="post"&gt;
+    {% csrf_token %}
+    {{ form.as_p }}
+    &lt;button type="submit"&gt;Send&lt;/button&gt;
+&lt;/form&gt;
+{% endblock %}</code></pre>
+  <div class="explain"><code>{% csrf_token %}</code> is mandatory on every form using POST — Django will reject the
+  submission with a 403 error without it. <code>{{ form.as_p }}</code> renders every field wrapped in a
+  <code>&lt;p&gt;</code> tag automatically, including error messages if validation failed.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Build a <code>ContactForm</code> with name, email, and message fields.</li>
+      <li>Create the view and template to display and process it.</li>
+      <li>Submit the form with an invalid email and confirm Django shows a validation error automatically.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 11 ================= -->
+<section class="day" data-id="d11">
+  <h2>Day 11 — ModelForms <button class="mark-btn" data-mark="d11">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Generating a form directly from a model</li>
+    <li>Saving submitted data straight into the database</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>A <code>ModelForm</code> is a shortcut that auto-generates form fields from a model's fields — you don't
+    repeat the field definitions like you did in <code>ContactForm</code>. It also gives you a <code>.save()</code>
+    method that writes the form data directly to the database, tying models, forms, and views together neatly.</p>
+  </div>
+
+  <div class="subhead">Defining a ModelForm <span class="filetag">blog/forms.py</span></div>
+  <pre><code class="language-python">from django import forms
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'is_published']   # or fields = '__all__'</code></pre>
+  <div class="explain">The inner <code>Meta</code> class tells Django which model to base the form on and which
+  fields to include. Using an explicit list (rather than <code>'__all__'</code>) is safer — it stops new model
+  fields from automatically becoming editable in the form without you noticing.</div>
+
+  <div class="subhead">View using the ModelForm <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.shortcuts import render, redirect
+from .forms import PostForm
+
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()                 # writes directly to the Post table
+            return redirect('home')
+    else:
+        form = PostForm()
+    return render(request, 'blog/post_form.html', {'form': form})</code></pre>
+  <div class="explain"><code>redirect('home')</code> sends the browser to the URL named 'home' after a successful
+  save — this follows the <b>Post/Redirect/Get</b> pattern, preventing the browser from re-submitting the same form
+  if the user refreshes the page.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Create a <code>PostForm</code> ModelForm for title, content, and is_published.</li>
+      <li>Build a "create post" view and template using it.</li>
+      <li>After saving, redirect to the home page and confirm the new post shows up in the list.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 12 ================= -->
+<section class="day" data-id="d12">
+  <h2>Day 12 — Class-Based Views: List &amp; Detail <button class="mark-btn" data-mark="d12">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Why Class-Based Views (CBVs) exist</li>
+    <li>Using <code>ListView</code> and <code>DetailView</code> for common patterns</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Class-Based Views</b> package common view patterns (list a model's records, show one record's detail,
+    handle a form) into reusable classes so you write far less repetitive code than function-based views. Django
+    provides "generic" CBVs for the most common jobs — <code>ListView</code>, <code>DetailView</code>,
+    <code>CreateView</code>, <code>UpdateView</code>, <code>DeleteView</code> — which we'll cover across today and
+    tomorrow.</p>
+  </div>
+
+  <div class="subhead">ListView <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.views.generic import ListView
+from .models import Post
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'   # default would be blog/post_list.html anyway
+    context_object_name = 'posts'            # default would be 'object_list'
+    ordering = ['-created_at']</code></pre>
+  <div class="explain">
+    Behind the scenes, <code>ListView</code> runs <code>Post.objects.all()</code>, orders it, and passes it to the
+    template under the name given in <code>context_object_name</code> — equivalent to writing the function-based
+    view from Day 4 manually, but in far fewer lines.
+  </div>
+
+  <div class="subhead">DetailView <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.views.generic import DetailView
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+    context_object_name = 'post'</code></pre>
+
+  <div class="subhead">Wiring CBVs into urls.py <span class="filetag">blog/urls.py</span></div>
+  <pre><code class="language-python">from django.urls import path
+from .views import PostListView, PostDetailView
+
+urlpatterns = [
+    path('', PostListView.as_view(), name='home'),
+    path('post/&lt;int:pk&gt;/', PostDetailView.as_view(), name='post_detail'),
+]</code></pre>
+  <div class="explain"><code>.as_view()</code> converts the class into something Django's URL dispatcher can call
+  like a function. <code>&lt;int:pk&gt;</code> is a <b>URL path converter</b> — it captures a number from the URL
+  and passes it as <code>pk</code> (primary key), which <code>DetailView</code> automatically uses to fetch the
+  matching object via <code>get_object_or_404</code>.</div>
+
+  <div class="subhead">Detail template <span class="filetag">blog/templates/blog/post_detail.html</span></div>
+  <pre><code class="language-xml">{% extends 'blog/base.html' %}
+{% block content %}
+    &lt;h1&gt;{{ post.title }}&lt;/h1&gt;
+    &lt;p&gt;{{ post.content }}&lt;/p&gt;
+    &lt;small&gt;Published {{ post.created_at }}&lt;/small&gt;
+{% endblock %}</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Replace your function-based home view with <code>PostListView</code>.</li>
+      <li>Add <code>PostDetailView</code> and link each post title in the list to its detail page using <code>{% url 'post_detail' post.pk %}</code>.</li>
+      <li>Confirm clicking a post title opens its individual page.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 13 ================= -->
+<section class="day" data-id="d13">
+  <h2>Day 13 — CBVs: Create, Update, Delete <button class="mark-btn" data-mark="d13">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Building full CRUD with generic CBVs</li>
+    <li><code>success_url</code>, <code>get_absolute_url</code>, and confirmation pages</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><code>CreateView</code> and <code>UpdateView</code> both combine a ModelForm with a template and a save step,
+    covering what we hand-wrote in Day 11. <code>DeleteView</code> shows a confirmation page before deleting — you
+    should never delete on a plain GET request, since browsers/crawlers can trigger GETs unexpectedly.</p>
+  </div>
+
+  <div class="subhead">Full CRUD views <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.views.generic import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Post
+
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'content', 'is_published']
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('home')
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['title', 'content', 'is_published']
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('home')
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('home')</code></pre>
+  <div class="explain">
+    <code>reverse_lazy()</code> is used instead of <code>redirect()</code> here because these are class attributes,
+    evaluated when the module loads (before urls.py is fully ready) — "lazy" defers the URL lookup until it's
+    actually needed. <code>CreateView</code> and <code>UpdateView</code> can reuse the <b>same template</b>, since
+    both just render a form.
+  </div>
+
+  <div class="subhead">URLs for full CRUD <span class="filetag">blog/urls.py</span></div>
+  <pre><code class="language-python">from .views import PostCreateView, PostUpdateView, PostDeleteView
+
+urlpatterns += [
+    path('post/new/', PostCreateView.as_view(), name='post_create'),
+    path('post/&lt;int:pk&gt;/edit/', PostUpdateView.as_view(), name='post_edit'),
+    path('post/&lt;int:pk&gt;/delete/', PostDeleteView.as_view(), name='post_delete'),
+]</code></pre>
+
+  <div class="subhead">Delete confirmation template <span class="filetag">blog/templates/blog/post_confirm_delete.html</span></div>
+  <pre><code class="language-xml">{% extends 'blog/base.html' %}
+{% block content %}
+    &lt;h2&gt;Delete "{{ post.title }}"?&lt;/h2&gt;
+    &lt;form method="post"&gt;
+        {% csrf_token %}
+        &lt;button type="submit"&gt;Yes, delete&lt;/button&gt;
+        &lt;a href="{% url 'home' %}"&gt;Cancel&lt;/a&gt;
+    &lt;/form&gt;
+{% endblock %}</code></pre>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Add Create, Update, and Delete views/URLs for Post.</li>
+      <li>Add "Edit" and "Delete" links next to each post on the detail page.</li>
+      <li>Test the full CRUD cycle: create a post, edit it, then delete it.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 14 ================= -->
+<section class="day" data-id="d14">
+  <h2>Day 14 — Model Relationships <button class="mark-btn" data-mark="d14">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li><code>ForeignKey</code> (many-to-one), <code>ManyToManyField</code>, and <code>OneToOneField</code></li>
+    <li>Querying across relationships</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <ul>
+      <li><b>ForeignKey</b> — many-to-one. Many Comments can belong to one Post.</li>
+      <li><b>ManyToManyField</b> — many-to-many. A Post can have many Tags, and a Tag can belong to many Posts.</li>
+      <li><b>OneToOneField</b> — exactly one-to-one. A User has exactly one Profile.</li>
+    </ul>
+    <p><code>on_delete</code> is required on every ForeignKey — it decides what happens to related rows when the
+    referenced row is deleted. <code>CASCADE</code> (delete related rows too) is the most common choice.</p>
+  </div>
+
+  <div class="subhead">Adding relationships <span class="filetag">blog/models.py</span></div>
+  <pre><code class="language-python">from django.db import models
+from django.contrib.auth.models import User
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    def __str__(self):
+        return self.name
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_published = models.BooleanField(default=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    categories = models.ManyToManyField(Category, blank=True)
+
+    def __str__(self):
+        return self.title
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=80)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.name} on {self.post}"</code></pre>
+  <div class="explain">
+    <code>related_name='comments'</code> lets you go <b>backwards</b> from a Post to its Comments using
+    <code>post.comments.all()</code> — without it, Django defaults to <code>post.comment_set.all()</code>, which
+    works but is less readable.
+  </div>
+
+  <div class="subhead">Querying across relationships <span class="filetag">shell</span></div>
+  <pre><code class="language-python">post = Post.objects.get(id=1)
+
+# forward relationship
+print(post.author.username)         # ForeignKey -> author's username
+print(post.categories.all())         # ManyToMany -> all categories on this post
+
+# backward relationship (thanks to related_name)
+print(post.comments.all())            # all comments on this post
+
+# filtering through a relationship with double underscore
+django_posts = Post.objects.filter(categories__name='Django')
+alice_posts = Post.objects.filter(author__username='alice')</code></pre>
+  <div class="explain">The double-underscore lookup syntax works across relationships too, not just field types —
+  <code>categories__name</code> reaches "through" the ManyToMany field into the related Category model's
+  <code>name</code> field.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Add <code>Category</code> and <code>Comment</code> models as shown, then run makemigrations/migrate.</li>
+      <li>Register both in the admin panel.</li>
+      <li>Add 2-3 comments to a post via the admin or shell, then print them from <code>post.comments.all()</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 15 ================= -->
+<section class="day" data-id="d15">
+  <h2>Day 15 — User Authentication <button class="mark-btn" data-mark="d15">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Django's built-in <code>User</code> model and <code>django.contrib.auth</code></li>
+    <li>Registration, login, and logout views</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Django ships with a complete authentication system: a <code>User</code> model, password hashing, session
+    management, and ready-made views for login/logout. You rarely need to build these from scratch — mostly you
+    wire up URLs and templates for the built-in views.</p>
+  </div>
+
+  <div class="subhead">Registration view (custom) <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'blog/register.html', {'form': form})</code></pre>
+  <div class="explain"><code>UserCreationForm</code> is a built-in ModelForm for the User model — it already
+  handles password confirmation and hashing (passwords are never stored as plain text; Django hashes them with
+  PBKDF2 by default).</div>
+
+  <div class="subhead">Login &amp; logout (built-in views) <span class="filetag">mysite/urls.py</span></div>
+  <pre><code class="language-python">from django.contrib.auth import views as auth_views
+
+urlpatterns += [
+    path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+]</code></pre>
+  <div class="explain">Django provides <code>LoginView</code> and <code>LogoutView</code> ready to use — you just
+  supply a login template; logout needs no template by default (it just clears the session and redirects).</div>
+
+  <div class="subhead">Login template <span class="filetag">blog/templates/blog/login.html</span></div>
+  <pre><code class="language-xml">{% extends 'blog/base.html' %}
+{% block content %}
+&lt;form method="post"&gt;
+    {% csrf_token %}
+    {{ form.as_p }}
+    &lt;button type="submit"&gt;Log in&lt;/button&gt;
+&lt;/form&gt;
+{% endblock %}</code></pre>
+
+  <div class="subhead">Checking login state in a template <span class="filetag">any template</span></div>
+  <pre><code class="language-xml">{% if user.is_authenticated %}
+    &lt;p&gt;Welcome, {{ user.username }}! &lt;a href="{% url 'logout' %}"&gt;Logout&lt;/a&gt;&lt;/p&gt;
+{% else %}
+    &lt;a href="{% url 'login' %}"&gt;Login&lt;/a&gt; | &lt;a href="{% url 'register' %}"&gt;Register&lt;/a&gt;
+{% endif %}</code></pre>
+  <div class="explain"><code>user</code> is automatically available in every template (via Django's built-in
+  context processor) — <code>user.is_authenticated</code> is <code>False</code> for anonymous visitors and
+  <code>True</code> once logged in.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Build the registration page and confirm a new user can sign up.</li>
+      <li>Wire up login and logout, and add a login/logout link to your navbar.</li>
+      <li>Update the "create post" view so a new post's <code>author</code> is automatically set to the logged-in user (<code>request.user</code>).</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 16 ================= -->
+<section class="day" data-id="d16">
+  <h2>Day 16 — Authorization &amp; Permissions <button class="mark-btn" data-mark="d16">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Restricting views to logged-in users</li>
+    <li>Restricting edit/delete to only the post's owner</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Authentication</b> answers "who are you?"; <b>authorization</b> answers "are you allowed to do this?".
+    Django provides both a decorator (for function-based views) and a mixin (for class-based views) to require
+    login, plus manual checks for object-level permissions like "only the owner can edit their own post".</p>
+  </div>
+
+  <div class="subhead">Function-based view protection <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.contrib.auth.decorators import login_required
+
+@login_required
+def create_post(request):
+    # ... only reachable by logged-in users; others get redirected to LOGIN_URL
+    ...</code></pre>
+
+  <div class="subhead">Class-based view protection <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import CreateView, UpdateView
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['title', 'content', 'is_published']
+    login_url = 'login'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user   # auto-assign the logged-in user
+        return super().form_valid(form)
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content', 'is_published']
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author   # only the owner can edit</code></pre>
+  <div class="explain">
+    <b>Mixins</b> are added as extra parent classes — Python checks them left to right, so
+    <code>LoginRequiredMixin</code> runs before <code>UserPassesTestMixin</code>. <code>form_valid()</code> is
+    called automatically after validation passes, right before saving — the perfect hook to attach the current user
+    as the author. <code>test_func()</code> must return True/False; UserPassesTestMixin blocks access (403) if it
+    returns False.
+  </div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Protect the create, update, and delete views so only logged-in users can access them.</li>
+      <li>Restrict edit/delete so only the post's original author can use them (test by trying with a second account).</li>
+      <li>Add a friendly "Access Denied" message or redirect for unauthorized attempts.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 17 ================= -->
+<section class="day" data-id="d17">
+  <h2>Day 17 — Django REST Framework: Serializers <button class="mark-btn" data-mark="d17">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>What DRF adds on top of Django, and why APIs matter</li>
+    <li>Converting model instances to/from JSON with serializers</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Django REST Framework (DRF)</b> is the standard toolkit for building JSON APIs on top of Django — used
+    when your frontend is a separate app (React, mobile app) that needs data over HTTP instead of rendered HTML.
+    A <b>serializer</b> is DRF's equivalent of a form: it converts complex data (model instances, querysets) into
+    JSON, and validates/converts incoming JSON back into Python objects.</p>
+  </div>
+
+  <div class="subhead">Install &amp; configure <span class="filetag">terminal / settings.py</span></div>
+  <pre><code class="language-bash">pip install djangorestframework</code></pre>
+  <pre><code class="language-python">INSTALLED_APPS = [
+    # ...
+    'rest_framework',
+    'blog',
+]</code></pre>
+
+  <div class="subhead">Serializer <span class="filetag">blog/serializers.py (new file)</span></div>
+  <pre><code class="language-python">from rest_framework import serializers
+from .models import Post
+
+class PostSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'content', 'author', 'is_published', 'created_at']</code></pre>
+  <div class="explain">
+    <code>ModelSerializer</code> is the DRF equivalent of <code>ModelForm</code> — it auto-generates fields from the
+    model. <code>ReadOnlyField(source='author.username')</code> exposes the author's username in the API output
+    (instead of just their numeric ID) without allowing it to be edited through the API.
+  </div>
+
+  <div class="subhead">Using it manually <span class="filetag">shell</span></div>
+  <pre><code class="language-python">from blog.models import Post
+from blog.serializers import PostSerializer
+
+post = Post.objects.first()
+serializer = PostSerializer(post)
+print(serializer.data)          # a dict, ready to convert to JSON
+
+posts = Post.objects.all()
+many_serializer = PostSerializer(posts, many=True)   # many=True for querysets/lists
+print(many_serializer.data)</code></pre>
+  <div class="explain"><code>many=True</code> is required whenever serializing a queryset or list instead of a
+  single object — it tells DRF to loop through and serialize each item.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Install DRF and add it to INSTALLED_APPS.</li>
+      <li>Write a <code>PostSerializer</code> exposing id, title, content, author, and created_at.</li>
+      <li>In the shell, serialize a single post and then all posts, and print both outputs.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 18 ================= -->
+<section class="day" data-id="d18">
+  <h2>Day 18 — DRF: Views &amp; Routers <button class="mark-btn" data-mark="d18">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Building a full CRUD API with <code>ViewSet</code> and <code>Router</code></li>
+    <li>Testing the API with the browsable API interface</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Just like Django has generic CBVs, DRF has <b>ViewSets</b> that bundle list/create/retrieve/update/delete
+    logic for a model into one class. A <b>Router</b> then automatically generates all the URL patterns for that
+    ViewSet — no manual <code>path()</code> entries needed for each CRUD action.</p>
+  </div>
+
+  <div class="subhead">ViewSet <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">from rest_framework import viewsets, permissions
+from .models import Post
+from .serializers import PostSerializer
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all().order_by('-created_at')
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)</code></pre>
+  <div class="explain">
+    <code>ModelViewSet</code> gives you list, create, retrieve, update, partial_update, and destroy — the entire
+    CRUD API — in one class. <code>IsAuthenticatedOrReadOnly</code> means anyone can GET (read), but only logged-in
+    users can POST/PUT/DELETE. <code>perform_create()</code> is DRF's version of <code>form_valid()</code> — the
+    hook to attach the current user before saving.
+  </div>
+
+  <div class="subhead">Router-based URLs <span class="filetag">mysite/urls.py</span></div>
+  <pre><code class="language-python">from rest_framework.routers import DefaultRouter
+from blog.views import PostViewSet
+
+router = DefaultRouter()
+router.register('api/posts', PostViewSet, basename='post')
+
+urlpatterns += router.urls</code></pre>
+  <div class="explain">
+    This single <code>router.register()</code> call automatically creates:
+    <code>GET/POST /api/posts/</code> (list &amp; create) and
+    <code>GET/PUT/PATCH/DELETE /api/posts/&lt;id&gt;/</code> (retrieve, update, delete) — 6 endpoints from one line.
+  </div>
+
+  <div class="subhead">Testing the API <span class="filetag">browser / requests</span></div>
+  <pre><code class="language-python">import requests
+
+# GET all posts
+response = requests.get("http://127.0.0.1:8000/api/posts/")
+print(response.json())
+
+# POST a new post (requires authentication in a real setup)
+new_post = {"title": "API Post", "content": "Created via DRF", "is_published": True}
+response = requests.post("http://127.0.0.1:8000/api/posts/", json=new_post)
+print(response.status_code, response.json())</code></pre>
+  <div class="explain">Visiting <code>/api/posts/</code> directly in a browser shows DRF's <b>browsable API</b> —
+  an interactive HTML page with forms for testing every endpoint without any extra tools, which is one of DRF's
+  most loved features for development.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Build <code>PostViewSet</code> and register it with a router.</li>
+      <li>Visit <code>/api/posts/</code> in your browser and explore the browsable API.</li>
+      <li>Use the <code>requests</code> library (or the browsable API form) to create, update, and delete a post via the API.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 19 ================= -->
+<section class="day" data-id="d19">
+  <h2>Day 19 — Media Uploads, Pagination &amp; Search <button class="mark-btn" data-mark="d19">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Handling image/file uploads with <code>ImageField</code></li>
+    <li>Paginating long lists</li>
+    <li>Adding a simple search feature</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p><b>Media files</b> (user uploads) are configured separately from static files — <code>MEDIA_URL</code> and
+    <code>MEDIA_ROOT</code> in settings tell Django where uploaded files are saved and served from.
+    <b>Pagination</b> splits a long queryset into pages so a template doesn't try to render thousands of rows at
+    once. A basic <b>search</b> feature just filters a queryset based on a GET parameter typed into a search box.</p>
+  </div>
+
+  <div class="subhead">Media configuration <span class="filetag">mysite/settings.py</span></div>
+  <pre><code class="language-python">MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'</code></pre>
+  <pre><code class="language-python"># mysite/urls.py — serve media files during development
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)</code></pre>
+
+  <div class="subhead">Image field on the model <span class="filetag">blog/models.py</span></div>
+  <pre><code class="language-python">class Post(models.Model):
+    # ... existing fields ...
+    cover_image = models.ImageField(upload_to='post_covers/', blank=True, null=True)</code></pre>
+  <div class="explain"><code>upload_to='post_covers/'</code> means uploaded images are saved to
+  <code>media/post_covers/</code>. Using <code>ImageField</code> requires the <code>Pillow</code> package
+  (<code>pip install Pillow</code>) — Django uses it to validate the file is actually a real image.</div>
+
+  <div class="subhead">Form must allow file uploads <span class="filetag">template</span></div>
+  <pre><code class="language-xml">&lt;form method="post" enctype="multipart/form-data"&gt;
+    {% csrf_token %}
+    {{ form.as_p }}
+    &lt;button type="submit"&gt;Save&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  <div class="explain"><code>enctype="multipart/form-data"</code> is required on the <code>&lt;form&gt;</code> tag
+  whenever a file input is present — without it the file simply won't be sent.</div>
+
+  <div class="subhead">Pagination <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">class PostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+    ordering = ['-created_at']
+    paginate_by = 5           # 5 posts per page</code></pre>
+  <pre><code class="language-xml">{% if is_paginated %}
+&lt;div class="pagination"&gt;
+    {% if page_obj.has_previous %}
+        &lt;a href="?page={{ page_obj.previous_page_number }}"&gt;Previous&lt;/a&gt;
+    {% endif %}
+    &lt;span&gt;Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}&lt;/span&gt;
+    {% if page_obj.has_next %}
+        &lt;a href="?page={{ page_obj.next_page_number }}"&gt;Next&lt;/a&gt;
+    {% endif %}
+&lt;/div&gt;
+{% endif %}</code></pre>
+  <div class="explain">Adding <code>paginate_by = 5</code> to a generic ListView automatically slices the queryset
+  and provides a <code>page_obj</code> in the template context — no manual pagination logic needed.</div>
+
+  <div class="subhead">Simple search <span class="filetag">blog/views.py</span></div>
+  <pre><code class="language-python">def search(request):
+    query = request.GET.get('q', '')
+    results = Post.objects.filter(title__icontains=query) if query else Post.objects.none()
+    return render(request, 'blog/search_results.html', {'results': results, 'query': query})</code></pre>
+  <pre><code class="language-xml">&lt;form method="get" action="{% url 'search' %}"&gt;
+    &lt;input type="text" name="q" placeholder="Search posts..." value="{{ query }}"&gt;
+    &lt;button type="submit"&gt;Search&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  <div class="explain">A search form typically uses <code>method="get"</code> (not post) — this puts the query in the
+  URL as <code>?q=django</code>, which makes search results bookmarkable and shareable.</div>
+
+  <div class="practice">
+    <h3>Practice Task</h3>
+    <ol>
+      <li>Add a <code>cover_image</code> field to Post and update the create/edit form to accept uploads.</li>
+      <li>Add pagination (5 per page) to your post list and build Previous/Next links.</li>
+      <li>Build a search bar that filters posts by title.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= DAY 20 ================= -->
+<section class="day" data-id="d20">
+  <h2>Day 20 — Deployment Basics &amp; Capstone Project <button class="mark-btn" data-mark="d20">Mark complete</button></h2>
+  <div class="objectives"><h3>Today you will learn</h3><ul>
+    <li>Preparing a Django project for production</li>
+    <li>Environment variables and <code>requirements.txt</code></li>
+    <li>Pulling everything together into one finished Blog application</li>
+  </ul></div>
+
+  <div class="theory">
+    <h3>Theory</h3>
+    <p>Moving from development to a live server requires several safety and performance changes. Never deploy with
+    development settings — they're insecure and slow for real traffic.</p>
+    <ul>
+      <li><code>DEBUG = False</code> — turns off Django's detailed error pages, which can leak sensitive info</li>
+      <li><code>ALLOWED_HOSTS</code> — a list of domain names allowed to serve this project (prevents HTTP Host header attacks)</li>
+      <li><b>Secret key &amp; passwords</b> should never be hardcoded — load them from environment variables</li>
+      <li><code>collectstatic</code> — gathers all static files into one folder for the production web server to serve directly</li>
+      <li><b>WSGI/ASGI server</b> — Django's own <code>runserver</code> is for development only; production uses something like Gunicorn behind Nginx</li>
+    </ul>
+  </div>
+
+  <div class="subhead">Production-ready settings <span class="filetag">mysite/settings.py</span></div>
+  <pre><code class="language-python">import os
+
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'    # target folder for collectstatic</code></pre>
+  <div class="explain"><code>os.environ.get()</code> reads values from environment variables set on the server —
+  this way your actual secret key and database password never appear in your code or get pushed to GitHub.</div>
+
+  <div class="subhead">Preparing for deployment <span class="filetag">terminal</span></div>
+  <pre><code class="language-bash"># freeze installed packages so the server can install the same versions
+pip freeze > requirements.txt
+
+# gather all static files into STATIC_ROOT
+python manage.py collectstatic
+
+# install a production WSGI server
+pip install gunicorn
+gunicorn mysite.wsgi:application</code></pre>
+  <div class="explain"><code>requirements.txt</code> lists every package and exact version your project needs —
+  hosting platforms (Render, Railway, PythonAnywhere, Heroku) read this file to rebuild your environment
+  automatically during deployment.</div>
+
+  <div class="theory">
+    <h3>Capstone Project Checklist — "Blog CRUD App"</h3>
+    <p>By today, your Blog application (built incrementally since Day 1) should include everything below. Go
+    through this checklist and confirm each item works end-to-end:</p>
+    <ul>
+      <li>✅ Home page listing all published posts, paginated 5 per page</li>
+      <li>✅ Post detail page showing full content, comments, and category tags</li>
+      <li>✅ User registration, login, and logout</li>
+      <li>✅ Only logged-in users can create posts; only the author can edit/delete their own posts</li>
+      <li>✅ Posts support a cover image upload</li>
+      <li>✅ A working search bar filtering posts by title</li>
+      <li>✅ Comments can be added on a post's detail page</li>
+      <li>✅ Admin panel fully configured (list_display, search_fields, filters) for Post, Category, and Comment</li>
+      <li>✅ A REST API (<code>/api/posts/</code>) exposing full CRUD, restricted to authenticated writes</li>
+      <li>✅ Settings prepared for production (DEBUG, ALLOWED_HOSTS, SECRET_KEY via environment variables)</li>
+    </ul>
+  </div>
+
+  <div class="practice">
+    <h3>Final Capstone Task</h3>
+    <ol>
+      <li>Go through the checklist above on your own Blog project and fix anything missing.</li>
+      <li>Write a <code>requirements.txt</code> and a short <code>README.md</code> explaining how to set up and run the project locally.</li>
+      <li>(Optional, stretch goal) Deploy the project to a free platform such as Render, Railway, or PythonAnywhere and share the live link.</li>
+    </ol>
+  </div>
+</section>
+
+<div class="nav-footer">
+  <button id="prevBtn">&larr; Previous day</button>
+  <button id="nextBtn">Next day &rarr;</button>
+</div>
+
+</main>
+
+<script>
+document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+
+const order = [];
+for(let i=1;i<=20;i++){ order.push('d'+i); }
+
+const titles = {
+  d1:["Introduction & Environment Setup","What Django is, how MVT works, and getting your first project running."],
+  d2:["Project Structure & Apps","Understanding manage.py, settings.py, and creating your first app."],
+  d3:["URLs & Views (Function-Based)","Routing requests to view functions and returning responses."],
+  d4:["Templates & DTL","Rendering HTML with dynamic data using the Django Template Language."],
+  d5:["Template Inheritance & Static Files","Reusable layouts with extends/block, plus CSS/JS."],
+  d6:["Models & the Django ORM","Defining your data structure as Python classes."],
+  d7:["Migrations & Django Shell","Turning model changes into database schema, and querying interactively."],
+  d8:["Django Admin","Managing your data through Django's built-in admin panel."],
+  d9:["QuerySets Deep Dive (CRUD)","Filtering, ordering, updating, and deleting records."],
+  d10:["Django Forms","Building and validating plain forms with CSRF protection."],
+  d11:["ModelForms","Auto-generating forms directly from your models."],
+  d12:["CBVs: List & Detail","Replacing repetitive views with generic class-based views."],
+  d13:["CBVs: Create, Update, Delete","Full CRUD using CreateView, UpdateView, DeleteView."],
+  d14:["Model Relationships","ForeignKey, ManyToMany, and OneToOne relationships."],
+  d15:["User Authentication","Registration, login, and logout with Django's built-in auth."],
+  d16:["Authorization & Permissions","Restricting access with decorators and mixins."],
+  d17:["DRF: Serializers","Converting model data to and from JSON."],
+  d18:["DRF: Views & Routers","Building a full REST API with ViewSets."],
+  d19:["Media, Pagination & Search","File uploads, paging long lists, and search."],
+  d20:["Deployment & Capstone","Production settings and the final project checklist."]
+};
+
+let completed = new Set();
+
+function showDay(id){
+  document.querySelectorAll('section.day').forEach(s => s.classList.remove('active'));
+  document.querySelector(`section.day[data-id="${id}"]`).classList.add('active');
+  document.querySelectorAll('nav.toc a').forEach(a => a.classList.remove('active'));
+  document.querySelector(`nav.toc a[data-target="${id}"]`).classList.add('active');
+  const dayNum = order.indexOf(id) + 1;
+  document.getElementById('dayTag').textContent = `DAY ${dayNum} / 20`;
+  document.getElementById('pageTitle').textContent = titles[id][0];
+  document.getElementById('pageSub').textContent = titles[id][1];
+  document.getElementById('main').scrollTop = 0;
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+document.querySelectorAll('nav.toc a').forEach(a=>{
+  a.addEventListener('click', ()=> showDay(a.dataset.target));
+});
+
+document.querySelectorAll('.mark-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const id = btn.dataset.mark;
+    const chk = document.querySelector(`nav.toc a[data-target="${id}"] .chk`);
+    if(completed.has(id)){
+      completed.delete(id); btn.classList.remove('done'); btn.textContent='Mark complete';
+      document.querySelector(`nav.toc a[data-target="${id}"]`).classList.remove('done');
+      chk.textContent = order.indexOf(id)+1;
+    } else {
+      completed.add(id); btn.classList.add('done'); btn.textContent='✓ Completed';
+      document.querySelector(`nav.toc a[data-target="${id}"]`).classList.add('done');
+      chk.textContent = '✓';
+    }
+    updateProgress();
+  });
+});
+
+function updateProgress(){
+  const pct = Math.round((completed.size/order.length)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = `${completed.size} / 20 days completed`;
+}
+
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  const current = document.querySelector('nav.toc a.active').dataset.target;
+  const idx = order.indexOf(current);
+  if(idx>0) showDay(order[idx-1]);
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  const current = document.querySelector('nav.toc a.active').dataset.target;
+  const idx = order.indexOf(current);
+  if(idx<order.length-1) showDay(order[idx+1]);
+});
+
+showDay('d1');
+</script>
+</body>
+</html>

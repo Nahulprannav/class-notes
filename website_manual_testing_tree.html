@@ -1,0 +1,503 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:14px 10px;font-family:var(--font-sans)}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.top-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.top-sub{font-size:11px;color:var(--color-text-secondary)}
+.btn-row{display:flex;gap:6px}
+.btn{font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.btn:hover{background:var(--color-background-secondary)}
+
+/* tree */
+ul.tree{list-style:none;padding:0;margin:0}
+ul.tree ul{list-style:none;padding-left:18px;margin:0;border-left:1.5px solid var(--color-border-tertiary);margin-left:10px}
+li.tnode{margin:2px 0}
+.row{display:flex;align-items:center;gap:6px;padding:4px 8px;border-radius:7px;cursor:pointer;transition:background .12s;user-select:none}
+.row:hover{background:var(--color-background-secondary)}
+.arr{width:14px;height:14px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--color-text-secondary);transition:transform .18s;flex-shrink:0}
+.arr.open{transform:rotate(90deg)}
+.arr.none{opacity:0;pointer-events:none}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lbl{font-size:12.5px;color:var(--color-text-primary);line-height:1.3}
+.lbl.h1{font-size:14px;font-weight:500}
+.lbl.h2{font-size:13px;font-weight:500}
+.lbl.h3{font-size:12.5px;font-weight:400}
+.lbl.leaf{font-size:12px;color:var(--color-text-secondary)}
+.tag{font-size:10px;padding:1px 7px;border-radius:8px;font-weight:500;flex-shrink:0;margin-left:2px}
+.kids{display:block}
+.kids.hide{display:none}
+
+/* colors */
+.c1{background:#EEEDFE}.c1t{color:#3C3489}
+.c2{background:#E1F5EE}.c2t{color:#085041}
+.c3{background:#FAEEDA}.c3t{color:#633806}
+.c4{background:#FAECE7}.c4t{color:#4A1B0C}
+.c5{background:#FBEAF0}.c5t{color:#4B1528}
+.c6{background:#E6F1FB}.c6t{color:#042C53}
+.c7{background:#EAF3DE}.c7t{color:#173404}
+.c8{background:#FCEBEB}.c8t{color:#501313}
+.c9{background:#EEEDFE}.c9t{color:#26215C}
+.c10{background:#F1EFE8}.c10t{color:#2C2C2A}
+
+.d1{background:#7F77DD}
+.d2{background:#1D9E75}
+.d3{background:#BA7517}
+.d4{background:#D85A30}
+.d5{background:#D4537E}
+.d6{background:#378ADD}
+.d7{background:#639922}
+.d8{background:#E24B4A}
+.d9{background:#534AB7}
+.d10{background:#888780}
+
+@media(prefers-color-scheme:dark){
+  .c1{background:#26215C}.c1t{color:#AFA9EC}
+  .c2{background:#04342C}.c2t{color:#5DCAA5}
+  .c3{background:#412402}.c3t{color:#FAC775}
+  .c4{background:#4A1B0C}.c4t{color:#F0997B}
+  .c5{background:#4B1528}.c5t{color:#ED93B1}
+  .c6{background:#042C53}.c6t{color:#85B7EB}
+  .c7{background:#173404}.c7t{color:#97C459}
+  .c8{background:#501313}.c8t{color:#F09595}
+  .c9{background:#26215C}.c9t{color:#AFA9EC}
+  .c10{background:#2C2C2A}.c10t{color:#B4B2A9}
+}
+</style>
+
+<div class="wrap">
+<div class="top-bar">
+  <div>
+    <div class="top-title">Manual Testing — Website Concepts Tree</div>
+    <div class="top-sub">Click any branch to expand / collapse</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="all(true)">Expand all</button>
+    <button class="btn" onclick="all(false)">Collapse all</button>
+  </div>
+</div>
+
+<ul class="tree">
+<li class="tnode">
+  <div class="row" onclick="tog(this)">
+    <span class="arr open">▶</span>
+    <span class="dot" style="width:11px;height:11px;background:#7F77DD"></span>
+    <span class="lbl h1">Manual Testing — Website</span>
+  </div>
+  <ul class="kids">
+
+    <!-- 1. FUNCTIONALITY -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d1"></span>
+        <span class="lbl h2">1. Functionality Testing</span>
+        <span class="tag c1 c1t">Core</span>
+      </div>
+      <ul class="kids">
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d1"></span><span class="lbl h3">1.1 Login &amp; Authentication</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Valid login redirects to dashboard</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Invalid credentials show error</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Forgot password flow works</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Logout clears session completely</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Remember me checkbox works</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">OAuth / social login (Google, Facebook)</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d1"></span><span class="lbl h3">1.2 Registration / Sign Up</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">All required fields validated</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Duplicate email shows error</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Password strength indicator works</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Confirmation email sent</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d1"></span><span class="lbl h3">1.3 Search Functionality</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Relevant results returned</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Empty search shows message</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Special characters handled</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Search suggestions / autocomplete</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Filters and sorting work</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d1"></span><span class="lbl h3">1.4 Shopping Cart (E-commerce)</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Add / remove items correctly</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Quantity update reflects price</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Coupon / discount code applies</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Cart persists after page refresh</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Checkout flow completes</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Payment gateway integrates</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Order confirmation email sent</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d1"></span><span class="lbl h3">1.5 Contact / Enquiry Forms</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Required field validation</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Email format validation</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Success message on submit</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Data received at admin email</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">CAPTCHA / bot protection works</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d1"></span><span class="lbl h3">1.6 Media &amp; File Uploads</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Allowed file types accepted</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Invalid file type rejected with message</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">File size limit enforced</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d1" style="width:5px;height:5px"></span><span class="lbl leaf">Uploaded file displays correctly</span></div></li>
+        </ul></li>
+
+      </ul>
+    </li>
+
+    <!-- 2. UI -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d2"></span>
+        <span class="lbl h2">2. UI Testing</span>
+        <span class="tag c2 c2t">Look &amp; Feel</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d2"></span><span class="lbl h3">2.1 Layout &amp; Alignment</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">No overlapping elements</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Consistent margins and padding</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Grid alignment is clean</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Footer sticks to bottom</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d2"></span><span class="lbl h3">2.2 Typography</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Font family consistent throughout</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Heading hierarchy (H1→H2→H3) correct</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Font size readable on all screens</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Line height not too cramped</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d2"></span><span class="lbl h3">2.3 Colors &amp; Branding</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Brand colors used consistently</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Sufficient contrast for readability</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">No random color inconsistencies</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d2"></span><span class="lbl h3">2.4 Images &amp; Icons</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">All images load without broken icon</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Images not stretched or distorted</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Icons are pixel-perfect and consistent</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Favicon present in browser tab</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d2"></span><span class="lbl h3">2.5 Interactive Elements</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Hover effects on buttons / links</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Focus state visible on keyboard nav</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Tooltips show correct info</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Modals / popups open and close</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Sliders and carousels work</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d2" style="width:5px;height:5px"></span><span class="lbl leaf">Accordions expand / collapse</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+    <!-- 3. RESPONSIVENESS -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d3"></span>
+        <span class="lbl h2">3. Responsiveness Testing</span>
+        <span class="tag c3 c3t">All Devices</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d3"></span><span class="lbl h3">3.1 Breakpoints</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Desktop — 1920px, 1440px, 1280px</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Laptop — 1366px, 1024px</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Tablet — 768px, 820px</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Mobile — 375px, 390px, 414px</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d3"></span><span class="lbl h3">3.2 Layout Checks</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">No horizontal scrollbar on mobile</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Text doesn't overflow containers</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Images scale proportionally</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Columns stack correctly on small screens</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d3"></span><span class="lbl h3">3.3 Mobile-Specific</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Hamburger menu opens / closes</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Touch targets ≥ 44px (tap-friendly)</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Phone numbers are tap-to-call</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d3" style="width:5px;height:5px"></span><span class="lbl leaf">Keyboard doesn't break layout on focus</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+    <!-- 4. LINK -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d4"></span>
+        <span class="lbl h2">4. Link Testing</span>
+        <span class="tag c4 c4t">Navigation</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d4"></span><span class="lbl h3">4.1 Internal Links</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">Menu links navigate correctly</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">CTA buttons go to right page</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">Anchor links scroll to section</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d4"></span><span class="lbl h3">4.2 External Links</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">Open in new tab (target="_blank")</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">Destination URL is correct</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">No 404 errors on destination</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d4"></span><span class="lbl h3">4.3 Broken / Redirect Links</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">404 pages show friendly error</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">No infinite redirect loops</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">Redirect lands on correct page</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d4"></span><span class="lbl h3">4.4 Special Links</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">mailto: opens email client</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">tel: opens dialer on mobile</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d4" style="width:5px;height:5px"></span><span class="lbl leaf">PDF / file download links work</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+    <!-- 5. FORM -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d5"></span>
+        <span class="lbl h2">5. Form Testing</span>
+        <span class="tag c5 c5t">Input Validation</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d5"></span><span class="lbl h3">5.1 Validation</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Required fields show error if empty</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Email format validated</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Phone number format checked</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Min / max character limits enforced</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Numeric fields reject alphabets</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d5"></span><span class="lbl h3">5.2 Boundary Value Testing</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Exactly at min limit (e.g. 8 chars password)</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">One below min — should fail</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">One above max — should fail</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Exactly at max limit — should pass</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d5"></span><span class="lbl h3">5.3 Negative Testing</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">SQL injection in fields</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Script tags / XSS attempt</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Extremely long text input</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Pasting special / Unicode characters</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d5"></span><span class="lbl h3">5.4 Submission &amp; UX</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Success message after submit</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Double submit prevention</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Tab order is logical</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">Auto-fill works correctly</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d5" style="width:5px;height:5px"></span><span class="lbl leaf">CAPTCHA doesn't block real users</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+    <!-- 6. CROSS-BROWSER -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d6"></span>
+        <span class="lbl h2">6. Cross-Browser Testing</span>
+        <span class="tag c6 c6t">Compatibility</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d6"></span><span class="lbl h3">6.1 Browser Coverage</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Google Chrome (latest)</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Mozilla Firefox (latest)</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Microsoft Edge</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Safari (macOS / iOS)</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Opera / Brave (optional)</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d6"></span><span class="lbl h3">6.2 What to Check Per Browser</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">CSS layout renders identically</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Fonts don't substitute</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">JavaScript features work</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Forms validate and submit</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Animations / transitions run</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d6" style="width:5px;height:5px"></span><span class="lbl leaf">Console has no JS errors (F12)</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+    <!-- 7. PERFORMANCE -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d7"></span>
+        <span class="lbl h2">7. Performance Testing (Basic)</span>
+        <span class="tag c7 c7t">Speed</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d7"></span><span class="lbl h3">7.1 Page Load</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">Home page loads within 3 seconds</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">Heavy pages (galleries, dashboards) acceptable</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">No render-blocking resources</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d7"></span><span class="lbl h3">7.2 Resource Checks</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">Images are compressed (not raw MB files)</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">No oversized CSS / JS files</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">Network tab shows no failed requests</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">Lazy loading works on images</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d7"></span><span class="lbl h3">7.3 Scroll &amp; Interaction</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">No jank / lag while scrolling</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">Infinite scroll loads more items</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d7" style="width:5px;height:5px"></span><span class="lbl leaf">Animations don't freeze the page</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+    <!-- 8. SECURITY -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d8"></span>
+        <span class="lbl h2">8. Security Testing (Basic)</span>
+        <span class="tag c8 c8t">Safety</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d8"></span><span class="lbl h3">8.1 HTTPS &amp; SSL</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">Site uses HTTPS (padlock visible)</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">HTTP redirects to HTTPS</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">SSL certificate not expired</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d8"></span><span class="lbl h3">8.2 Authentication Security</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">Password field is masked</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">Restricted pages redirect if not logged in</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">Session expires after logout</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">No sensitive data in URL params</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">Brute force protection on login</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d8"></span><span class="lbl h3">8.3 Input Security</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">SQL injection attempts don't crash site</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">XSS — script tags sanitized</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d8" style="width:5px;height:5px"></span><span class="lbl leaf">Error messages don't expose DB info</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+    <!-- 9. NAVIGATION -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d9"></span>
+        <span class="lbl h2">9. Navigation Testing</span>
+        <span class="tag c9 c9t">UX Flow</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d9"></span><span class="lbl h3">9.1 Menu Testing</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">All menu items link to correct pages</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Dropdown menus open/close correctly</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Active page is highlighted in menu</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Mega menu / nested menu works</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d9"></span><span class="lbl h3">9.2 Browser Controls</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Back button works as expected</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Refresh doesn't lose data unexpectedly</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">URL structure is clean and logical</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Direct URL access works (deep links)</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d9"></span><span class="lbl h3">9.3 Wayfinding</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Logo links to homepage</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Breadcrumbs show correct path</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">404 page has a "Go home" button</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d9" style="width:5px;height:5px"></span><span class="lbl leaf">Pagination works correctly</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+    <!-- 10. CONTENT -->
+    <li class="tnode">
+      <div class="row" onclick="tog(this)">
+        <span class="arr open">▶</span><span class="dot d10"></span>
+        <span class="lbl h2">10. Content Testing</span>
+        <span class="tag c10 c10t">Accuracy</span>
+      </div>
+      <ul class="kids">
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d10"></span><span class="lbl h3">10.1 Text Quality</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">No spelling or grammar mistakes</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">No "Lorem Ipsum" placeholder text</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Headings are meaningful</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Reading flow is logical</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d10"></span><span class="lbl h3">10.2 Accuracy</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Phone numbers and emails are correct</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Address and map location match</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Pricing is up to date</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Copyright year is current</span></div></li>
+        </ul></li>
+
+        <li class="tnode"><div class="row" onclick="tog(this)"><span class="arr open">▶</span><span class="dot d10"></span><span class="lbl h3">10.3 Accessibility (a11y)</span></div>
+        <ul class="kids">
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">All images have alt text</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Videos have captions</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Color contrast passes WCAG standard</span></div></li>
+          <li class="tnode"><div class="row"><span class="arr none">▶</span><span class="dot d10" style="width:5px;height:5px"></span><span class="lbl leaf">Keyboard-only navigation possible</span></div></li>
+        </ul></li>
+      </ul>
+    </li>
+
+  </ul>
+</li>
+</ul>
+</div>
+
+<script>
+function tog(row){
+  const li=row.parentElement;
+  const kids=li.querySelector(':scope > ul.kids');
+  if(!kids)return;
+  const open=!kids.classList.contains('hide');
+  kids.classList.toggle('hide',open);
+  row.querySelector('.arr').classList.toggle('open',!open);
+}
+function all(expand){
+  document.querySelectorAll('ul.kids').forEach(u=>u.classList.toggle('hide',!expand));
+  document.querySelectorAll('.arr:not(.none)').forEach(a=>a.classList.toggle('open',expand));
+}
+</script>
