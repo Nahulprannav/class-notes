@@ -141,38 +141,17 @@
             display: none;
         }
 
-        .notes-links {
+        .demo-credentials {
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #e0e0e0;
             text-align: center;
-        }
-
-        .notes-links h3 {
-            color: #333;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        .notes-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .note-link {
-            display: inline-block;
-            padding: 10px;
-            background-color: #f5f5f5;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 5px;
             font-size: 12px;
-            transition: background-color 0.3s;
+            color: #666;
         }
 
-        .note-link:hover {
-            background-color: #e8eaf6;
+        .demo-credentials strong {
+            color: #333;
         }
 
         .loading {
@@ -236,7 +215,6 @@
                     <input type="checkbox" id="remember" name="remember">
                     Remember me
                 </label>
-                <a href="#" onclick="alert('Password reset feature coming soon!'); return false;">Forgot Password?</a>
             </div>
 
             <button type="submit" class="login-btn">Login</button>
@@ -249,16 +227,11 @@
             <div class="success-message" id="successMessage"></div>
         </form>
 
-        <div class="notes-links">
-            <h3>📖 Quick Access to Notes</h3>
-            <div class="notes-grid">
-                <a href="python_notes_1.html" class="note-link" onclick="return loginFirst(event)">Python Notes</a>
-                <a href="django_20day_notes.html" class="note-link" onclick="return loginFirst(event)">Django Notes</a>
-                <a href="sql_20day_notes.html" class="note-link" onclick="return loginFirst(event)">SQL Notes</a>
-                <a href="powerbi_28day_notes.html" class="note-link" onclick="return loginFirst(event)">Power BI Notes</a>
-                <a href="cloud_computing_curriculum%201.html" class="note-link" onclick="return loginFirst(event)">Cloud Computing</a>
-                <a href="html-css-selenium-notes.html" class="note-link" onclick="return loginFirst(event)">HTML/CSS/Selenium</a>
-            </div>
+        <div class="demo-credentials">
+            <strong>Demo Credentials:</strong><br>
+            Username: <strong>student1</strong> | Password: <strong>password123</strong><br>
+            Username: <strong>student2</strong> | Password: <strong>secure456</strong><br>
+            Username: <strong>demo</strong> | Password: <strong>demo</strong>
         </div>
     </div>
 
@@ -277,6 +250,10 @@
             if (savedUsername) {
                 usernameInput.value = savedUsername;
                 rememberCheckbox.checked = true;
+            }
+            // If already logged in, redirect to home
+            if (sessionStorage.getItem('isLoggedIn')) {
+                window.location.href = 'home.html';
             }
         });
 
@@ -302,11 +279,11 @@
                 const user = usersData.users.find(u => u.username === username);
 
                 if (!user) {
-                    throw new Error('User not found');
+                    throw new Error('User not found. Please check your username.');
                 }
 
                 if (user.password !== password) {
-                    throw new Error('Incorrect password');
+                    throw new Error('Incorrect password. Please try again.');
                 }
 
                 // Success - Save username if Remember me is checked
@@ -317,18 +294,17 @@
                 }
 
                 // Show success message and redirect
-                successMessage.textContent = `Welcome back, ${user.name}! 🎉`;
+                successMessage.textContent = `✅ Welcome, ${user.name}! Redirecting...`;
                 successMessage.style.display = 'block';
 
-                // Set session flag
+                // Set session flags
                 sessionStorage.setItem('isLoggedIn', 'true');
                 sessionStorage.setItem('currentUser', username);
+                sessionStorage.setItem('userName', user.name);
 
                 // Redirect after 1.5 seconds
                 setTimeout(() => {
-                    // Redirect to a dashboard or notes page
-                    alert(`Login successful! You are now logged in as ${user.name}.`);
-                    // window.location.href = 'dashboard.html'; // You can create a dashboard page
+                    window.location.href = 'home.html';
                 }, 1500);
 
             } catch (error) {
@@ -344,16 +320,6 @@
             successMessage.style.display = 'none';
             errorMessage.textContent = '';
             successMessage.textContent = '';
-        }
-
-        function loginFirst(event) {
-            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-            if (!isLoggedIn) {
-                event.preventDefault();
-                alert('Please login first to access the notes!');
-                return false;
-            }
-            return true;
         }
     </script>
 </body>
