@@ -45,6 +45,7 @@
         .user-name {
             color: #666;
             font-size: 14px;
+            font-weight: 600;
         }
 
         .logout-btn {
@@ -65,69 +66,101 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         .dashboard-header {
             background: white;
-            padding: 30px;
+            padding: 40px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-align: center;
         }
 
         .dashboard-header h2 {
             color: #667eea;
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
         }
 
         .dashboard-header p {
             color: #666;
             font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .notes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .note-card {
             background: white;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
+            padding: 28px;
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s ease;
             text-decoration: none;
             color: inherit;
             cursor: pointer;
+            border: 2px solid transparent;
         }
 
         .note-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
         }
 
         .note-card .icon {
-            font-size: 40px;
+            font-size: 50px;
             margin-bottom: 15px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .note-card:hover .icon {
+            transform: scale(1.2) rotateY(10deg);
         }
 
         .note-card h3 {
             color: #333;
             font-size: 18px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         .note-card p {
             color: #666;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .note-card .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 10px;
         }
 
         .add-user-section {
@@ -135,12 +168,14 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
         }
 
         .add-user-section h3 {
             color: #333;
             margin-bottom: 20px;
             font-size: 18px;
+            font-weight: 600;
         }
 
         .form-row {
@@ -221,6 +256,7 @@
         .users-list h4 {
             color: #333;
             margin-bottom: 15px;
+            font-weight: 600;
         }
 
         .user-item {
@@ -238,6 +274,22 @@
             font-size: 14px;
         }
 
+        .back-to-home {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .back-to-home:hover {
+            background: #764ba2;
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -246,6 +298,15 @@
 
             .notes-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .dashboard-header {
+                padding: 25px;
+            }
+
+            .dashboard-header h2 {
+                font-size: 24px;
             }
         }
     </style>
@@ -261,48 +322,79 @@
         </div>
 
         <div class="dashboard-header">
-            <h2>Welcome to Your Study Hub</h2>
-            <p>Access all your class notes and learning materials in one place</p>
+            <h2>Welcome to Your Study Hub 🎓</h2>
+            <p>Access all your class notes and learning materials in one place. Select any course to begin learning.</p>
         </div>
 
+        <!-- Core Programming & Web Development -->
+        <div class="section-title">🖥️ Core Programming & Web Development</div>
         <div class="notes-grid">
             <a href="python_notes_1.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">🐍</div>
                 <h3>Python Notes</h3>
-                <p>Complete Python programming basics and advanced concepts</p>
+                <p>Complete Python programming basics and advanced concepts for beginners to professionals</p>
+                <span class="badge">Comprehensive Guide</span>
             </a>
 
             <a href="django_20day_notes.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">🌐</div>
                 <h3>Django Notes</h3>
-                <p>20-day comprehensive Django web framework guide</p>
+                <p>20-day comprehensive Django web framework guide for building scalable web applications</p>
+                <span class="badge">20-Day Course</span>
             </a>
 
             <a href="sql_20day_notes.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">🗄️</div>
                 <h3>SQL Notes</h3>
-                <p>20-day SQL database fundamentals and queries</p>
+                <p>20-day SQL database fundamentals, queries, and optimization techniques</p>
+                <span class="badge">20-Day Course</span>
+            </a>
+        </div>
+
+        <!-- Cloud & Data Analytics -->
+        <div class="section-title">☁️ Cloud & Data Analytics</div>
+        <div class="notes-grid">
+            <a href="cloud_computing_curriculum%201.html" class="note-card" onclick="checkAuth(event)">
+                <div class="icon">☁️</div>
+                <h3>Cloud Computing</h3>
+                <p>Cloud computing architecture, infrastructure, and implementation best practices</p>
+                <span class="badge">Advanced Topic</span>
             </a>
 
             <a href="powerbi_28day_notes.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">📊</div>
                 <h3>Power BI Notes</h3>
-                <p>28-day Power BI data visualization masterclass</p>
-            </a>
-
-            <a href="cloud_computing_curriculum%201.html" class="note-card" onclick="checkAuth(event)">
-                <div class="icon">☁️</div>
-                <h3>Cloud Computing</h3>
-                <p>Cloud computing architecture and implementation</p>
-            </a>
-
-            <a href="html-css-selenium-notes.html" class="note-card" onclick="checkAuth(event)">
-                <div class="icon">🧪</div>
-                <h3>HTML/CSS/Selenium</h3>
-                <p>Web testing fundamentals with HTML, CSS & Selenium</p>
+                <p>28-day Power BI data visualization and business intelligence masterclass</p>
+                <span class="badge">28-Day Course</span>
             </a>
         </div>
 
+        <!-- Testing & Automation -->
+        <div class="section-title">🧪 Testing & Automation</div>
+        <div class="notes-grid">
+            <a href="html-css-selenium-notes.html" class="note-card" onclick="checkAuth(event)">
+                <div class="icon">🧪</div>
+                <h3>HTML/CSS for Selenium</h3>
+                <p>Web testing fundamentals with HTML, CSS & Selenium WebDriver for automation testing</p>
+                <span class="badge">Testing Guide</span>
+            </a>
+
+            <a href="selenium_10day_guide.html" class="note-card" onclick="checkAuth(event)">
+                <div class="icon">🤖</div>
+                <h3>Selenium Guide</h3>
+                <p>10-day comprehensive Selenium WebDriver guide for automated browser testing</p>
+                <span class="badge">10-Day Course</span>
+            </a>
+
+            <a href="website_manual_testing_tree.html" class="note-card" onclick="checkAuth(event)">
+                <div class="icon">✅</div>
+                <h3>Manual Testing</h3>
+                <p>Website manual testing strategies, methodologies, and test execution best practices</p>
+                <span class="badge">Testing Manual</span>
+            </a>
+        </div>
+
+        <!-- Add User Section -->
         <div class="add-user-section">
             <h3>➕ Add New User (Admin Only)</h3>
             <div id="successMsg" class="message success-msg"></div>
@@ -327,7 +419,7 @@
             </form>
 
             <div class="users-list">
-                <h4>Current Users in System:</h4>
+                <h4>👥 Current Users in System:</h4>
                 <div id="usersList"></div>
             </div>
         </div>
