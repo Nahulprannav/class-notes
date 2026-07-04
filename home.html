@@ -290,6 +290,35 @@
             background: #764ba2;
         }
 
+        .info-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .info-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .info-section p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .info-section ul {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -323,7 +352,19 @@
 
         <div class="dashboard-header">
             <h2>Welcome to Your Study Hub 🎓</h2>
-            <p>Access all your class notes and learning materials in one place. Select any course to begin learning.</p>
+            <p>Access all your class notes and learning materials in one place. Select any course to begin learning. All notes are carefully curated and comprehensive.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>📖 About This Platform</h3>
+            <p>This comprehensive learning platform contains detailed notes on multiple technology subjects including programming languages, web frameworks, databases, cloud computing, and automated testing. Each course is structured with clear learning objectives, practical examples, and hands-on exercises.</p>
+            <ul>
+                <li><strong>Well-Organized:</strong> Notes are structured with clear sections and progression</li>
+                <li><strong>Practical Examples:</strong> Real-world code examples and use cases throughout</li>
+                <li><strong>Progress Tracking:</strong> Mark topics as complete to track your learning</li>
+                <li><strong>Search Functionality:</strong> Easily find topics across your notes</li>
+                <li><strong>Interactive Learning:</strong> Practice tasks at the end of each section</li>
+            </ul>
         </div>
 
         <!-- Core Programming & Web Development -->
@@ -332,21 +373,21 @@
             <a href="python_notes_1.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">🐍</div>
                 <h3>Python Notes</h3>
-                <p>Complete Python programming basics and advanced concepts for beginners to professionals</p>
+                <p>Complete Python programming basics and advanced concepts including data structures, functions, file handling, and data science libraries</p>
                 <span class="badge">Comprehensive Guide</span>
             </a>
 
             <a href="django_20day_notes.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">🌐</div>
                 <h3>Django Notes</h3>
-                <p>20-day comprehensive Django web framework guide for building scalable web applications</p>
+                <p>20-day comprehensive Django web framework guide for building scalable web applications with models, views, forms, and deployment</p>
                 <span class="badge">20-Day Course</span>
             </a>
 
             <a href="sql_20day_notes.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">🗄️</div>
                 <h3>SQL Notes</h3>
-                <p>20-day SQL database fundamentals, queries, and optimization techniques</p>
+                <p>20-day SQL database fundamentals covering queries, joins, aggregations, indexing and optimization techniques for production databases</p>
                 <span class="badge">20-Day Course</span>
             </a>
         </div>
@@ -357,14 +398,14 @@
             <a href="cloud_computing_curriculum%201.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">☁️</div>
                 <h3>Cloud Computing</h3>
-                <p>Cloud computing architecture, infrastructure, and implementation best practices</p>
+                <p>Cloud computing architecture, infrastructure as a service, platform services, and implementation best practices for modern applications</p>
                 <span class="badge">Advanced Topic</span>
             </a>
 
             <a href="powerbi_28day_notes.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">📊</div>
                 <h3>Power BI Notes</h3>
-                <p>28-day Power BI data visualization and business intelligence masterclass</p>
+                <p>28-day Power BI data visualization and business intelligence masterclass including dashboards, reports, and data modeling</p>
                 <span class="badge">28-Day Course</span>
             </a>
         </div>
@@ -375,23 +416,35 @@
             <a href="html-css-selenium-notes.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">🧪</div>
                 <h3>HTML/CSS for Selenium</h3>
-                <p>Web testing fundamentals with HTML, CSS & Selenium WebDriver for automation testing</p>
+                <p>Web testing fundamentals with HTML, CSS basics and Selenium WebDriver for automated browser testing and quality assurance</p>
                 <span class="badge">Testing Guide</span>
             </a>
 
             <a href="selenium_10day_guide.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">🤖</div>
                 <h3>Selenium Guide</h3>
-                <p>10-day comprehensive Selenium WebDriver guide for automated browser testing</p>
+                <p>10-day comprehensive Selenium WebDriver guide for automated browser testing covering locators, actions, waits, and best practices</p>
                 <span class="badge">10-Day Course</span>
             </a>
 
             <a href="website_manual_testing_tree.html" class="note-card" onclick="checkAuth(event)">
                 <div class="icon">✅</div>
                 <h3>Manual Testing</h3>
-                <p>Website manual testing strategies, methodologies, and test execution best practices</p>
+                <p>Website manual testing strategies, methodologies, test execution best practices and comprehensive testing documentation</p>
                 <span class="badge">Testing Manual</span>
             </a>
+        </div>
+
+        <div class="info-section">
+            <h3>🎯 How to Use These Notes</h3>
+            <ul>
+                <li><strong>Start with Basics:</strong> If you're new to programming, start with Python Notes</li>
+                <li><strong>Follow the Curriculum:</strong> Each course is structured day-by-day or section-by-section</li>
+                <li><strong>Practice Tasks:</strong> Complete the practice tasks at the end of each section</li>
+                <li><strong>Mark Progress:</strong> Use the mark complete buttons to track your learning journey</li>
+                <li><strong>Review Code Examples:</strong> Study and run the provided code examples</li>
+                <li><strong>Build Projects:</strong> Create real projects using what you've learned</li>
+            </ul>
         </div>
 
         <!-- Add User Section -->
