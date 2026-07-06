@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cybersecurity Fundamentals — 30-Day Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080C14;
+  --surface:#0F1520;
+  --card:#141C2B;
+  --border:#1E2D45;
+  --primary:#7C3AED;
+  --primary-glow:rgba(124,58,237,0.25);
+  --accent:#10D985;
+  --accent-glow:rgba(16,217,133,0.2);
+  --orange:#F97316;
+  --blue:#38BDF8;
+  --red:#EF4444;
+  --text:#E2E8F0;
+  --muted:#64748B;
+  --code-bg:#060A10;
+  --radius:10px;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--primary)}
+.header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:700;font-size:15px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#E74C3C,#C0392B);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-text{color:var(--text)}
+.logo-text span{color:#E74C3C}
+.progress-bar-wrap{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.progress-track{width:160px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#E74C3C,#E67E22);border-radius:3px;transition:width .4s}
+.day-counter{color:#E74C3C;font-weight:600}
+.layout{display:flex;padding-top:60px;min-height:100vh}
+.sidebar{width:230px;min-width:230px;background:var(--surface);border-right:1px solid var(--border);position:fixed;top:60px;left:0;bottom:0;overflow-y:auto;padding:16px 0;z-index:90}
+.sidebar-section{padding:0 16px 8px;font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:8px}
+.day-btn{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--muted);font-family:var(--sans);font-size:13px;text-align:left;transition:all .2s;border-left:3px solid transparent}
+.day-btn:hover{background:rgba(231,76,60,.08);color:var(--text);border-left-color:#E74C3C}
+.day-btn.active{background:rgba(231,76,60,.15);color:var(--text);border-left-color:#E74C3C}
+.day-btn.completed{color:var(--accent)}
+.day-btn.completed .day-num{background:var(--accent);color:#000}
+.day-num{min-width:26px;height:26px;background:var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;transition:all .2s}
+.day-btn.active .day-num{background:#E74C3C;color:#fff}
+.day-label{font-size:12px;line-height:1.3}
+.main{margin-left:230px;flex:1;padding:32px;max-width:calc(100vw - 230px)}
+.day-panel{display:none;animation:fadeIn .3s ease}
+.day-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.day-hero{background:linear-gradient(135deg,rgba(231,76,60,.15) 0%,rgba(230,126,34,.08) 100%);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:28px;position:relative;overflow:hidden}
+.day-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(231,76,60,0.25),transparent 70%);pointer-events:none}
+.day-tag{font-family:var(--mono);font-size:11px;color:#E74C3C;background:rgba(231,76,60,.1);padding:4px 10px;border-radius:4px;border:1px solid rgba(231,76,60,.2);display:inline-block;margin-bottom:8px}
+.day-hero h1{font-size:26px;font-weight:700;line-height:1.3;margin-bottom:8px}
+.day-hero h1 span{color:#E74C3C}
+.day-hero p{color:var(--muted);font-size:14px;max-width:600px;line-height:1.6}
+.day-meta{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);background:rgba(255,255,255,.04);padding:5px 10px;border-radius:5px;border:1px solid var(--border)}
+.meta-item .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--accent)}
+.dot-red{background:#E74C3C}
+.dot-orange{background:var(--orange)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.tab-btn{background:none;border:none;cursor:pointer;padding:10px 18px;font-family:var(--sans);font-size:13px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:#E74C3C;border-bottom-color:#E74C3C}
+.tab-pane{display:none}
+.tab-pane.active{display:block;animation:fadeIn .25s ease}
+.section{margin-bottom:28px}
+.section-title{font-family:var(--mono);font-size:13px;font-weight:700;color:#E74C3C;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:20px}
+.concept-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:all .2s}
+.concept-card:hover{border-color:#E74C3C;transform:translateY(-2px);box-shadow:0 6px 20px rgba(231,76,60,.15)}
+.cc-icon{font-size:22px;margin-bottom:8px}
+.cc-title{font-weight:600;font-size:14px;margin-bottom:6px;color:var(--text)}
+.cc-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.box{border-radius:var(--radius);padding:16px 18px;margin:16px 0;border-left:4px solid;font-size:13px;line-height:1.7}
+.box-info{background:rgba(56,189,248,.08);border-color:var(--blue);color:#BAE6FD}
+.box-tip{background:rgba(16,217,133,.08);border-color:var(--accent);color:#6EE7B7}
+.box-warn{background:rgba(249,115,22,.08);border-color:var(--orange);color:#FED7AA}
+.box-title{font-weight:700;font-family:var(--mono);margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.code-wrap{position:relative;margin:16px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.code-header{background:#0D1525;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.code-lang{font-family:var(--mono);font-size:11px;color:#E74C3C;font-weight:700;text-transform:uppercase}
+.copy-btn{background:rgba(231,76,60,.2);border:1px solid rgba(231,76,60,.3);color:#E74C3C;font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all .2s}
+.copy-btn:hover{background:rgba(231,76,60,.4)}
+.copy-btn.copied{background:rgba(16,217,133,.2);border-color:rgba(16,217,133,.3);color:var(--accent)}
+pre{background:var(--code-bg);padding:18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.75;margin:0}
+code{font-family:var(--mono);font-size:13px}
+.kw{color:#C792EA}
+.fn{color:#82AAFF}
+.st{color:#C3E88D}
+.cm{color:#546E7A;font-style:italic}
+.nb{color:#F78C6C}
+.op{color:#89DDFF}
+.cl{color:#FFCB6B}
+.tbl-wrap{overflow-x:auto;margin:14px 0;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#0D1525;padding:10px 14px;text-align:left;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid rgba(30,45,69,.6);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(231,76,60,.05)}
+.tag-td{font-family:var(--mono);font-size:12px;color:#E74C3C}
+.content-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.content-list li{display:flex;gap:10px;font-size:13px;line-height:1.6;color:var(--text)}
+.content-list li::before{content:'▸';color:#E74C3C;font-size:11px;margin-top:3px;flex-shrink:0}
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.quiz-q{font-weight:600;font-size:14px;margin-bottom:14px;line-height:1.5}
+.quiz-q span{font-family:var(--mono);color:#E74C3C;margin-right:8px}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt-btn{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-size:13px;font-family:var(--sans);color:var(--text);cursor:pointer;text-align:left;transition:all .2s}
+.opt-btn:hover:not([disabled]){background:rgba(231,76,60,.1);border-color:#E74C3C;color:#E74C3C}
+.opt-btn.correct{background:rgba(16,217,133,.1);border-color:var(--accent);color:var(--accent)}
+.opt-btn.wrong{background:rgba(239,68,68,.1);border-color:var(--red);color:var(--red)}
+.quiz-result{font-family:var(--mono);font-size:12px;margin-top:10px;padding:8px 12px;border-radius:6px;display:none}
+.result-correct{background:rgba(16,217,133,.1);color:var(--accent)}
+.result-wrong{background:rgba(239,68,68,.1);color:var(--red)}
+.practice-box{background:var(--card);border:1px solid rgba(231,76,60,.3);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.task-num{font-family:var(--mono);font-size:11px;color:#E74C3C;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.task-title{font-weight:600;font-size:14px;margin-bottom:8px}
+.task-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:12px}
+.difficulty{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-family:var(--mono);padding:3px 9px;border-radius:4px}
+.diff-easy{background:rgba(16,217,133,.1);color:var(--accent);border:1px solid rgba(16,217,133,.2)}
+.diff-med{background:rgba(249,115,22,.1);color:var(--orange);border:1px solid rgba(249,115,22,.2)}
+.diff-hard{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.complete-btn{display:inline-flex;align-items:center;gap:8px;margin-top:24px;background:linear-gradient(135deg,#E74C3C,#C0392B);border:none;border-radius:8px;padding:11px 22px;color:#fff;font-family:var(--sans);font-weight:600;font-size:14px;cursor:pointer;transition:all .25s}
+.complete-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(231,76,60,.25)}
+.complete-btn.done{background:linear-gradient(135deg,#065F46,#10B981);box-shadow:0 0 20px rgba(16,185,129,.2)}
+.nav-row{display:flex;gap:12px;margin-top:32px;justify-content:space-between}
+.nav-arrow{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 18px;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.nav-arrow:hover{border-color:#E74C3C;color:#E74C3C;background:rgba(231,76,60,.08)}
+.nav-arrow:disabled{opacity:.3;cursor:not-allowed}
+.ic{background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.2);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:12px;color:#FECACA}
+.step-list{list-style:none;counter-reset:steps;display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.step-list li{counter-increment:steps;display:flex;gap:12px;font-size:13px;line-height:1.65;color:var(--text);align-items:flex-start}
+.step-list li::before{content:counter(steps);min-width:24px;height:24px;background:#E74C3C;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:11px;color:#fff;flex-shrink:0}
+@media(max-width:768px){
+  .sidebar{width:200px;min-width:200px}
+  .main{margin-left:200px;padding:20px}
+  .day-hero h1{font-size:20px}
+  .concept-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">🔒</div>
+    <div class="logo-text">Cyber<span>Security</span></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <span>Progress</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="day-counter" id="progressText">0 / 30</span>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section">30-Day Course</div>
+    <button class="day-btn active" onclick="showDay(1)" id="nav1"><div class="day-num">01</div><div class="day-label">Security Basics</div></button>
+    <button class="day-btn" onclick="showDay(2)" id="nav2"><div class="day-num">02</div><div class="day-label">Threats & Vulnerabilities</div></button>
+    <button class="day-btn" onclick="showDay(3)" id="nav3"><div class="day-num">03</div><div class="day-label">Cryptography Intro</div></button>
+    <button class="day-btn" onclick="showDay(4)" id="nav4"><div class="day-num">04</div><div class="day-label">Network Security</div></button>
+    <button class="day-btn" onclick="showDay(5)" id="nav5"><div class="day-num">05</div><div class="day-label">Firewalls & IDS</div></button>
+    <button class="day-btn" onclick="showDay(6)" id="nav6"><div class="day-num">06</div><div class="day-label">Access Control</div></button>
+    <button class="day-btn" onclick="showDay(7)" id="nav7"><div class="day-num">07</div><div class="day-label">Authentication</div></button>
+    <button class="day-btn" onclick="showDay(8)" id="nav8"><div class="day-num">08</div><div class="day-label">Malware & Viruses</div></button>
+    <button class="day-btn" onclick="showDay(9)" id="nav9"><div class="day-num">09</div><div class="day-label">Social Engineering</div></button>
+    <button class="day-btn" onclick="showDay(10)" id="nav10"><div class="day-num">10</div><div class="day-label">Incident Response</div></button>
+    <button class="day-btn" onclick="showDay(11)" id="nav11"><div class="day-num">11</div><div class="day-label">Penetration Testing</div></button>
+    <button class="day-btn" onclick="showDay(12)" id="nav12"><div class="day-num">12</div><div class="day-label">Ethical Hacking</div></button>
+    <button class="day-btn" onclick="showDay(13)" id="nav13"><div class="day-num">13</div><div class="day-label">OWASP Top 10</div></button>
+    <button class="day-btn" onclick="showDay(14)" id="nav14"><div class="day-num">14</div><div class="day-label">Web Security</div></button>
+    <button class="day-btn" onclick="showDay(15)" id="nav15"><div class="day-num">15</div><div class="day-label">Cloud Security</div></button>
+    <button class="day-btn" onclick="showDay(16)" id="nav16"><div class="day-num">16</div><div class="day-label">IoT Security</div></button>
+    <button class="day-btn" onclick="showDay(17)" id="nav17"><div class="day-num">17</div><div class="day-label">Mobile Security</div></button>
+    <button class="day-btn" onclick="showDay(18)" id="nav18"><div class="day-num">18</div><div class="day-label">API Security</div></button>
+    <button class="day-btn" onclick="showDay(19)" id="nav19"><div class="day-num">19</div><div class="day-label">Data Protection</div></button>
+    <button class="day-btn" onclick="showDay(20)" id="nav20"><div class="day-num">20</div><div class="day-label">Compliance & Laws</div></button>
+    <button class="day-btn" onclick="showDay(21)" id="nav21"><div class="day-num">21</div><div class="day-label">Risk Management</div></button>
+    <button class="day-btn" onclick="showDay(22)" id="nav22"><div class="day-num">22</div><div class="day-label">Security Audit</div></button>
+    <button class="day-btn" onclick="showDay(23)" id="nav23"><div class="day-num">23</div><div class="day-label">Threat Hunting</div></button>
+    <button class="day-btn" onclick="showDay(24)" id="nav24"><div class="day-num">24</div><div class="day-label">SIEM Tools</div></button>
+    <button class="day-btn" onclick="showDay(25)" id="nav25"><div class="day-num">25</div><div class="day-label">Forensics Basics</div></button>
+    <button class="day-btn" onclick="showDay(26)" id="nav26"><div class="day-num">26</div><div class="day-label">Incident Analysis</div></button>
+    <button class="day-btn" onclick="showDay(27)" id="nav27"><div class="day-num">27</div><div class="day-label">Disaster Recovery</div></button>
+    <button class="day-btn" onclick="showDay(28)" id="nav28"><div class="day-num">28</div><div class="day-label">Career Path</div></button>
+    <button class="day-btn" onclick="showDay(29)" id="nav29"><div class="day-num">29</div><div class="day-label">Certifications</div></button>
+    <button class="day-btn" onclick="showDay(30)" id="nav30"><div class="day-num">30</div><div class="day-label">Capstone Project</div></button>
+  </nav>
+  <main class="main">
+    <div class="day-panel active" id="day1">
+      <div class="day-hero">
+        <div class="day-tag">DAY 01 / 30</div>
+        <h1>Introduction to <span>Cybersecurity</span></h1>
+        <p>Understand the fundamentals of cybersecurity, its importance, evolution, and core principles that form the foundation of digital protection.</p>
+        <div class="day-meta">
+          <span class="meta-item"><span class="dot dot-green"></span>Beginner</span>
+          <span class="meta-item"><span class="dot dot-red"></span>Fundamentals</span>
+          <span class="meta-item"><span class="dot dot-orange"></span>~2 Hours</span>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'d1-theory')">📖 Theory</button>
+        <button class="tab-btn" onclick="switchTab(this,'d1-code')">💻 Resources</button>
+        <button class="tab-btn" onclick="switchTab(this,'d1-quiz')">🧠 Quiz</button>
+      </div>
+      <div class="tab-pane active" id="d1-theory">
+        <div class="section">
+          <div class="section-title">What is Cybersecurity?</div>
+          <div class="concept-grid">
+            <div class="concept-card">
+              <div class="cc-icon">🛡️</div>
+              <div class="cc-title">Protection of Assets</div>
+              <div class="cc-desc">Cybersecurity protects digital and physical assets from unauthorized access, theft, and damage.</div>
+            </div>
+            <div class="concept-card">
+              <div class="cc-icon">🔐</div>
+              <div class="cc-title">Confidentiality</div>
+              <div class="cc-desc">Ensures that sensitive data is accessible only to authorized individuals and systems.</div>
+            </div>
+            <div class="concept-card">
+              <div class="cc-icon">✅</div>
+              <div class="cc-title">Integrity</div>
+              <div class="cc-desc">Maintains data accuracy and consistency, preventing unauthorized modification or corruption.</div>
+            </div>
+            <div class="concept-card">
+              <div class="cc-icon">⚡</div>
+              <div class="cc-title">Availability</div>
+              <div class="cc-desc">Ensures systems and data are accessible when needed by authorized users without disruption.</div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">CIA Triad Framework</div>
+          <div class="box box-info">
+            <div class="box-title">🎯 The CIA Model</div>
+            The CIA Triad (Confidentiality, Integrity, Availability) forms the foundation of cybersecurity. All security measures aim to protect these three aspects.
+          </div>
+          <ul class="content-list">
+            <li><strong>Confidentiality:</strong> Restricts access to authorized users only (encryption, access control)</li>
+            <li><strong>Integrity:</strong> Ensures data hasn't been altered or tampered with (hashing, digital signatures)</li>
+            <li><strong>Availability:</strong> Guarantees legitimate users can access data when needed (backups, redundancy)</li>
+            <li><strong>Additional Elements:</strong> Authentication (who you are), Non-repudiation (proof of actions)</li>
+          </ul>
+        </div>
+        <div class="section">
+          <div class="section-title">Evolution of Cybersecurity</div>
+          <ol class="step-list">
+            <li><strong>1960s-1980s:</strong> Physical security focused, early computer networks emerge</li>
+            <li><strong>1990s:</strong> Internet expansion, firewalls introduced, antivirus software development</li>
+            <li><strong>2000s:</strong> Web-based attacks rise, intrusion detection systems (IDS) developed</li>
+            <li><strong>2010s:</strong> Cloud computing security, mobile device security, big data analytics</li>
+            <li><strong>2020s:</strong> AI/ML in security, zero-trust architecture, supply chain security focus</li>
+          </ol>
+        </div>
+        <div class="section">
+          <div class="section-title">Security Domains</div>
+          <div class="tbl-wrap">
+            <table>
+              <tr><th>Domain</th><th>Focus Area</th><th>Key Concern</th></tr>
+              <tr><td class="tag-td">Network Security</td><td>Protecting network infrastructure</td><td>Unauthorized access, data interception</td></tr>
+              <tr><td class="tag-td">Application Security</td><td>Securing software and apps</td><td>Code vulnerabilities, data breaches</td></tr>
+              <tr><td class="tag-td">Cloud Security</td><td>Protecting cloud services</td><td>Misconfiguration, data exposure</td></tr>
+              <tr><td class="tag-td">Identity & Access</td><td>Authentication & authorization</td><td>Unauthorized access, privilege abuse</td></tr>
+              <tr><td class="tag-td">Endpoint Security</td><td>Securing devices and systems</td><td>Malware, ransomware infections</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="d1-code">
+        <div class="section">
+          <div class="section-title">Essential Cybersecurity Concepts</div>
+          <div class="code-wrap">
+            <div class="code-header"><span class="code-lang">CONCEPTS</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="cm">KEY TERMINOLOGY IN CYBERSECURITY</span>
+
+<span class="st">Threat:</span> Any potential danger that could exploit a vulnerability
+<span class="st">Vulnerability:</span> A weakness or gap in security defenses
+<span class="st">Risk:</span> The probability that a threat will exploit a vulnerability
+<span class="st">Attack:</span> An actual attempt to breach security and cause harm
+<span class="st">Exploit:</span> Code or technique used to take advantage of a vulnerability
+<span class="st">Payload:</span> The malicious code or data delivered in an attack
+<span class="st">Zero-day:</span> Previously unknown vulnerability with no patch available
+<span class="st">APT:</span> Advanced Persistent Threat - sophisticated, ongoing attacks
+<span class="st">Social Engineering:</span> Manipulation of people to divulge sensitive information
+<span class="st">Defense in Depth:</span> Multiple layers of security controls</code></pre>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">Recommended Resources</div>
+          <div class="box box-tip">
+            <div class="box-title">📚 Learning Resources</div>
+            <ul class="content-list" style="margin-top:8px">
+              <li><strong>NIST Cybersecurity Framework:</strong> https://www.nist.gov/cyberframework/</li>
+              <li><strong>OWASP Top 10:</strong> https://owasp.org/www-project-top-ten/</li>
+              <li><strong>CompTIA Security+:</strong> Industry-recognized security certification</li>
+              <li><strong>SANS Cyber Academy:</strong> Professional cybersecurity training</li>
+              <li><strong>Cybrary:</strong> Free cybersecurity courses and labs</li>
+            </ul>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">Security Best Practices Checklist</div>
+          <ul class="content-list">
+            <li>☐ Use strong, unique passwords (12+ characters with special symbols)</li>
+            <li>☐ Enable multi-factor authentication (MFA) on all critical accounts</li>
+            <li>☐ Keep all software and systems updated with latest patches</li>
+            <li>☐ Use VPN when connecting to public WiFi networks</li>
+            <li>☐ Enable encryption for sensitive data (at rest and in transit)</li>
+            <li>☐ Regularly backup important data to secure locations</li>
+            <li>☐ Implement principle of least privilege (PoLP) access</li>
+            <li>☐ Conduct regular security awareness training</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tab-pane" id="d1-quiz">
+        <div class="quiz-card">
+          <div class="quiz-q"><span>Q1.</span>Which of the following is NOT part of the CIA Triad?</div>
+          <div class="options">
+            <button class="opt-btn" onclick="checkAns(this,'wrong','Confidentiality is part of the CIA Triad.')">Confidentiality</button>
+            <button class="opt-btn" onclick="checkAns(this,'wrong','Integrity is part of the CIA Triad.')">Integrity</button>
+            <button class="opt-btn" onclick="checkAns(this,'correct','Correct! The CIA Triad consists of Confidentiality, Integrity, and Availability only.')">Authentication</button>
+            <button class="opt-btn" onclick="checkAns(this,'wrong','Availability is part of the CIA Triad.')">Availability</button>
+          </div>
+          <div class="quiz-result" id="qr1"></div>
+        </div>
+        <div class="quiz-card">
+          <div class="quiz-q"><span>Q2.</span>What is a zero-day vulnerability?</div>
+          <div class="options">
+            <button class="opt-btn" onclick="checkAns(this,'correct','Correct! A zero-day is a previously unknown vulnerability with no patch available yet.')">A vulnerability with no patch available yet</button>
+            <button class="opt-btn" onclick="checkAns(this,'wrong','A zero-day is unknown, not publicly disclosed.')">A publicly disclosed vulnerability</button>
+            <button class="opt-btn" onclick="checkAns(this,'wrong','A zero-day is exploitable, not defensive.')">A defensive security measure</button>
+            <button class="opt-btn" onclick="checkAns(this,'wrong','A zero-day is not time-specific in this way.')">A vulnerability active for zero hours</button>
+          </div>
+          <div class="quiz-result" id="qr2"></div>
+        </div>
+        <div class="quiz-card">
+          <div class="quiz-q"><span>Q3.</span>Which principle restricts users to the minimum access needed?</div>
+          <div class="options">
+            <button class="opt-btn" onclick="checkAns(this,'wrong','Defense in depth uses multiple layers of security.')">Defense in Depth</button>
+            <button class="opt-btn" onclick="checkAns(this,'correct','Correct! Principle of Least Privilege (PoLP) gives users only the minimum access required.')">Principle of Least Privilege (PoLP)</button>
+            <button class="opt-btn" onclick="checkAns(this,'wrong','Need-to-know is similar but PoLP is the correct term.')">Need-to-Know Basis</button>
+            <button class="opt-btn" onclick="checkAns(this,'wrong','Role-based access is different from PoLP.')">Role-Based Access Control</button>
+          </div>
+          <div class="quiz-result" id="qr3"></div>
+        </div>
+      </div>
+      <button class="complete-btn" id="complete1" onclick="markComplete(1)">✓ Mark Day 1 Complete</button>
+      <div class="nav-row">
+        <button class="nav-arrow" disabled>← Previous</button>
+        <button class="nav-arrow" onclick="showDay(2)">Day 2 →</button>
+      </div>
+    </div>
+    <div id="more-days"></div>
+  </main>
+</div>
+<script>
+function showDay(day){const panels=document.querySelectorAll('.day-panel');panels.forEach(p=>p.classList.remove('active'));document.getElementById('day'+day).classList.add('active');const btns=document.querySelectorAll('.day-btn');btns.forEach((b,i)=>{if(i+1===day)b.classList.add('active');else b.classList.remove('active')});updateProgress()}
+function switchTab(btn,paneId){const card=btn.closest('.day-panel')||btn.closest('main');const tabBtns=card.querySelectorAll('.tab-btn');const panes=card.querySelectorAll('.tab-pane');tabBtns.forEach(b=>b.classList.remove('active'));panes.forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById(paneId).classList.add('active')}
+function checkAns(btn,type,msg){const card=btn.closest('.quiz-card');const options=card.querySelectorAll('.opt-btn');options.forEach(o=>o.disabled=true);btn.classList.add(type);const resultDiv=card.querySelector('.quiz-result');resultDiv.style.display='block';resultDiv.classList.add(type==='correct'?'result-correct':'result-wrong');resultDiv.textContent=msg}
+function copyCode(btn){const code=btn.closest('.code-wrap').querySelector('code').textContent;navigator.clipboard.writeText(code);btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000)}
+function markComplete(day){const btn=document.getElementById('complete'+day);const navBtn=document.getElementById('nav'+day);btn.classList.add('done');btn.disabled=true;navBtn.classList.add('completed')}
+function updateProgress(){const completed=document.querySelectorAll('.day-btn.completed').length;const total=document.querySelectorAll('.day-btn').length;document.getElementById('progressFill').style.width=(completed/total*100)+'%';document.getElementById('progressText').textContent=completed+' / '+total}
+</script>
+</body>
+</html>
