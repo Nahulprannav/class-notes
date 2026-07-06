@@ -1,0 +1,578 @@
+================================================================================
+STANDARDIZED COURSE FORMAT TEMPLATE
+For All HTML Course Pages (Selenium, Django, SQL, Python, etc.)
+================================================================================
+
+PROJECT OVERVIEW:
+This template ensures all course pages follow a consistent, professional structure
+with interactive learning features, code examples, quizzes, and responsive design.
+
+================================================================================
+PAGE STRUCTURE & LAYOUT
+================================================================================
+
+1. FIXED HEADER (Top of Page)
+   ├─ Logo with icon (emoji) and course name with accent color
+   ├─ Progress bar showing completion status
+   └─ Format: "X / Total Days" counter
+
+2. SIDEBAR NAVIGATION (Left Side, Fixed)
+   ├─ "10-Day Course" section header
+   ├─ Day buttons (numbered 01-10 with labels)
+   ├─ Visual indicators:
+   │  ├─ Day number in numbered badge
+   │  ├─ Active state highlighting (purple border-left + bg)
+   │  ├─ Completed state (green checkmark icon)
+   │  └─ Hover effects for all buttons
+   └─ Responsive: Collapses on tablets (768px breakpoint)
+
+3. MAIN CONTENT AREA (Center, Scrollable)
+   ├─ Day panels (hidden by default, one active at a time)
+   ├─ Animated fade-in transitions between days
+   └─ Padding and max-width for readability
+
+================================================================================
+EACH DAY PANEL STRUCTURE
+================================================================================
+
+DAY HERO SECTION (Top of Day Panel)
+├─ Background: Gradient (purple to green with 15% opacity)
+├─ Border: 1px solid with custom border color
+├─ Content:
+│  ├─ Day Tag: "DAY 01 / 10" (small, accent green)
+│  ├─ Main Heading: Large title with span for accent color
+│  ├─ Description: Gray subtext explaining day's focus
+│  └─ Meta Information:
+│     ├─ Difficulty level (Beginner/Intermediate/Advanced) - green dot
+│     ├─ Topic category - purple dot
+│     └─ Estimated duration (e.g., ~2 Hours) - orange dot
+└─ Decorative: Radial gradient overlay (top-right corner)
+
+TABBED INTERFACE (Below Hero)
+├─ 3 Tabs per day:
+│  ├─ 📖 Theory
+│  ├─ 💻 Code
+│  └─ 🧠 Quiz
+├─ Tab styling:
+│  ├─ Inactive: Gray text, transparent background
+│  ├─ Active: Primary color (purple) text + bottom border
+│  └─ Hover: Text color change to white
+└─ Tab panes: Display block only when active, fade-in animation
+
+================================================================================
+THEORY TAB CONTENT (📖)
+================================================================================
+
+SECTION 1: Core Concepts
+├─ Section Title: "What is [Topic]?" (uppercase, green accent)
+├─ Section Divider: Horizontal line (--border color)
+└─ Content: CONCEPT CARDS GRID
+   ├─ Grid: auto-fill columns (minmax 260px)
+   ├─ Card styling:
+   │  ├─ Background: Card color (#141C2B)
+   │  ├─ Border: 1px solid, changes on hover
+   │  ├─ Border radius: 10px
+   │  ├─ Padding: 18px
+   │  ├─ Hover: Border → primary color, translate up, box-shadow
+   │  └─ Transition: 0.2s smooth
+   ├─ Card elements:
+   │  ├─ Icon: Large emoji (22px)
+   │  ├─ Title: Bold, 14px
+   │  └─ Description: Muted gray, 13px, line-height 1.6
+   └─ Card count: 4 cards per concept section
+
+SECTION 2: Architecture/Overview
+├─ Info Box (blue)
+├─ Title: "🔧 How [Topic] Works" or similar
+├─ Content: Brief explanation with flow diagram (text-based)
+└─ Bullet points explaining key components
+
+SECTION 3: Installation/Setup Steps
+├─ Ordered list with step counter styling
+├─ Counter: Circular badge with number inside
+├─ Each step:
+│  ├─ Main text
+│  └─ Inline code spans (dark bg, accent color)
+└─ Box with Pro Tip after steps
+
+SECTION 4: Comparison Table
+├─ Table with borders and hover effects
+├─ Header row: Dark background (#0D1525), uppercase gray text
+├─ Data rows: Alternate hover effect (5% purple opacity)
+├─ Borders: 1px solid, rounded corners for table wrap
+└─ Content: Specific to course (e.g., Selenium vs Playwright vs Cypress)
+
+BOX STYLING (Used throughout):
+├─ Info Box: Blue border, blue tinted background
+├─ Tip Box: Green border, green tinted background  
+├─ Warning Box: Orange border, orange tinted background
+├─ All boxes: 16px padding, left 4px border, small uppercase title
+└─ Font size: 13px, line-height 1.7
+
+CONTENT LISTS:
+├─ Custom bullet points (▸ symbol in primary color)
+├─ Gap: 8px between items
+├─ Font: 13px, line-height 1.6
+└─ Support for <strong> tags for emphasis
+
+================================================================================
+CODE TAB CONTENT (💻)
+================================================================================
+
+SECTION STRUCTURE: Multiple code sections
+
+EACH CODE SECTION:
+├─ Section Title: Uppercase, green accent
+├─ Code Wrapper:
+│  ├─ Border: 1px solid, radius 10px
+│  ├─ Overflow: hidden
+│  ├─ Background: Dark code bg (#060A10)
+│  └─ Code Header:
+│     ├─ Language tag: "PYTHON", "TERMINAL", "JAVASCRIPT" (purple, bold)
+│     └─ Copy Button:
+│        ├─ Default: Purple 20% bg, purple border
+│        ├─ Hover: Purple 40% bg
+│        ├─ Copied state: Green 20% bg, green border, "Copied!" text
+│        └─ Transition: 0.2s smooth
+│
+├─ Code Block <pre><code>:
+│  ├─ Background: #060A10
+│  ├─ Padding: 18px
+│  ├─ Font: JetBrains Mono, 13px
+│  ├─ Line-height: 1.75
+│  ├─ Overflow-x: auto (for long lines)
+│  └─ NO margin (set to 0)
+│
+├─ SYNTAX HIGHLIGHTING COLORS:
+│  ├─ Keywords (.kw): #C792EA (purple)
+│  ├─ Functions (.fn): #82AAFF (blue)
+│  ├─ Strings (.st): #C3E88D (green)
+│  ├─ Comments (.cm): #546E7A (gray, italic)
+│  ├─ Numbers (.nb): #F78C6C (orange)
+│  ├─ Operators (.op): #89DDFF (cyan)
+│  └─ Classes (.cl): #FFCB6B (yellow)
+│
+└─ INLINE CODE SPANS:
+   ├─ Background: Purple 15% opacity
+   ├─ Border: 1px purple 20% opacity
+   ├─ Padding: 2px 6px
+   ├─ Border-radius: 4px
+   ├─ Font: Monospace, 12px
+   ├─ Color: #C4B5FD (light purple)
+   └─ Used within text for quick reference
+
+CODE EXAMPLES TO INCLUDE:
+├─ Installation commands (pip install packages)
+├─ First working script example
+├─ Multiple browser/environment setups
+├─ Common methods/functions reference
+└─ Practical real-world examples (e.g., login automation)
+
+CODE COMMENTS:
+├─ Format: Explanatory comments above code sections
+├─ Styled with .cm class
+├─ Use dashes for visual separators: # ─── Section Name ───
+
+COPY FUNCTIONALITY:
+├─ JavaScript function: copyCode(buttonElement)
+├─ Copies <pre><code> content to clipboard
+├─ Changes button text to "Copied!" + green styling
+├─ Reverts after 2 seconds
+└─ Provides user feedback
+
+================================================================================
+QUIZ TAB CONTENT (🧠)
+================================================================================
+
+QUIZ STRUCTURE: 3 Questions per day
+
+EACH QUIZ CARD:
+├─ Background: Card color (#141C2B)
+├─ Border: 1px solid
+├─ Border-radius: 10px
+├─ Padding: 20px
+├─ Margin-bottom: 16px
+
+QUESTION FORMAT:
+├─ Question text: Bold, 14px
+├─ Question number: Monospace, accent color, margin-right 8px
+├─ Line-height: 1.5
+└─ Code within question: <code> tag (inline styling)
+
+OPTIONS CONTAINER:
+├─ Display: flex column
+├─ Gap: 8px between options
+├─ All options are buttons
+
+OPTION BUTTON STYLING:
+├─ Default state:
+│  ├─ Background: Transparent 3% white
+│  ├─ Border: 1px solid border-color
+│  ├─ Border-radius: 7px
+│  ├─ Padding: 10px 14px
+│  ├─ Font: 13px sans-serif
+│  ├─ Color: White text
+│  ├─ Cursor: pointer
+│  ├─ Text-align: left
+│  └─ Transition: 0.2s smooth
+│
+├─ Hover state (if not disabled):
+│  ├─ Background: Purple 10%
+│  ├─ Border-color: Primary color
+│  └─ Color: Primary (purple)
+│
+├─ Correct answer state:
+│  ├─ Background: Green 10% opacity
+│  ├─ Border-color: Accent green
+│  ├─ Color: Accent green
+│  └─ Disabled: true
+│
+└─ Wrong answer state:
+   ├─ Background: Red 10% opacity
+   ├─ Border-color: Red
+   ├─ Color: Red
+   └─ Disabled: true
+
+QUIZ RESULT MESSAGE:
+├─ Display: none (hidden until answer selected)
+├─ Font: Monospace, 12px
+├─ Margin-top: 10px
+├─ Padding: 8px 12px
+├─ Border-radius: 6px
+├─ Correct: Green 10% bg, accent green text
+└─ Wrong: Red 10% bg, red text
+
+QUIZ JAVASCRIPT FUNCTION:
+├─ checkAns(buttonElement, correctOrWrong, feedbackMessage)
+├─ Functionality:
+│  ├─ Apply correct/wrong styling to clicked button
+│  ├─ Disable all option buttons after selection
+│  ├─ Display feedback message in result box
+│  └─ Show instant feedback to user
+└─ Prevents multiple submissions per question
+
+================================================================================
+PRACTICE TASKS (If Included)
+================================================================================
+
+PRACTICE BOX STYLING:
+├─ Background: Card color (#141C2B)
+├─ Border: 1px solid with purple 30% opacity
+├─ Border-radius: 10px
+├─ Padding: 20px
+├─ Margin-bottom: 16px
+
+PRACTICE CONTENT:
+├─ Task number: Monospace, uppercase, primary color
+├─ Task title: Bold, 14px
+├─ Task description: Muted gray, 13px, line-height 1.65
+├─ Difficulty badge:
+│  ├─ Inline-flex layout
+│  ├─ Gap: 4px
+│  ├─ Font: Monospace, 11px
+│  ├─ Padding: 3px 9px
+│  ├─ Border-radius: 4px
+│  ├─ Easy: Green 10% bg, accent text, green border 20%
+│  ├─ Medium: Orange 10% bg, orange text, orange border 20%
+│  └─ Hard: Red 10% bg, red text, red border 20%
+└─ Expected content: Clear instructions, example outputs, hints
+
+================================================================================
+DAY COMPLETION & NAVIGATION
+================================================================================
+
+COMPLETE BUTTON (At end of day):
+├─ Styling: 
+│  ├─ Background: Gradient (purple → pink)
+│  ├─ Border: none
+│  ├─ Border-radius: 8px
+│  ├─ Padding: 11px 22px
+│  ├─ Color: White
+│  ├─ Font: Semi-bold, 14px
+│  ├─ Cursor: pointer
+│  ├─ Margin-top: 24px
+│  └─ Transition: 0.25s smooth
+│
+├─ Hover: Translate up 1px, add shadow
+├─ Completed state:
+│  ├─ Background: Gradient (green #065F46 → #10B981)
+│  ├─ Box-shadow: Green glow
+│  └─ Permanently styled after click
+└─ Functionality: Mark day as complete, update progress bar
+
+NAVIGATION ARROWS (Bottom of day):
+├─ Layout: Flex row, space-between
+├─ Margin-top: 32px
+├─ Gap: 12px
+├─ Left arrow: Shows "← Previous" (disabled on Day 1)
+├─ Right arrow: Shows "Day X →" (navigates to next day)
+├─ Arrow styling:
+│  ├─ Background: Card color
+│  ├─ Border: 1px solid
+│  ├─ Border-radius: 8px
+│  ├─ Padding: 10px 18px
+│  ├─ Color: Muted gray
+│  ├─ Font: 13px, semi-bold
+│  ├─ Cursor: pointer
+│  └─ Transition: 0.2s smooth
+│
+├─ Hover: Border → primary, color → primary, bg → purple 8%
+└─ Disabled: Opacity 0.3, cursor not-allowed
+
+================================================================================
+COLOR SCHEME & THEME
+================================================================================
+
+CSS VARIABLES (--variable):
+├─ --bg: #080C14 (main background, very dark)
+├─ --surface: #0F1520 (surface elements)
+├─ --card: #141C2B (card backgrounds)
+├─ --border: #1E2D45 (borders, dividers)
+├─ --primary: #7C3AED (purple, main accent)
+├─ --primary-glow: rgba(124,58,237,0.25) (purple with opacity)
+├─ --accent: #10D985 (green, success/info)
+├─ --accent-glow: rgba(16,217,133,0.2) (green with opacity)
+├─ --orange: #F97316 (warning)
+├─ --blue: #38BDF8 (info)
+├─ --red: #EF4444 (error/danger)
+├─ --text: #E2E8F0 (main text, light gray)
+├─ --muted: #64748B (secondary text, darker gray)
+├─ --code-bg: #060A10 (code background, darkest)
+├─ --radius: 10px (default border radius)
+├─ --mono: 'JetBrains Mono', monospace (code font)
+└─ --sans: 'Inter', sans-serif (body font)
+
+DOT COLORS (Meta items):
+├─ .dot-green: --accent (green)
+├─ .dot-purple: --primary (purple)
+└─ .dot-orange: --orange (orange)
+
+GRADIENTS:
+├─ Primary gradient: 135deg, --primary to #A855F7 (purple variants)
+├─ Accent gradient: 90deg, --primary to --accent (purple to green)
+└─ Used for buttons, hero sections, progress bar
+
+================================================================================
+TYPOGRAPHY & FONTS
+================================================================================
+
+FONT FAMILIES:
+├─ Monospace: JetBrains Mono (code, labels, numbers)
+├─ Sans-serif: Inter (body text, headings)
+└─ Imported from Google Fonts
+
+FONT SIZES:
+├─ Hero H1: 26px, font-weight 700, line-height 1.3
+├─ Section titles: 13px, uppercase, letter-spacing 0.08em
+├─ Card titles: 14px, font-weight 600
+├─ Card descriptions: 13px, muted color
+├─ Tab text: 13px, font-weight 500
+├─ Code: 13px, JetBrains Mono
+├─ Meta items: 12px
+├─ Small labels: 11px, uppercase
+└─ Box titles: 12px, uppercase, font-weight 700
+
+================================================================================
+RESPONSIVE DESIGN
+================================================================================
+
+BREAKPOINT: 768px (Tablets and smaller)
+
+CHANGES AT 768px:
+├─ Sidebar width: 200px (from 230px)
+├─ Sidebar: min-width 200px
+├─ Main content: margin-left 200px, padding 20px (from 32px)
+├─ Day hero H1: 20px (from 26px)
+├─ Concept grid: 1 column (from auto-fill)
+└─ Layout still maintains sidebar + main structure
+
+MOBILE CONSIDERATION:
+├─ Scrollbar styling: 6px width (webkit)
+├─ Touch targets: 26-32px minimum (already in design)
+├─ Overflow handling: overflow-x auto for code blocks
+└─ Consider adding additional breakpoint for phones if needed
+
+================================================================================
+JAVASCRIPT FUNCTIONALITY
+================================================================================
+
+MAIN FUNCTIONS:
+
+1. showDay(dayNumber)
+   ├─ Hides all day panels
+   ├─ Shows selected day panel with fade-in
+   ├─ Updates sidebar active state
+   ├─ Updates progress bar
+   └─ Resets all tabs to Theory (first tab)
+
+2. switchTab(buttonElement, tabPaneId)
+   ├─ Removes active class from all tabs/panes
+   ├─ Adds active class to clicked tab and corresponding pane
+   ├─ Triggers fade-in animation
+   └─ Maintains tab state per day
+
+3. checkAns(buttonElement, correctOrWrong, feedbackMessage)
+   ├─ Adds correct/wrong class styling
+   ├─ Disables all option buttons in the quiz card
+   ├─ Displays feedback message with appropriate styling
+   └─ Prevents further interaction with that question
+
+4. copyCode(buttonElement)
+   ├─ Finds parent code-wrap
+   ├─ Extracts <code> text content
+   ├─ Copies to clipboard
+   ├─ Changes button text and styling to "Copied!"
+   ├─ Reverts after 2000ms
+   └─ Provides user feedback
+
+5. markComplete(dayNumber)
+   ├─ Marks day as complete
+   ├─ Updates progress bar and counter
+   ├─ Changes button styling to completed state
+   ├─ Updates sidebar day button to show completion checkmark
+   └─ Persists state (localStorage recommended)
+
+ANIMATION KEYFRAMES:
+└─ fadeIn:
+   ├─ from: opacity 0, translateY 10px
+   └─ to: opacity 1, translateY 0
+   ├─ Duration: 0.3s ease
+   └─ Applied to day panels and tab panes
+
+================================================================================
+ADDITIONAL FEATURES
+================================================================================
+
+SCROLLBAR CUSTOMIZATION (Webkit browsers):
+├─ Track background: --surface
+├─ Thumb background: --border
+├─ Thumb hover: --primary
+├─ Thumb border-radius: 3px
+└─ Width/Height: 6px
+
+ACCESSIBILITY:
+├─ Semantic HTML: <header>, <nav>, <main>
+├─ Proper heading hierarchy (h1 in hero)
+├─ Button elements for interactive items
+├─ Disabled attribute for inactive buttons
+├─ Clear visual feedback for hover/active states
+└─ Sufficient color contrast (verified for WCAG)
+
+LAYOUT SYSTEM:
+├─ Flexbox for header, sidebar, main layout
+├─ Grid for concept cards (auto-fill, minmax)
+├─ Fixed positioning for header and sidebar
+├─ Padding strategy: 16px-32px depending on section
+├─ Max-width control: calc(100vw - 230px) for main
+└─ Consistent spacing: 8px, 12px, 16px, 24px, 28px, 32px
+
+BOX SHADOW USAGE:
+├─ Card hover: 0 6px 20px rgba(124,58,237,0.15)
+├─ Button hover: 0 6px 20px rgba(124,58,237,0.25)
+├─ Completed button: 0 0 20px rgba(16,185,129,0.2)
+└─ Creates depth without distraction
+
+TRANSITIONS & ANIMATIONS:
+├─ Standard: 0.2s smooth (buttons, borders)
+├─ Progress bar: 0.4s smooth width change
+├─ Button click: 0.25s smooth
+├─ Tab panes: 0.25s fade-in
+└─ All use 'ease' timing for natural motion
+
+================================================================================
+IMPLEMENTATION CHECKLIST FOR NEW PAGES
+================================================================================
+
+STRUCTURE:
+☐ Create day panels with hero section
+☐ Add tabbed interface (Theory, Code, Quiz)
+☐ Implement sidebar navigation
+☐ Add progress tracking header
+
+THEORY TAB:
+☐ Create 4-5 concept cards for core idea
+☐ Add architecture/how-it-works section with info box
+☐ Create numbered installation/setup steps
+☐ Add comparison table vs similar tools/approaches
+☐ Use appropriate tip/warning boxes throughout
+☐ Link concepts with inline code spans
+
+CODE TAB:
+☐ Installation commands (terminal)
+☐ First working script example
+☐ Multiple setup variations
+☐ Common methods/functions reference
+☐ Practical real-world example
+☐ Apply proper syntax highlighting
+☐ Ensure copy button functionality
+☐ Add helpful comments above code sections
+
+QUIZ TAB:
+☐ Create 3 multiple-choice questions
+☐ Mix difficulty levels
+☐ Provide meaningful feedback messages
+☐ Ensure feedback explains why answer is correct/wrong
+☐ Test JavaScript interaction
+
+STYLING:
+☐ Use CSS variables for colors
+☐ Apply responsive breakpoints
+☐ Ensure contrast ratios meet WCAG
+☐ Test hover states on all interactive elements
+☐ Verify animations are smooth
+
+JAVASCRIPT:
+☐ Day navigation works smoothly
+☐ Tab switching preserves state per day
+☐ Quiz questions disable after answer
+☐ Copy button provides feedback
+☐ Progress tracking updates correctly
+☐ Completion button changes state
+
+================================================================================
+EXAMPLE META ITEMS (Hero Section)
+================================================================================
+
+Level Indicators:
+├─ Beginner (green dot)
+├─ Intermediate (purple dot)
+├─ Advanced (orange dot)
+└─ Mixed (multiple dots)
+
+Category Tags:
+├─ Topic-specific (e.g., "Locators", "Setup")
+├─ Methodology (e.g., "Theory + Setup")
+└─ Practice focus (e.g., "Hands-on")
+
+Duration Estimates:
+├─ ~2 Hours
+├─ ~3 Hours
+└─ Variable based on pace
+
+================================================================================
+FILE ORGANIZATION RECOMMENDATION
+================================================================================
+
+For Each Course Page:
+├─ Single HTML file (all-in-one for easy deployment)
+├─ External fonts: Google Fonts link
+├─ Embedded CSS: All in <style> tag
+├─ Embedded JavaScript: All in <script> tag (end of body)
+├─ File naming: [topic]_[days]day_[type].html
+│  └─ Examples:
+│     ├─ selenium_10day_guide.html
+│     ├─ django_20day_notes.html
+│     ├─ python_30day_course.html
+│     └─ sql_20day_notes.html
+
+================================================================================
+END OF STANDARD FORMAT TEMPLATE
+================================================================================
+
+Last Updated: 2026-07-06
+Use this template as reference for creating consistent, professional course pages
+for all training materials in the class-notes repository.
+
+For updates or questions about implementation, refer to:
+- selenium_10day_guide.html (reference implementation)
+- This document (COURSE_FORMAT_STANDARD.txt)
